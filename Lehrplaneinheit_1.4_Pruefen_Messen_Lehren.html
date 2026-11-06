@@ -737,7 +737,49 @@ ol.legend{margin:0; padding-left:22px; line-height:1.6}
     <label for="frage">Was ist noch unklar? Deine Frage für den Unterricht:</label>
     <textarea id="frage" data-field data-label="Offene Frage"></textarea>
   </div>
+  <div class="stepbox" id="s6-teaser">
+    <h2><span class="no">★</span>Schon fertig? Zusatz: Endkontrolle vor dem Versand</h2>
+    <p>Freiwillig und nicht Teil der 90 Minuten: Du sitzt in der Endkontrolle. Vier Prüfaufträge aus der Fertigung warten. Du liest ab, rechnest nach und entscheidest: freigeben, nacharbeiten oder sperren. Dein Stand wird wie bei allen Aufgaben gespeichert.</p>
+    <div class="row"><button type="button" class="btn secondary" data-go="s6">Zur Endkontrolle →</button></div>
+  </div>
   <div id="merke"></div>
+</section>
+
+<section class="station" id="s6" data-title="★ Zusatz" data-zusatz>
+  <p class="eyebrow">Zusatz · freiwillig · nicht Teil der 90 Min.</p>
+  <h1>Endkontrolle vor dem Versand: freigeben oder sperren?</h1>
+  <details class="glossar"><summary>📖 Begriffe dieser Station <span class="small muted">(antippen zum Aufklappen)</span></summary>
+  <dl>
+    <dt>Endkontrolle</dt><dd>Letzte Prüfung der Teile, bevor sie an den Kunden gehen.</dd>
+    <dt>Freigeben / Sperren</dt><dd>Freigegebene Teile dürfen in den Versand. Gesperrte Teile bleiben im Haus, bis sie geprüft, nachgearbeitet oder verschrottet sind.</dd>
+    <dt>Nacharbeit</dt><dd>Das Teil ist außerhalb der Toleranz, lässt sich aber noch retten, z. B. eine zu dicke Welle nachschleifen.</dd>
+    <dt>Ausschuss</dt><dd>Das Teil ist außerhalb der Toleranz und lässt sich nicht mehr retten, z. B. eine zu dünne Welle.</dd>
+    <dt>Reklamation</dt><dd>Der Kunde beanstandet fehlerhafte Teile und schickt sie zurück.</dd>
+    <dt>Stichprobe</dt><dd>Aus einer Serie werden nur einzelne Teile geprüft.</dd>
+    <dt>Nullkontrolle</dt><dd>Messschraube schließen und prüfen, ob sie genau 0,00 mm anzeigt.</dd>
+    <dt>Kalibrieren</dt><dd>Ein Messgerät mit einem genauen Normal (z. B. Endmaß) vergleichen und die Abweichung feststellen.</dd>
+    <dt>Ausdehnungskoeffizient α</dt><dd>Gibt an, um wie viel sich ein Werkstoff je Kelvin Erwärmung ausdehnt. Stahl: α = 11,5 · 10⁻⁶ 1/K. Längenänderung: Δl = α · l · ΔT.</dd>
+    <dt>Maßbezugstemperatur</dt><dd>20 °C. Bei dieser Temperatur gelten alle Maße einer Zeichnung.</dd>
+  </dl></details>
+  <p class="lead">In den Stationen hast du gelernt, Messschieber und Messschraube abzulesen, mit Grenzlehren zu prüfen und Messabweichungen zu erkennen. Jetzt kommen echte Meldungen aus der Fertigung. Nicht jede Meldung stimmt so, wie sie geschrieben ist.</p>
+  <div class="input">
+    <p class="tag">So funktioniert die Endkontrolle</p>
+    <ol>
+      <li><b>Lies die Meldung</b> und schau dir das Bild genau an.</li>
+      <li><b>Nachfragen und Nachmessen</b> (freiwillig): Messraum anrufen, Teile nachmessen lassen.</li>
+      <li><b>Entscheiden:</b> Messwert angeben, Befund wählen, Begründung wählen.</li>
+    </ol>
+    <div class="fb info small"><b>Die Uhr läuft:</b> Solange nicht entschieden ist, wartet der Versand. Jeder Auftrag kostet 1 h. Nachfragen kosten zusätzlich Zeit (Rückruf +1 h, Nachmessen +3 h), ebenso der Tipp aus dem Messraum (+4 h). <b>Schlechte Teile freigegeben</b> heißt, der Kunde reklamiert (+16 h). <b>Gute Teile gesperrt</b> oder unnötig nachgearbeitet kostet +8 h. Stimmen nur Messwert oder Begründung nicht, fragt die Qualitätsleitung zurück (+4 h). Wer die Lösung öffnet, bevor alles stimmt, übergibt an den Messraum (+12 h). Zusätzlich zählt ab „Los geht’s“ die <b>echte Zeit</b>: Jede Minute zählt wie 1 h. Für den Bestwert löst du alle Aufträge ohne Hilfen in höchstens 20 Minuten. Die Kosten je Stunde sind Beispielwerte. Für die Note zählt das alles nicht.</div>
+  </div>
+  <div class="task">
+    <p class="tag">Zusatz · Fallanalyse</p>
+    <h2>Vier Prüfaufträge aus der Fertigung</h2>
+    <p class="muted small">Bearbeite die Aufträge in beliebiger Reihenfolge. Die Lösung lässt sich öffnen, sobald du einmal geprüft hast.</p>
+    <div id="zx" style="display:flex;flex-direction:column;gap:18px"></div>
+    <div id="zx-total" class="fb info" style="margin-top:14px"></div>
+    <div class="row" id="zx-reset"></div>
+    <div class="row"><button class="btn secondary" data-go="s5">← Zurück zu Station 5</button></div>
+  </div>
 </section>
 
 </main>
@@ -1265,6 +1307,107 @@ const U = {
   problem:{
     hint:"Gehe die drei Maße nacheinander durch. (1) Wie groß ist jeweils die Maßtoleranz? Ø20±0,1 → 0,2 mm, 30±0,2 → 0,4 mm, Ø12H7 → 0,018 mm. (2) Vergleiche mit dem Noniuswert des Messschiebers (0,05 mm): Ist er wesentlich kleiner als die Toleranz? (3) Für die Bohrung: 400 Teile, Normmaß, enge Toleranz, das Istmaß wird nicht gebraucht. Welches Prüfmittel passt? Denk an Station 4.",
     sol:"Der Vorschlag ist nur zum Teil gut. Den <b>Außendurchmesser Ø20±0,1</b> (Maßtoleranz 0,2 mm) und die <b>Länge 30±0,2</b> (0,4 mm) kann man mit dem <b>Messschieber</b> messen, weil sein <b>Noniuswert</b> von 0,05 mm deutlich kleiner ist als die Toleranz. Die <b>Bohrung Ø12H7</b> hat dagegen nur eine <b>Toleranz</b> von 0,018 mm, das ist weniger als der Noniuswert. Mit dem Messschieber kann man hier nicht sicher entscheiden, ob das Maß stimmt. Für 400 Teile in der Endkontrolle ist das <b>Lehren</b> mit einem <b>Grenzlehrdorn</b> Ø12H7 am besten: Die Gutseite (12,000 mm) muss hineingleiten, die Ausschussseite (12,018 mm, rot) darf nicht hineingehen. Das geht schnell und sicher, und das genaue Istmaß wird nicht gebraucht. Wenn man das Istmaß braucht, müsste man mit einer Innenmessschraube <b>messen</b>."
+  },
+  zusatz:{
+    name:"Endkontrolle vor dem Versand", plan:"Vier Prüfaufträge aus der Fertigung: ablesen, rechnen, freigeben oder sperren",
+    unit:"Prüfauftrag", clock:"Lieferverzug", solved:"entschieden", total:"Lieferverzug gesamt", rate:800,
+    costs:{tip:4, sol:12}, mlabel:"Meldung aus der Fertigung", clueHead:"Nachfragen und Nachmessen", tipHead:"Tipp aus dem Messraum",
+    okText:(r,h,eur)=>`Die Entscheidung steht, die Teile können weiter. Lieferverzug durch diesen Auftrag: ${h} h, ca. ${eur} €.`,
+    wrong:(r, ok, a) => {
+      const k = r.q.findIndex(q => q.k === "Befund"), v = a[k];
+      if(ok[k]) return [4, "Der Befund stimmt, aber Messwert oder Begründung nicht. Die Qualitätsleitung fragt zurück: +4 h."];
+      return /freigeben/.test(v)
+        ? [16, "Fehlentscheidung: Die Teile wurden freigegeben und beim Kunden reklamiert. Rücksendung und Sortierprüfung: +16 h."]
+        : [8, "Fehlentscheidung: Gute Teile wurden gesperrt oder unnötig nachgearbeitet. Die Lieferung wartet: +8 h."];
+    },
+    mail:{from:"Werkleitung", to:"Endkontrolle (du)", sign:"Ihre Werkleitung", limits:[8,20], levels:[
+      [{b:"Beförderung zur Leitung des Messraums", t:[
+         "vier Prüfaufträge, vier richtige Entscheidungen, ohne Nachmessen und ohne Rückfrage. Lieferverzug insgesamt {h} h, also nur die Zeit, die das Prüfen eben dauert.",
+         "Ab Montag leiten Sie den Messraum. Der klimatisierte Platz direkt am Fenster gehört Ihnen, konstant 20 °C, wie es sich gehört.",
+         "Der Kunde hat angerufen und gefragt, ob er Ihre Prüfprotokolle einrahmen darf. Wir haben ja gesagt."]},
+       {b:"Beförderung (der Messraum hat eine neue Chefin oder einen neuen Chef)", t:[
+         "der Kollege mit dem Messschieber an der H7-Bohrung hat sich bei mir gemeldet. Er möchte bei Ihnen in die Lehre gehen. Lieferverzug {h} h.",
+         "Hiermit sind Sie zur Leitung des Messraums befördert. Den Schlüssel zum Endmaßkasten bekommen Sie morgen, mit Baumwollhandschuhen.",
+         "Ihr Name wird in die Prüfanweisung aufgenommen: „Im Zweifel fragen.“"]}],
+      [{b:"Sonderlob aus dem Versand", t:[
+         "gute Arbeit. Ein paar Nachfragen waren dabei, aber kein schlechtes Teil hat das Haus verlassen. Lieferverzug {h} h, Kosten ca. {eur} € (Bestwert {best} h).",
+         "Der Versand hat Ihnen zum Dank einen Grenzlehrdorn als Briefbeschwerer geschenkt. Die rote Seite zeigt nach oben, damit niemand ihn verwechselt.",
+         "Zur Beförderung fehlt nur noch ein kleines Stück: alles ohne Nachmessen entscheiden."]},
+       {b:"Danke für die zuverlässige Endkontrolle", t:[
+         "alle Lieferungen sind raus, und keine kommt zurück. Lieferverzug {h} h, Kosten ca. {eur} € (Bestwert {best} h).",
+         "Als kleines Dankeschön bekommen Sie eine eigene Bügelmessschraube mit Ihrem Namen auf der Isolierplatte.",
+         "Am längsten gedauert hat {worst}. Mit dem Musterbeispiel aus der Lerneinheit geht das beim nächsten Mal schneller."]}],
+      [{b:"Gesprächstermin Montag, 7:00 Uhr, im Messraum", t:[
+         "die Lieferungen sind inzwischen raus, aber teilweise erst nach einer Sortierprüfung. Lieferverzug {h} h, Kosten ca. {eur} € (Bestwert {best} h). Fehlentscheidungen: {wrong}.",
+         "Die Fertigung hat eine Kiste mit Teilen vor meine Tür gestellt. Auf dem Zettel steht: „Die sind gut. Wirklich.“ Am meisten Zeit hat {worst} gekostet.",
+         "Bitte kommen Sie Montag um 7:00 Uhr in den Messraum. Dort ist es 20 °C, das hilft beim Nachdenken."]},
+       {b:"Rückfrage zu Ihren Prüfentscheidungen", t:[
+         "der Kunde hat eine Lieferung zurückgeschickt. Lieferverzug {h} h, Kosten ca. {eur} € (Bestwert {best} h). Fehlentscheidungen: {wrong}.",
+         "In der Kantine wird schon erzählt, dass Sie die rote Seite des Lehrdorns für einen Griff gehalten haben. Besonders lange hat {worst} gedauert.",
+         "Ich schlage ein Gespräch am Montag um 7:00 Uhr vor. Bringen Sie bitte die Prüfprotokolle mit und Ihre Lesebrille, falls Sie eine haben."]}],
+      [{b:"Neue Aufgabe in der Kantine (fristlos, aber herzlich)", t:[
+         "nach Durchsicht Ihrer Prüfprotokolle haben wir die Endkontrolle vorübergehend dem Praktikanten übergeben. Lieferverzug {h} h, Kosten ca. {eur} €, Fehlentscheidungen: {wrong}.",
+         "Die Personalabteilung hat für Sie eine Stelle gefunden: Sie messen ab sofort in der Kantine nach, ob die Schnitzel innerhalb der Toleranz liegen. Allgemeintoleranz, grob.",
+         "Ihren Messschieber räumt der Messraum. Er wird gerade wegen {worst} neu kalibriert."]},
+       {b:"Versetzung zur Warenannahme (mit sofortiger Wirkung)", t:[
+         "der Versand hat {h} h länger gewartet als geplant, Kosten ca. {eur} €. Am teuersten war {worst}.",
+         "Sie wechseln in die Warenannahme. Dort zählen Sie Pakete. Das geht ganz ohne Nonius, wir haben es extra geprüft.",
+         "Die Kunden schicken übrigens Grüße. Und ihre Teile."]}]
+    ]},
+    rounds:[
+      {t:"Hydraulikbolzen Ø25f7", ort:"Drehmaschine 3, Serie 200 Stück, Stichprobe Teil 37", base:1, fig:"zx-a",
+       m:"„Hier ist Teil 37 aus der Bolzen-Serie, gemessen mit der Bügelmessschraube 0–25 mm (Bild). Laut Zeichnung Ø25f7, oberes Abmaß −0,020 mm, unteres Abmaß −0,041 mm. Ich habe 24,47 mm abgelesen, also Ausschuss. Soll ich die Maschine anhalten?“",
+       clues:[{n:"Nullkontrolle", how:"Messschraube schließen und Nullpunkt prüfen", h:1, t:"Messschraube geschlossen: Die Trommel steht genau auf 0, der Nullstrich der Hülse ist gerade noch sichtbar. Der Nullpunkt stimmt."},
+              {n:"Zweite Messung", how:"Teil im Messraum nachmessen lassen", h:3, t:"Der Messraum misst das gleiche Teil mit einer zweiten Messschraube: Anzeige 24,97 mm."}],
+       q:[{type:"num", k:"Messwert", q:"Welches Maß zeigt die Messschraube im Bild an?", u:"mm", a:24.97, tol:0.004},
+          {type:"select", k:"Befund", q:"Wie entscheidest du über Teil 37?", o:["gut – freigeben","Nacharbeit – nachdrehen","Ausschuss – verschrotten","Maschine sofort anhalten"], a:"gut – freigeben"},
+          {type:"opts", k:"Begründung", q:"Was ist beim Kollegen schiefgelaufen?", a:2, o:[
+            "Er hat die Trommel falsch abgelesen. Dort steht 47, nicht 97.",
+            "Die Messschraube misst nur bis 25 mm. Bei 24,97 mm ist sie am Ende und zeigt falsch an.",
+            "Er hat den Halbmillimeterstrich unten auf der Hülse übersehen. Mit + 0,5 mm ergibt sich 24,97 mm.",
+            "Er hätte mit dem Messschieber messen müssen, weil die Toleranz zu groß für die Messschraube ist."]}],
+       h:"Lies in der Lupe drei Dinge ab: ganze mm oben auf der Hülse, ob unten noch ein Halbmillimeterstrich sichtbar ist, und die Trommel. Grenzmaße: G<sub>o</sub> = 25 − 0,020 = 24,980 mm, G<sub>u</sub> = 25 − 0,041 = 24,959 mm.",
+       s:"<b>Messwert:</b> Hülse oben 24 mm, unten ist der Halbmillimeterstrich sichtbar (+ 0,5 mm), Trommel 47 · 0,01 mm = 0,47 mm. Zusammen 24 + 0,5 + 0,47 = <b>24,97 mm</b>. <b>Grenzmaße:</b> G<sub>o</sub> = 24,980 mm, G<sub>u</sub> = 24,959 mm. 24,97 mm liegt dazwischen: <b>gut, freigeben</b>. Der Kollege hat den halben Millimeter vergessen (24,47 mm) und hätte sonst eine gute Serie angehalten.",
+       r:"Teil 37 ist gut (24,97 mm, zulässig 24,959 bis 24,980 mm). Ablesefehler: Halbmillimeterstrich übersehen. Serie läuft weiter."},
+      {t:"Lagerbohrungen Ø30H7", ort:"Bearbeitungszentrum 1, Gehäuse, 300 Stück, Versand heute", base:1, fig:"zx-b",
+       m:"„Ich habe alle 300 Bohrungen Ø30H7 mit dem Messschieber (1/20 mm) gemessen, jedes Mal 30,00 mm (Bild). Laut Zeichnung oberes Abmaß +0,021 mm, unteres Abmaß 0. Passt doch genau. Kann ich die Gehäuse für den Versand freigeben?“",
+       clues:[{n:"Messraum fragen", how:"Rückruf im Messraum", h:1, t:"„Mit einem 1/20-Messschieber siehst du nur Schritte von 0,05 mm. Ob die Bohrung 29,99 oder 30,03 mm hat, merkst du damit nicht.“"},
+              {n:"Stichprobe mit Lehrdorn", how:"Fünf Gehäuse mit dem Grenzlehrdorn Ø30H7 prüfen", h:3, t:"Bei 4 Gehäusen geht die Gutseite hinein, die Ausschussseite nicht. Bei einem Gehäuse geht die Gutseite nicht hinein."}],
+       q:[{type:"num", k:"Toleranz", q:"Wie groß ist die Maßtoleranz der Bohrung Ø30H7?", u:"mm", a:0.021, tol:0.0005},
+          {type:"select", k:"Prüfmittel", q:"Mit welchem Prüfmittel müssen die 300 Bohrungen geprüft werden?", o:["Messschieber 1/10 mm","Messschieber 1/20 mm","Grenzlehrdorn Ø30H7","Grenzrachenlehre Ø30H7","Bügelmessschraube 25–50 mm","Stahlmaßstab"], a:"Grenzlehrdorn Ø30H7"},
+          {type:"select", k:"Befund", q:"Wie entscheidest du über die Lieferung?", o:["alle 300 freigeben","sperren und mit dem Grenzlehrdorn nachprüfen","alle 300 verschrotten","nur eine Stichprobe von 5 Stück freigeben"], a:"sperren und mit dem Grenzlehrdorn nachprüfen"}],
+       h:"Vergleiche die Toleranz mit dem Noniuswert des Messschiebers. Der Noniuswert muss wesentlich kleiner sein als die Toleranz. Und welches Prüfmittel ist für viele Bohrungen mit Normtoleranz gedacht?",
+       s:"<b>Toleranz:</b> T = 0,021 mm − 0 = <b>0,021 mm</b>. Der Noniuswert des Messschiebers beträgt 0,05 mm, also mehr als die ganze Toleranz. Die Anzeige 30,00 mm sagt deshalb nichts darüber aus, ob die Bohrung zwischen 30,000 und 30,021 mm liegt. <b>Prüfmittel:</b> Grenzlehrdorn Ø30H7 (Gutseite 30,000 mm muss hineingehen, Ausschussseite 30,021 mm darf nicht hineingehen). Eine Grenzrachenlehre ist für Wellen, die Bügelmessschraube 25–50 mm misst außen. <b>Befund:</b> Lieferung sperren und alle Bohrungen lehren. Die Stichprobe zeigt, dass mindestens ein Gehäuse zu eng ist.",
+       r:"Lieferung gesperrt: Messschieber (0,05 mm) ist für T = 0,021 mm ungeeignet. Alle 300 Bohrungen mit Grenzlehrdorn Ø30H7 prüfen, zu enge Bohrungen nacharbeiten."},
+      {t:"Wellen Ø40h6 direkt von der Schleifmaschine", ort:"Rundschleifmaschine 2, Wellen werden sofort gelehrt", base:1, fig:"zx-c",
+       m:"„Bei den Wellen Ø40h6 (oberes Abmaß 0, unteres Abmaß −0,016 mm) geht die Gutseite der Grenzrachenlehre nicht drüber, die Ausschussseite auch nicht. Ich lehre jede Welle direkt nach dem Schleifen, sie ist noch richtig warm, etwa 60 °C. Soll ich alle nachschleifen?“",
+       clues:[{n:"Messraum fragen", how:"Rückruf im Messraum", h:1, t:"„Stahl dehnt sich um etwa 0,0115 mm je Meter und Kelvin aus (α = 11,5 · 10⁻⁶ 1/K). Gelehrt wird bei 20 °C.“"},
+              {n:"Abgekühlte Welle lehren", how:"Eine Welle 30 Minuten abkühlen lassen und neu lehren", h:3, t:"Nach dem Abkühlen auf Raumtemperatur geht die Gutseite über die Welle, die Ausschussseite nicht."}],
+       q:[{type:"num", k:"Ausdehnung", q:"Um wie viel ist der Durchmesser bei 60 °C größer als bei 20 °C? Δd = α · d · ΔT =", u:"mm", a:0.0184, tol:0.0006},
+          {type:"select", k:"Befund", q:"Wie entscheidest du über die Wellen?", o:["freigeben – die Lehre ist ungenau","Nacharbeit – alle Wellen nachschleifen","Ausschuss – alle Wellen verschrotten","auf 20 °C abkühlen lassen, dann neu lehren"], a:"auf 20 °C abkühlen lassen, dann neu lehren"},
+          {type:"opts", k:"Art der Abweichung", q:"Um welche Art von Messabweichung handelt es sich?", a:1, o:[
+            "Eine zufällige Messabweichung, weil die Temperatur von Welle zu Welle schwankt.",
+            "Eine systematische Messabweichung: Die Wärme macht jede warme Welle um etwa den gleichen Betrag dicker.",
+            "Keine Messabweichung: Die Wellen sind wirklich zu dick und müssen nachgeschliffen werden.",
+            "Ein Fehler der Grenzrachenlehre, weil die Gutseite immer etwas zu eng ist."]}],
+       h:"Rechne Δd = α · d · ΔT mit d = 40 mm, ΔT = 60 °C − 20 °C = 40 K und α = 11,5 · 10⁻⁶ 1/K. Vergleiche Δd mit der Toleranz 0,016 mm. Bei welcher Temperatur gelten die Maße einer Zeichnung?",
+       s:"<b>Ausdehnung:</b> Δd = 11,5 · 10⁻⁶ 1/K · 40 mm · 40 K = <b>0,0184 mm</b>. Das ist mehr als die ganze Toleranz von 0,016 mm. Eine warme Welle, die bei 20 °C genau 39,990 mm hätte, hat bei 60 °C etwa 40,008 mm. Deshalb geht die Gutseite (40,000 mm) nicht darüber. <b>Befund:</b> Die Wellen auf die Maßbezugstemperatur 20 °C abkühlen lassen und dann neu lehren. Nachschleifen würde sie nach dem Abkühlen zu dünn machen. <b>Art:</b> systematische Messabweichung (Temperatur), sie tritt bei jeder warmen Welle gleich auf.",
+       r:"Wellen nicht nachschleifen: Bei 60 °C sind sie um 0,0184 mm dicker (mehr als T = 0,016 mm). Systematische Messabweichung, erst bei 20 °C lehren."},
+      {t:"Distanzscheiben 12,8±0,05", ort:"Flachschleifmaschine, Messschraube ist vom Tisch gefallen", base:1, fig:"zx-d",
+       m:"„Die Messschraube ist heute früh vom Tisch gefallen. Seitdem zeigt sie im geschlossenen Zustand +0,03 mm statt 0,00 mm an. An der Distanzscheibe (Zeichnung 12,8±0,05) lese ich jetzt den Wert im Bild ab. Ist die Scheibe zu dick?“",
+       clues:[{n:"Messraum fragen", how:"Rückruf im Messraum", h:1, t:"„Wenn die Messschraube geschlossen +0,03 mm zeigt, zeigt sie bei jedem Teil 0,03 mm zu viel an. Das kann man herausrechnen. Danach muss sie zur Kalibrierung.“"},
+              {n:"Endmaß messen", how:"Mit der Messschraube ein 10-mm-Endmaß messen", h:3, t:"Anzeige am Endmaß 10 mm: 10,03 mm."}],
+       q:[{type:"num", k:"berichtigter Wert", q:"Berichtigter Messwert der Scheibe:", u:"mm", a:12.84, tol:0.004},
+          {type:"select", k:"Befund", q:"Wie entscheidest du über die Scheibe?", o:["gut – freigeben","Nacharbeit – nachschleifen","Ausschuss – verschrotten","nicht entscheidbar, Scheibe wegwerfen"], a:"gut – freigeben"},
+          {type:"opts", k:"Maßnahme", q:"Was passiert mit der Messschraube?", a:0, o:[
+            "Bis zur Kalibrierung jeden Wert um 0,03 mm berichtigen, dann die Messschraube kalibrieren lassen.",
+            "Nichts. Eine Abweichung von 0,03 mm ist kleiner als die Toleranz und spielt keine Rolle.",
+            "Jede Scheibe dreimal messen und den Mittelwert nehmen, dann verschwindet die Abweichung.",
+            "Die Messschraube wegwerfen, weil man systematische Messabweichungen nicht herausrechnen kann."]}],
+       h:"Messabweichung = Istanzeige − Sollanzeige = 0,03 mm − 0,00 mm. Berichtigter Messwert = abgelesener Wert − Messabweichung. Grenzmaße: 12,75 mm und 12,85 mm.",
+       s:"<b>Abgelesen:</b> 12 mm + 0,5 mm + 37 · 0,01 mm = 12,87 mm. <b>Messabweichung:</b> 0,03 mm − 0,00 mm = 0,03 mm (systematisch, verstellter Nullpunkt). <b>Berichtigt:</b> 12,87 mm − 0,03 mm = <b>12,84 mm</b>. <b>Befund:</b> 12,84 mm liegt zwischen 12,75 und 12,85 mm, die Scheibe ist <b>gut</b>. Ohne Berichtigung wäre sie fälschlich als zu dick nachgeschliffen worden. Die Messschraube bis zur Kalibrierung nur mit Berichtigung verwenden. Mehrfach messen hilft nur gegen zufällige Abweichungen.",
+       r:"Scheibe gut: 12,87 mm − 0,03 mm = 12,84 mm (zulässig 12,75 bis 12,85 mm). Systematische Abweichung durch verstellten Nullpunkt, Messschraube zur Kalibrierung."}
+    ]
   },
   tasks:{
     a1:{type:"mc", tag:"Einstieg · Fragen zum Lesetext", title:"Prüfen, Messen, Lehren", intro:"Beantworte die Fragen mit dem Lesetext oben.",
@@ -2618,6 +2761,20 @@ document.querySelectorAll('[data-fig="mm-teile"]').forEach(window.LM_FIG["mm-tei
   dim(x1+40, yc-r, x1+40, yc+r, "Ø12H7", true);
   T(g, 210, 18, "Distanzbuchse, 400 Stück (Maßstab 2:1)", "lbl", {"text-anchor":"middle"});
 })();
+/* =====================================================================
+   Zusatz „Endkontrolle vor dem Versand“: ein Bild je Prüfauftrag
+   ===================================================================== */
+window.LM_FIG["zx-a"] = h => micrometer(h, {v:24.97, help:false, wp:true, d:24.97});
+window.LM_FIG["zx-b"] = h => caliper(h, {v:30.00, res:0.05, help:false, wp:false});
+window.LM_FIG["zx-d"] = h => micrometer(h, {v:12.87, help:false, wp:true, d:12.87});
+window.LM_FIG["zx-c"] = h => {
+  const {svg, defs} = svgRoot(h, 420, 290, "Grenzrachenlehre 40 h6 an einer warmen Welle direkt nach dem Schleifen: Gutseite geht nicht, Ausschussseite geht nicht"); big(svg);
+  const KB = BILD.kit(defs), g = add(svg, "g");
+  BILD.snap(g, KB, {x:60, y:20, w:300, txt:"40 h6", es:"0", ei:"−16", fs:15});
+  T(g, 210, 232, "Gutseite: geht nicht · Ausschussseite: geht nicht", "lbl-s", {"text-anchor":"middle", style:"fill:var(--ink)"});
+  add(g, "rect", {x:140, y:246, width:140, height:36, rx:6, fill:"var(--surface)", style:"stroke:var(--rust);stroke-width:1.6"});
+  T(g, 210, 270, "Welle ≈ 60 °C", "lbl", {"text-anchor":"middle", style:"fill:var(--rust);font-weight:700"});
+};
 })();
 
 /* =====================================================================

@@ -613,8 +613,48 @@ svg.gfx.big .lbl{font-size:16px}
     <textarea id="frage" data-field data-label="Offene Frage"></textarea>
   </div>
   <div class="fb maybe"><b>📘 Nicht vergessen:</b> Zur Klausur unbedingt das <b>Tabellenbuch</b> mitbringen, außerdem Taschenrechner und Zeichengeräte (Geodreieck, Bleistift, Radiergummi).</div>
+  <div class="stepbox" id="s6-teaser">
+    <h2><span class="no">★</span>Schon fertig? Zusatz: Zeichnungsprüfung in der Arbeitsvorbereitung</h2>
+    <p>Freiwillig und nicht Teil der 90 Minuten: Du prüfst in der Arbeitsvorbereitung vier Zeichnungen, bevor die Werkstatt anfängt. Du rechnest Passungen, Maßketten und Allgemeintoleranzen nach und entscheidest: freigeben oder zurück an die Konstruktion. Gute Übung für die Klausur. Dein Stand wird wie bei allen Aufgaben gespeichert.</p>
+    <div class="row"><button type="button" class="btn secondary" data-go="s6">Zur Zeichnungsprüfung →</button></div>
+  </div>
   <div id="merke"></div>
 </section>
+<section class="station" id="s6" data-title="★ Zusatz" data-zusatz>
+  <p class="eyebrow">Zusatz · freiwillig · nicht Teil der 90 Min.</p>
+  <h1>Zeichnungsprüfung: Darf die Werkstatt anfangen?</h1>
+  <details class="glossar"><summary>📖 Begriffe dieser Station <span class="small muted">(antippen zum Aufklappen)</span></summary>
+  <dl>
+    <dt>Arbeitsvorbereitung</dt><dd>Abteilung zwischen Konstruktion und Werkstatt. Sie prüft Zeichnungen und plant die Fertigung.</dd>
+    <dt>Freigeben / zurückgeben</dt><dd>Eine freigegebene Zeichnung darf gefertigt werden. Eine fehlerhafte Zeichnung geht mit einem klaren Auftrag zurück an die Konstruktion.</dd>
+    <dt>Höchstübermaß</dt><dd>Mindestmaß der Bohrung − Höchstmaß der Welle (negativ, als Betrag angegeben).</dd>
+    <dt>Geschlossene Maßkette</dt><dd>Alle Einzelmaße und das Gesamtmaß sind toleriert eingetragen. Die Maße widersprechen sich, das ist nicht erlaubt.</dd>
+    <dt>Hilfsmaß</dt><dd>Maß in runden Klammern ohne Toleranz, z. B. (35). Es dient nur zur Information und wird nicht geprüft.</dd>
+    <dt>Allgemeintoleranz ISO 2768-m</dt><dd>Gilt für alle Maße ohne eigene Toleranzangabe. Die Toleranz hängt vom Nennmaßbereich ab.</dd>
+    <dt>Nacharbeit</dt><dd>Ein Teil außerhalb der Toleranz lässt sich noch retten, z. B. eine zu lange Platte kürzen.</dd>
+    <dt>Maßstab</dt><dd>Verhältnis Zeichnung : Wirklichkeit. Die Maßzahlen geben immer das wirkliche Maß an.</dd>
+  </dl></details>
+  <p class="lead">In den Stationen hast du Zeichnungen gelesen, Toleranzen berechnet und Passungen bestimmt. Jetzt prüfst du vier Zeichnungen, bevor die Werkstatt anfängt. In jeder steckt eine Falle.</p>
+  <div class="input">
+    <p class="tag">So funktioniert die Zeichnungsprüfung</p>
+    <ol>
+      <li><b>Lies die Rückfrage aus der Werkstatt</b> genau, alle nötigen Abmaße stehen darin.</li>
+      <li><b>Nachfragen</b> (freiwillig): Kunde, Konstruktion, Tabellenbuch, Normblatt.</li>
+      <li><b>Entscheiden:</b> nachrechnen, Befund wählen, Begründung wählen.</li>
+    </ol>
+    <div class="fb info small"><b>Die Uhr läuft:</b> Solange nicht entschieden ist, steht die Werkstatt. Jede Zeichnung kostet 1 h. Jede Nachfrage kostet +1 h, der Tipp aus der Konstruktion +4 h. <b>Fehlerhafte Zeichnung freigegeben</b> heißt, die Werkstatt fertigt falsch (+16 h). <b>Zeichnung unnötig oder mit falschem Auftrag zurückgegeben</b> kostet +8 h. Stimmen nur Rechnung oder Begründung nicht, fragt die Konstruktion zurück (+4 h). Wer die Lösung öffnet, bevor alles stimmt, übergibt an die Konstruktion (+12 h). Zusätzlich zählt ab „Los geht’s“ die <b>echte Zeit</b>: Jede Minute zählt wie 1 h. Für den Bestwert löst du alle Zeichnungen ohne Hilfen in höchstens 20 Minuten. Die Kosten je Stunde sind Beispielwerte. Für die Note zählt das alles nicht.</div>
+  </div>
+  <div class="task">
+    <p class="tag">Zusatz · Fallanalyse</p>
+    <h2>Vier Zeichnungen vor dem Fertigungsstart</h2>
+    <p class="muted small">Bearbeite die Zeichnungen in beliebiger Reihenfolge. Die Lösung lässt sich öffnen, sobald du einmal geprüft hast.</p>
+    <div id="zx" style="display:flex;flex-direction:column;gap:18px"></div>
+    <div id="zx-total" class="fb info" style="margin-top:14px"></div>
+    <div class="row" id="zx-reset"></div>
+    <div class="row"><button class="btn secondary" data-go="s5">← Zurück zu Station 5</button></div>
+  </div>
+</section>
+
 </main>
 <footer class="site-foot">Technisches Gymnasium · Maschinenbau</footer>
 
@@ -1140,6 +1180,107 @@ const U = {
   problem:{
     hint:"Rechne beide Passungen mit Nennmaß 25 aus (Passungslabor in Station 4 oder Tabellenbuch). H7: 0/+21 µm. k6: +2/+15 µm. g6: −7/−20 µm. Bestimme jeweils das Höchstspiel und das Mindestspiel bzw. Höchstübermaß. Welche Passungsart braucht eine Rolle, die sich drehen soll?",
     sol:"Der <b>Kollege</b> hat Recht. Bei <b>H7/k6</b> liegt die Bohrung zwischen 25,000 und 25,021 mm, der Bolzen zwischen 25,002 und 25,015 mm. Das Höchstspiel beträgt 25,021 − 25,002 = 0,019 mm, das Höchstübermaß 25,000 − 25,015 = −0,015 mm, also 0,015 mm Übermaß: eine <b>Übergangspassung</b>. Je nach Istmaßen sitzt die Rolle fest und dreht sich nicht. Bei <b>H7/g6</b> liegt der Bolzen zwischen 24,980 und 24,993 mm. Mindestspiel 25,000 − 24,993 = 0,007 mm, Höchstspiel 25,021 − 24,980 = 0,041 mm: eine <b>Spielpassung</b>. Die Rolle hat immer Spiel und dreht sich leicht."
+  },
+  zusatz:{
+    name:"Zeichnungsprüfung in der Arbeitsvorbereitung", plan:"Vier Zeichnungen vor dem Fertigungsstart: nachrechnen, prüfen, freigeben oder zurückgeben",
+    unit:"Zeichnung", clock:"Stillstand", solved:"geprüft", total:"Stillstand gesamt", rate:900,
+    costs:{tip:4, sol:12}, mlabel:"Rückfrage aus der Werkstatt", clueHead:"Nachfragen", tipHead:"Tipp aus der Konstruktion",
+    okText:(r,h,eur)=>`Die Zeichnung ist geprüft, die Werkstatt kann loslegen. Stillstand durch diese Zeichnung: ${h} h, ca. ${eur} €.`,
+    wrong:(r, ok, a) => {
+      const k = r.q.findIndex(q => q.k === "Befund"), v = a[k];
+      if(ok[k]) return [4, "Der Befund stimmt, aber Rechnung oder Begründung nicht. Die Konstruktion fragt zurück: +4 h."];
+      return /freigeben|weiter|starten/.test(v)
+        ? [16, "Fehlentscheidung: Die Werkstatt hat nach der fehlerhaften Zeichnung gefertigt. Die Teile passen nicht, alles noch einmal: +16 h."]
+        : [8, "Fehlentscheidung: Die Zeichnung ging unnötig oder mit dem falschen Auftrag zurück an die Konstruktion: +8 h."];
+    },
+    mail:{from:"Fertigungsleitung", to:"Arbeitsvorbereitung (du)", sign:"Ihre Fertigungsleitung", limits:[8,20], levels:[
+      [{b:"Beförderung zur Leitung der Arbeitsvorbereitung", t:[
+         "vier Zeichnungen, vier richtige Entscheidungen, ohne eine einzige Rückfrage. Stillstand insgesamt {h} h, also nur die Zeit fürs Hinschauen.",
+         "Ab Montag leiten Sie die Arbeitsvorbereitung. Ihr Name kommt ins Schriftfeld jeder Zeichnung, gleich unter „Geprüft“. In Normschrift, versteht sich.",
+         "Die Konstruktion hat angefragt, ob Sie dort einmal im Monat einen Vortrag über Maßketten halten."]},
+       {b:"Beförderung (die Konstruktion hat Respekt)", t:[
+         "die Konstruktion hat sich gemeldet: Seit Sie prüfen, schauen dort alle zweimal auf die Passungen. Stillstand {h} h.",
+         "Hiermit sind Sie zur Leitung der Arbeitsvorbereitung befördert. Das große Zeichenbrett am Fenster gehört ab sofort Ihnen.",
+         "Ihr Stempel „Geprüft und für gut befunden“ ist schon bestellt. Er hat ISO 2768-m, also mittlere Genauigkeit."]}],
+      [{b:"Lob aus der Werkstatt", t:[
+         "gute Arbeit. Ein paar Rückfragen waren dabei, aber keine falsche Zeichnung ist in die Werkstatt gegangen. Stillstand {h} h, Kosten ca. {eur} € (Bestwert {best} h).",
+         "Die Werkstatt hat Ihnen ein Geodreieck mit Gravur geschenkt: „Für den, der die Maßkette gefunden hat.“",
+         "Zur Beförderung fehlt nur noch ein kleines Stück: alles ohne Nachfragen entscheiden."]},
+       {b:"Danke für die gründliche Prüfung", t:[
+         "alle vier Aufträge laufen. Stillstand {h} h, Kosten ca. {eur} € (Bestwert {best} h).",
+         "Als Dankeschön bekommen Sie einen eigenen Radiergummi. Er ist groß genug für jede überbestimmte Maßkette.",
+         "Am längsten gedauert hat {worst}. Die Stationen der Lerneinheit sparen dort beim nächsten Mal Zeit."]}],
+      [{b:"Gesprächstermin Montag, 7:00 Uhr, am Zeichenbrett", t:[
+         "die Aufträge laufen inzwischen, aber teilweise erst im zweiten Anlauf. Stillstand {h} h, Kosten ca. {eur} € (Bestwert {best} h). Fehlentscheidungen: {wrong}.",
+         "Die Werkstatt hat mir eine Lagerbuchse auf den Schreibtisch gelegt, die sich nicht mehr herausziehen lässt. Daneben ein Zettel: „Bitte an die Arbeitsvorbereitung.“ Am meisten Zeit hat {worst} gekostet.",
+         "Bitte kommen Sie Montag um 7:00 Uhr vorbei. Das Tabellenbuch bringen Sie bitte mit."]},
+       {b:"Rückfrage zu Ihren Freigaben", t:[
+         "wir mussten einen Auftrag zweimal fertigen. Stillstand {h} h, Kosten ca. {eur} € (Bestwert {best} h). Fehlentscheidungen: {wrong}.",
+         "In der Werkstatt hängt jetzt ein Schild: „Maße nie mit dem Lineal aus der Zeichnung abgreifen.“ Darunter hat jemand Ihren Namen geschrieben. Besonders lange hat {worst} gedauert.",
+         "Ich schlage ein Gespräch am Montag um 7:00 Uhr vor. Ihr Geodreieck liegt schon bereit."]}],
+      [{b:"Neue Aufgabe im Archiv (fristlos, aber herzlich)", t:[
+         "nach Durchsicht Ihrer Freigaben haben wir die Zeichnungsprüfung vorübergehend an den Kopierer übergeben. Der gibt alles frei, aber wenigstens schnell. Stillstand {h} h, Kosten ca. {eur} €, Fehlentscheidungen: {wrong}.",
+         "Die Personalabteilung hat für Sie eine Stelle im Zeichnungsarchiv gefunden. Dort sortieren Sie alte Zeichnungen nach Maßstab. Wir haben extra alle im Maßstab 1:1 herausgesucht.",
+         "Ihren Schreibtisch räumt die Werkstatt. Sie fertigt gerade {worst} noch einmal."]},
+       {b:"Versetzung in die Poststelle (mit sofortiger Wirkung)", t:[
+         "die Werkstatt hat {h} h länger gewartet als geplant, Kosten ca. {eur} €. Am teuersten war {worst}.",
+         "Sie wechseln in die Poststelle. Briefe haben keine Toleranzen, nur Briefmarken. Die sind genormt, aber das schaffen Sie.",
+         "Die Werkstatt schickt Grüße. Und eine Lagerbuchse, die sich nicht lösen lässt."]}]
+    ]},
+    rounds:[
+      {t:"Lagerbuchse im Pumpengehäuse", ort:"Pumpengehäuse, Passung Lagerbuchse/Gehäusebohrung", base:1,
+       m:"„In der Zeichnung steht für die Lagerbuchse im Gehäuse Ø30 H7/r6. Bohrung H7: +0,021 / 0 mm, Buchse r6: +0,041 / +0,028 mm. Der Kunde will, dass der Monteur die Buchse bei jeder Wartung von Hand herausziehen und wieder einsetzen kann. Dürfen wir so fertigen?“",
+       clues:[{n:"Kunde fragen", how:"Rückruf beim Kunden", h:1, t:"„Die Buchse wird alle drei Monate ausgebaut, ohne Presse, direkt an der Anlage. Sie soll sich leicht bewegen lassen, darf aber nicht viel Luft haben.“"},
+              {n:"Tabellenbuch", how:"Abmaße für andere Wellentoleranzen nachschlagen", h:1, t:"Ø30: g6 = −0,007 / −0,020 mm · k6 = +0,015 / +0,002 mm · r6 = +0,041 / +0,028 mm."}],
+       q:[{type:"num", k:"Höchstübermaß", q:"Wie groß ist das Höchstübermaß der Passung Ø30 H7/r6 (als Betrag)?", u:"mm", a:0.041, tol:0.0005},
+          {type:"select", k:"Passungsart", q:"Welche Passungsart ist H7/r6?", o:["Spielpassung","Übergangspassung","Übermaßpassung"], a:"Übermaßpassung"},
+          {type:"select", k:"Befund", q:"Wie entscheidest du?", o:["Zeichnung freigeben, Buchse einpressen","Zeichnung zurück: Übergangspassung H7/k6 eintragen","Zeichnung zurück: Spielpassung H7/g6 eintragen","Fertigung starten, Buchse vor der Montage kühlen"], a:"Zeichnung zurück: Spielpassung H7/g6 eintragen"}],
+       h:"Höchstübermaß = Mindestmaß Bohrung − Höchstmaß Welle. Ist auch das Mindestübermaß noch ein Übermaß, liegt eine Übermaßpassung vor. Von Hand ausbauen geht nur, wenn immer Spiel vorhanden ist.",
+       s:"<b>Grenzmaße:</b> Bohrung 30,000 bis 30,021 mm, Buchse 30,028 bis 30,041 mm. <b>Höchstübermaß:</b> 30,000 − 30,041 = −0,041 mm, also <b>0,041 mm</b>. Mindestübermaß: 30,021 − 30,028 = −0,007 mm. Die Buchse ist immer dicker als die Bohrung: <b>Übermaßpassung</b>. Sie müsste eingepresst werden und ließe sich nicht von Hand herausziehen. <b>Befund:</b> zurück an die Konstruktion, Spielpassung H7/g6 eintragen (Buchse 29,980 bis 29,993 mm, Spiel 0,007 bis 0,041 mm). H7/k6 ist eine Übergangspassung, dort kann es auch klemmen.",
+       r:"H7/r6 ist eine Übermaßpassung (Höchstübermaß 0,041 mm) und passt nicht zum Ausbau von Hand. Zeichnung zurück, Spielpassung H7/g6 eintragen."},
+      {t:"Abgesetzte Welle mit Maßkette", ort:"Antriebswelle, Längenmaße", base:1, fig:"zxb-kette",
+       m:"„Auf der Zeichnung der Antriebswelle (Bild) sind die drei Absätze 20±0,1, 35±0,2 und 15±0,1 bemaßt und zusätzlich die Gesamtlänge 70±0,2. Der Dreher fragt, welches Maß er einhalten soll, wenn alle drei Absätze am oberen Grenzmaß liegen.“",
+       clues:[{n:"Konstruktion fragen", how:"Rückruf in der Konstruktion", h:1, t:"„Wichtig sind die Gesamtlänge und die beiden Lagersitze links und rechts (20 und 15). Der mittlere Absatz ist nur ein Bund, der ergibt sich.“"},
+              {n:"Normblatt", how:"Regel zu Maßketten nachlesen", h:1, t:"Maßketten dürfen nicht geschlossen sein. Ein Maß entfällt oder wird als Hilfsmaß in runden Klammern ohne Toleranz eingetragen."}],
+       q:[{type:"num", k:"Höchstmaß der Kette", q:"Wie lang wird die Welle höchstens, wenn alle drei Absätze am oberen Grenzmaß liegen?", u:"mm", a:70.4, tol:0.01},
+          {type:"select", k:"Befund", q:"Wie entscheidest du?", o:["Zeichnung freigeben, der Dreher soll aufpassen","Zeichnung zurück: Maßkette ist geschlossen, ein Maß als Hilfsmaß","Zeichnung zurück: Toleranz der Gesamtlänge auf ±0,4 ändern","Fertigung starten, nur die Gesamtlänge prüfen"], a:"Zeichnung zurück: Maßkette ist geschlossen, ein Maß als Hilfsmaß"},
+          {type:"opts", k:"Welches Maß?", q:"Welches Maß wird zum Hilfsmaß?", a:2, o:[
+            "Die Gesamtlänge 70±0,2, weil sie sich aus den drei Absätzen ergibt.",
+            "Der linke Lagersitz 20±0,1, weil er das erste Maß der Kette ist.",
+            "Der mittlere Bund 35±0,2: Er ist für die Funktion am unwichtigsten und wird zu (35) ohne Toleranz.",
+            "Keins: Man schreibt alle vier Maße mit Toleranz und lässt den Dreher entscheiden."]}],
+       h:"Addiere die drei Höchstmaße und vergleiche mit dem Höchstmaß der Gesamtlänge (70,2 mm). Was sagt die Regel über geschlossene Maßketten? Welches Maß ist für die Funktion am unwichtigsten?",
+       s:"<b>Höchstmaß der Kette:</b> 20,1 + 35,2 + 15,1 = <b>70,4 mm</b>. Erlaubt sind für die Gesamtlänge aber höchstens 70,2 mm. Die Maße widersprechen sich: Die Maßkette ist <b>geschlossen</b> (überbestimmt). <b>Befund:</b> Zeichnung zurück an die Konstruktion. Das für die Funktion unwichtigste Maß, der mittlere Bund, wird zum <b>Hilfsmaß (35)</b> ohne Toleranz. Er ergibt sich dann aus der Gesamtlänge und den beiden Lagersitzen.",
+       r:"Geschlossene Maßkette: 20,1 + 35,2 + 15,1 = 70,4 mm > 70,2 mm. Zeichnung zurück, mittleren Bund als Hilfsmaß (35) eintragen."},
+      {t:"Grundplatte mit Allgemeintoleranz", ort:"Grundplatte, Länge 120 ohne Toleranzangabe, Schriftfeld: ISO 2768-m", base:1,
+       m:"„Die Grundplatte hat die Länge 120 ohne Toleranz. Im Schriftfeld steht ISO 2768-m. Gemessen habe ich 120,40 mm. Für Maße über 120 mm gilt doch ±0,5 mm, also ist die Platte in Ordnung, oder?“",
+       clues:[{n:"Tabellenbuch", how:"Tabelle ISO 2768-m nachschlagen", h:1, t:"Toleranzklasse m: über 6 bis 30 mm ±0,2 · über 30 bis 120 mm ±0,3 · über 120 bis 400 mm ±0,5."},
+              {n:"Werkstatt fragen", how:"Rückfrage an der Säge", h:1, t:"„Die Platten werden mit Aufmaß gesägt und dann auf Länge gefräst. Abfräsen geht jederzeit, ankleben nicht.“"}],
+       q:[{type:"num", k:"Höchstmaß", q:"Welches Höchstmaß gilt für die Länge 120 nach ISO 2768-m?", u:"mm", a:120.3, tol:0.005},
+          {type:"select", k:"Befund", q:"Wie entscheidest du über die Platte?", o:["gut – freigeben","Nacharbeit – Platte auf Maß fräsen","Ausschuss – verschrotten","Zeichnung ändern auf ±0,5 und freigeben"], a:"Nacharbeit – Platte auf Maß fräsen"},
+          {type:"opts", k:"Begründung", q:"Warum gilt ±0,3 mm?", a:1, o:[
+            "Weil bei ISO 2768-m alle Maße die gleiche Toleranz ±0,3 mm haben.",
+            "Weil 120 mm noch zum Bereich über 30 bis 120 mm gehört. ±0,5 mm gilt erst über 120 mm.",
+            "Weil die Platte gefräst wird und Fräsen immer genauer ist als ±0,5 mm.",
+            "Weil man bei Allgemeintoleranzen immer die kleinere Toleranz der beiden Bereiche nimmt."]}],
+       h:"Prüfe genau, in welchen Nennmaßbereich 120 mm fällt: „über 30 bis 120“ schließt 120 ein. Ist die Platte zu lang oder zu kurz? Lässt sie sich retten?",
+       s:"<b>Nennmaßbereich:</b> 120 mm gehört zu „über 30 bis 120 mm“, also <b>±0,3 mm</b>. Höchstmaß <b>120,3 mm</b>, Mindestmaß 119,7 mm. 120,40 mm ist zu lang. <b>Befund:</b> Nacharbeit, die Platte wird auf Maß gefräst. Zu lang lässt sich retten, zu kurz wäre Ausschuss. Die Zeichnung zu ändern, nur weil ein Teil nicht passt, ist keine Lösung.",
+       r:"Länge 120 nach ISO 2768-m: ±0,3 mm (Bereich über 30 bis 120 mm). 120,40 mm > 120,3 mm, Platte nacharbeiten (auf Maß fräsen)."},
+      {t:"Lochabstand aus der Zeichnung abgegriffen", ort:"Lasche, Zeichnung im Maßstab 2:1, Maßzahl verschmiert", base:1,
+       m:"„Auf der Zeichnung der Lasche (Maßstab 2:1) ist die Maßzahl für den Lochabstand verschmiert. Der Bohrer hat den Abstand mit dem Lineal auf der Zeichnung gemessen: 64 mm. Er will jetzt 50 Laschen mit 64 mm Lochabstand bohren.“",
+       clues:[{n:"Konstruktion fragen", how:"Rückruf in der Konstruktion", h:1, t:"„Ich schicke die Zeichnung neu. Die Maßzahl ist dort gut lesbar.“"},
+              {n:"Normblatt", how:"Regel zu Maßzahlen nachlesen", h:1, t:"Maßzahlen geben immer das Nennmaß des fertigen Teils an, unabhängig vom Maßstab der Zeichnung."}],
+       q:[{type:"num", k:"wirklicher Abstand", q:"Welchen Lochabstand hat die Lasche wirklich, wenn genau gezeichnet wurde?", u:"mm", a:32, tol:0.05},
+          {type:"select", k:"Befund", q:"Wie entscheidest du?", o:["weiter: mit 64 mm bohren","weiter: mit 32 mm bohren, ohne Rückfrage","anhalten und die lesbare Zeichnung anfordern","weiter: mit 128 mm bohren"], a:"anhalten und die lesbare Zeichnung anfordern"},
+          {type:"opts", k:"Regel", q:"Was gilt für Maße in einer Zeichnung im Maßstab 2:1?", a:3, o:[
+            "Die Maßzahlen sind doppelt so groß wie das wirkliche Maß.",
+            "Man darf die Maße mit dem Lineal abgreifen und durch 2 teilen.",
+            "Die Maßzahlen sind halb so groß wie das wirkliche Maß.",
+            "Die Maßzahlen geben das wirkliche Maß an. Abgreifen mit dem Lineal ist nicht erlaubt."]}],
+       h:"Maßstab 2:1 heißt: 2 mm auf der Zeichnung entsprechen 1 mm am Teil. Aber darf man überhaupt aus einer Zeichnung abmessen?",
+       s:"<b>Wirklicher Abstand:</b> Maßstab 2:1, also 64 mm : 2 = <b>32 mm</b> (wenn genau gezeichnet wurde). <b>Befund:</b> Trotzdem nicht einfach 32 mm bohren. Zeichnungen sind nie genau genug zum Abgreifen, das Papier kann sich verziehen, und Maße können „nicht maßstäblich“ eingetragen sein. Richtig: anhalten und die lesbare Zeichnung anfordern. <b>Regel:</b> Die Maßzahlen geben immer das wirkliche Maß an, unabhängig vom Maßstab.",
+       r:"Nicht bohren: Bei 2:1 wären 64 mm auf dem Papier 32 mm am Teil, aber Maße werden nie abgegriffen. Lesbare Zeichnung anfordern, die Maßzahl gibt das wirkliche Maß an."}
+    ]
   },
   tasks:{
     b1:{type:"select", tag:"Aufgabe 1 · Auswahl", title:"Welche Zeichnungsart?", intro:"Wähle für jede Situation die passende Zeichnungsart.",
@@ -1810,7 +1951,7 @@ function kit(defs){
     return cache[key] = `url(#${id})`; };
   const bid = "bdb"+(++UID); defs.appendChild(el("filter", {id:bid, x:"-30%", y:"-30%", width:"160%", height:"160%"}, [el("feGaussianBlur", {stdDeviation:3})]));
   const rid = "bdr"+(++UID); defs.appendChild(el("radialGradient", {id:rid, cx:.38, cy:.32, r:.75}, [el("stop",{offset:0,"stop-color":"#ffffff"}), el("stop",{offset:.6,"stop-color":"#c7cdd3"}), el("stop",{offset:1,"stop-color":"#7d858e"})]));
-  return { v: n => grad(n, 0,0,0,1), h: n => grad(n, 0,0,1,0), d: n => grad(n, 0,0,1,1), blur:`url(#${bid})`, kugel:`url(#${rid})`,
+  return { defs, v: n => grad(n, 0,0,0,1), h: n => grad(n, 0,0,1,0), d: n => grad(n, 0,0,1,1), blur:`url(#${bid})`, kugel:`url(#${rid})`,
     shadow: (p, cx, cy, rx, ry, op=.28) => add(p, "ellipse", {cx, cy, rx, ry, fill:"#101820", "fill-opacity":op, filter:`url(#${bid})`}) };
 }
 const S = (w=.8, c="#3a4148") => ({stroke:c, "stroke-width":w, "stroke-linejoin":"round"});
@@ -1913,37 +2054,57 @@ function micrometer(p, K, o){
   return {XA, XB, XS, X0, XE, bot, rT};
 }
 
-/* ---------------- Grenzlehrdorn (waagerecht) ---------------- */
+/* ---------------- Grenzlehrdorn (waagerecht, nach Foto: langer gerändelter Griff, kurze dicke Prüfzylinder, roter Ring) ----------------
+   x, y = linkes Ende, Mitte; w = Gesamtlänge. Rückgabe: Mitten der Prüfzylinder und Radius */
 function plug(p, K, o){
-  o = Object.assign({x:20, y:60, w:380, txt:"Ø20 H7"}, o||{}); const {x, y, w} = o, u = w/100, g = add(p, "g");
-  K.shadow(g, x+w/2, y+14*u, w/2, 3*u, .2);
-  // Gutseite (lang)
-  add(g, "path", {d:`M${x+1.2*u},${y-9*u} L${x+30*u},${y-9*u} L${x+30*u},${y+9*u} L${x+1.2*u},${y+9*u} L${x},${y+7.8*u} L${x},${y-7.8*u} Z`, fill:K.v("chrom"), ...S(.8)});
-  hi(g, x+2*u, y-6.5*u, x+29*u, y-6.5*u, 1.4, .9);
-  add(g, "rect", {x:x+30*u, y:y-4.5*u, width:4*u, height:9*u, fill:K.v("stahl"), ...S(.6)});
-  // Griff
-  add(g, "rect", {x:x+34*u, y:y-7*u, width:42*u, height:14*u, rx:2*u, fill:K.v("dunkel"), ...S(.8, "#1e2226")});
-  knurl(g, x+38*u, y-7*u, 34*u, 14*u, 2.2*u, .55);
-  add(g, "rect", {x:x+40*u, y:y-4.4*u, width:30*u, height:8.8*u, rx:1, fill:K.v("matt"), ...S(.5)});
-  add(g, "text", {x:x+55*u, y:y+2.2*u, "font-size":Math.max(15, 4.8*u), "text-anchor":"middle", fill:"#14181c", "font-family":"Segoe UI, Arial, sans-serif", "font-weight":700}, [o.txt]);
-  add(g, "rect", {x:x+76*u, y:y-4.5*u, width:4*u, height:9*u, fill:K.v("stahl"), ...S(.6)});
-  // Ausschussseite (kurz, rot)
-  add(g, "path", {d:`M${x+80*u},${y-9*u} L${x+98.8*u},${y-9*u} L${x+100*u},${y-7.8*u} L${x+100*u},${y+7.8*u} L${x+98.8*u},${y+9*u} L${x+80*u},${y+9*u} Z`, fill:K.v("chrom"), ...S(.8)});
-  add(g, "rect", {x:x+80*u, y:y-9*u, width:6*u, height:18*u, fill:K.v("rot"), ...S(.5, "#5c0f0a")});
-  hi(g, x+87*u, y-6.5*u, x+98*u, y-6.5*u, 1.4, .9);
-  return {gut:[x+15*u, y], aus:[x+90*u, y]};
+  o = Object.assign({x:20, y:60, w:380, txt:"Ø20 H7", fs:15, shadow:true}, o||{}); const {x, y, w} = o, u = w/100, g = add(p, "g");
+  const R = 11*u, rn = 3.6*u, rh = 6.2*u;
+  if(o.shadow) K.shadow(g, x+w/2, y+R+4*u, w/2, 2.4*u, .2);
+  const cyl = (x0, len, r, grad="chrom") => {
+    add(g, "path", {d:`M${x0+.12*r},${y-r} L${x0+len-.12*r},${y-r} L${x0+len},${y-r*.88} L${x0+len},${y+r*.88} L${x0+len-.12*r},${y+r} L${x0+.12*r},${y+r} L${x0},${y+r*.88} L${x0},${y-r*.88} Z`, fill:K.v(grad), ...S(.8)});
+    hi(g, x0+.2*r, y-r*.62, x0+len-.2*r, y-r*.62, Math.max(1.2, r*.08), .85);
+    add(g, "line", {x1:x0+.12*r, x2:x0+.12*r, y1:y-r*.88, y2:y+r*.88, stroke:"#fff", "stroke-opacity":.5}); add(g, "line", {x1:x0+len-.12*r, x2:x0+len-.12*r, y1:y-r*.88, y2:y+r*.88, stroke:"#5a626a", "stroke-opacity":.5}); };
+  // Gutseite (länger), Hals, Griff, roter Ring, Hals, Ausschussseite (kürzer)
+  cyl(x, 15*u, R);
+  add(g, "rect", {x:x+15*u, y:y-rn, width:9*u, height:2*rn, fill:K.v("stahl"), ...S(.6)}); hi(g, x+15.5*u, y-rn*.5, x+23.5*u, y-rn*.5, 1, .8);
+  const hx0 = x+24*u, hx1 = x+81*u;
+  add(g, "path", {d:`M${hx0+1.4*u},${y-rh} L${hx1-1.4*u},${y-rh} L${hx1},${y-rh*.55} L${hx1},${y+rh*.55} L${hx1-1.4*u},${y+rh} L${hx0+1.4*u},${y+rh} L${hx0},${y+rh*.55} L${hx0},${y-rh*.55} Z`, fill:K.v("schwarz"), ...S(.8, "#000")});
+  add(g, "rect", {x:hx0+1.4*u, y:y-rh*.98, width:hx1-hx0-2.8*u, height:rh*.5, fill:"#fff", "fill-opacity":.12});
+  add(g, "line", {x1:hx0+1.4*u, x2:hx1-1.4*u, y1:y-rh*.48, y2:y-rh*.48, stroke:"#000", "stroke-opacity":.6}); add(g, "line", {x1:hx0+1.4*u, x2:hx1-1.4*u, y1:y+rh*.48, y2:y+rh*.48, stroke:"#000", "stroke-opacity":.6});
+  for(let i=hx0+2*u; i<hx1-2*u; i+=1.15*u){ add(g, "line", {x1:i, y1:y-rh*.96, x2:i+1.1*u, y2:y+rh*.96, stroke:"#8a9199", "stroke-opacity":.28, "stroke-width":.6}); add(g, "line", {x1:i+1.1*u, y1:y-rh*.96, x2:i, y2:y+rh*.96, stroke:"#8a9199", "stroke-opacity":.28, "stroke-width":.6}); }
+  add(g, "text", {x:(hx0+hx1)/2-4*u, y:y+o.fs*.36, "font-size":o.fs, "text-anchor":"middle", fill:"#ffffff", "font-family":"Segoe UI, Arial, sans-serif", "font-weight":700, "letter-spacing":".5"}, [o.txt]);
+  add(g, "rect", {x:hx1-4.6*u, y:y-rh*1.04, width:2.6*u, height:rh*2.08, rx:.6*u, fill:K.v("rot"), ...S(.5, "#5c0f0a")});
+  add(g, "rect", {x:hx1, y:y-rn, width:7*u, height:2*rn, fill:K.v("stahl"), ...S(.6)}); hi(g, hx1+.5*u, y-rn*.5, hx1+6.5*u, y-rn*.5, 1, .8);
+  cyl(x+88*u, 12*u, R);
+  return {gut:[x+7.5*u, y], aus:[x+94*u, y], R, u};
 }
-/* ---------------- Grenzrachenlehre (Rachen nach unten) ---------------- */
+/* ---------------- Grenzrachenlehre (doppelseitig nach Foto: geschmiedeter Rahmen, gehärtete Messflächen, Maßplättchen) ----------------
+   x, y = linke obere Ecke, w = Breite (Höhe = 0,6 · w). Links Gutseite (Höchstmaß), rechts Ausschussseite (Mindestmaß, rot). */
 function snap(p, K, o){
-  o = Object.assign({x:20, y:20, w:200, txt:"20 h6"}, o||{}); const {x, y, w} = o, u = w/100, g = add(p, "g");
-  K.shadow(g, x+w/2, y+96*u, w/2.2, 4*u, .2);
-  const d = `M${x+10*u},${y+90*u} L${x+10*u},${y+30*u} Q${x+10*u},${y} ${x+50*u},${y} Q${x+90*u},${y} ${x+90*u},${y+30*u} L${x+90*u},${y+90*u} L${x+66*u},${y+90*u} L${x+66*u},${y+70*u} L${x+64*u},${y+70*u} L${x+64*u},${y+48*u} L${x+36*u},${y+48*u} L${x+36*u},${y+90*u} Z`;
-  add(g, "path", {d, fill:K.d("stahl"), ...S(.9)});
-  add(g, "path", {d:`M${x+14*u},${y+86*u} L${x+14*u},${y+30*u} Q${x+14*u},${y+4*u} ${x+50*u},${y+4*u}`, fill:"none", stroke:"#fff", "stroke-opacity":.6, "stroke-width":1.2});
-  add(g, "circle", {cx:x+50*u, cy:y+24*u, r:9*u, fill:"var(--surface, #fff)", ...S(.8)});
-  add(g, "rect", {x:x+64*u, y:y+48*u, width:26*u, height:22*u, fill:K.v("rot"), opacity:.85});
-  add(g, "text", {x:x+50*u, y:y+42*u, "font-size":Math.max(15, 7*u), "text-anchor":"middle", fill:"#14181c", "font-family":"Segoe UI, Arial, sans-serif", "font-weight":700}, [o.txt]);
-  return {gut:[x+23*u, y+80*u], aus:[x+77*u, y+60*u]};
+  o = Object.assign({x:20, y:20, w:300, txt:"20 h6", es:"0", ei:"−13", fs:15, shadow:true}, o||{}); const {x, y, w} = o, u = w/300, g = add(p, "g");
+  const X = v => x + v*u, Y = v => y + v*u, H = 180;
+  if(o.shadow) K.shadow(g, X(150), Y(H+6), 150*u, 6*u, .2);
+  const mid = "bdm"+Math.random().toString(36).slice(2,8);
+  const open = (side) => { const s = side < 0 ? 1 : -1, x0 = side < 0 ? 0 : 300, xi = side < 0 ? 86 : 214;
+    return `M${X(x0-s*10)},${Y(58)} L${X(x0+s*52)},${Y(58)} Q${X(xi)},${Y(58)} ${X(xi)},${Y(90)} Q${X(xi)},${Y(122)} ${X(x0+s*52)},${Y(122)} L${X(x0-s*10)},${Y(122)} Z`; };
+  K.defs.appendChild(el("mask", {id:mid, maskUnits:"userSpaceOnUse", x:X(-20), y:Y(-20), width:340*u, height:(H+40)*u}, [el("rect", {x:X(-20), y:Y(-20), width:340*u, height:(H+40)*u, fill:"#fff"}), el("path", {d:open(-1)+" "+open(1), fill:"#000"})]));
+  const outer = `M${X(10)},${Y(30)} C${X(10)},${Y(6)} ${X(40)},${Y(0)} ${X(78)},${Y(6)} C${X(118)},${Y(14)} ${X(128)},${Y(44)} ${X(150)},${Y(44)} C${X(172)},${Y(44)} ${X(182)},${Y(14)} ${X(222)},${Y(6)} C${X(260)},${Y(0)} ${X(290)},${Y(6)} ${X(290)},${Y(30)} L${X(290)},${Y(150)} C${X(290)},${Y(174)} ${X(260)},${Y(180)} ${X(222)},${Y(174)} C${X(182)},${Y(166)} ${X(172)},${Y(136)} ${X(150)},${Y(136)} C${X(128)},${Y(136)} ${X(118)},${Y(166)} ${X(78)},${Y(174)} C${X(40)},${Y(180)} ${X(10)},${Y(174)} ${X(10)},${Y(150)} Z`;
+  const fg = add(g, "g", {mask:`url(#${mid})`});
+  add(fg, "path", {d:outer, fill:K.d("dunkel"), ...S(1, "#1e2226")});
+  add(fg, "path", {d:outer, fill:"none", stroke:"#fff", "stroke-opacity":.18, "stroke-width":4*u, transform:`translate(${-1.5*u} ${-1.5*u})`});
+  // Rand der Öffnungen: rechts rot (Ausschussseite)
+  const rim = side => { const s = side < 0 ? 1 : -1, x0 = side < 0 ? 0 : 300, xi = side < 0 ? 86 : 214;
+    return `M${X(x0+s*10)},${Y(58)} L${X(x0+s*52)},${Y(58)} Q${X(xi)},${Y(58)} ${X(xi)},${Y(90)} Q${X(xi)},${Y(122)} ${X(x0+s*52)},${Y(122)} L${X(x0+s*10)},${Y(122)}`; };
+  add(g, "path", {d:rim(-1), fill:"none", stroke:"#1e2226", "stroke-width":1.2});
+  add(g, "path", {d:rim(1), fill:"none", stroke:"#b0261b", "stroke-width":5*u});
+  // gehärtete Messflächen (Plättchen) an den vier Spitzen
+  [[10,34,60,58],[10,122,60,146],[240,34,290,58],[240,122,290,146]].forEach(([a,b2,c,d]) => {
+    add(g, "rect", {x:X(a), y:Y(b2), width:(c-a)*u, height:(d-b2)*u, rx:3*u, fill:K.v("chrom"), ...S(.7)}); hi(g, X(a+4), Y(b2+4), X(c-4), Y(b2+4), 1.2, .8); });
+  // Maßplättchen in der Mitte
+  const plate = (cx, cy, pw, ph, t, fs) => { add(g, "rect", {x:X(cx-pw/2), y:Y(cy-ph/2), width:pw*u, height:ph*u, rx:ph*u/2.4, fill:K.v("matt"), ...S(.6)});
+    add(g, "text", {x:X(cx), y:Y(cy)+fs*.36, "font-size":fs, "text-anchor":"middle", fill:"#1d2328", "font-family":"Segoe UI, Arial, sans-serif", "font-weight":700}, [t]); };
+  plate(150, 90, 54, 30, o.txt, o.fs); plate(106, 90, 26, 24, o.es, o.fs*.85); plate(194, 90, 26, 24, o.ei, o.fs*.85);
+  return {gut:[X(30), Y(90)], aus:[X(270), Y(90)], gapTop:Y(58), gapBot:Y(122), X, Y};
 }
 /* ---------------- Messuhr ---------------- */
 function dial(p, K, o){
@@ -2338,6 +2499,21 @@ document.querySelectorAll('[data-fig="tf-lage"]').forEach(window.LM_FIG["tf-lage
   }
   make();
 })();
+/* Zusatz: abgesetzte Welle mit geschlossener Maßkette */
+window.LM_FIG["zxb-kette"] = h => {
+  const {el, svgRoot} = LM.G, {svg} = svgRoot(h, 420, 200, "Abgesetzte Welle mit den Längenmaßen 20±0,1, 35±0,2, 15±0,1 und der Gesamtlänge 70±0,2");
+  svg.classList.add("big");
+  const A = (t, a, k) => svg.appendChild(el(t, a, k)), ink = "var(--ink)", k = 5, x0 = 35, yc = 78;
+  const xs = [x0, x0+20*k, x0+55*k, x0+70*k], r = [22, 34, 18];
+  for(let i=0;i<3;i++) A("rect", {x:xs[i], y:yc-r[i], width:xs[i+1]-xs[i], height:2*r[i], fill:"none", stroke:ink, "stroke-width":2.2});
+  A("line", {x1:x0-12, x2:xs[3]+12, y1:yc, y2:yc, stroke:ink, "stroke-width":.8, "stroke-dasharray":"16 3 2 3"});
+  const dim = (x1, x2, y, t) => { A("line", {x1, x2, y1:y, y2:y, stroke:ink, "stroke-width":.8, "marker-start":"none"});
+    [[x1,1],[x2,-1]].forEach(([x,s]) => A("path", {d:`M${x},${y} l${s*9},-3 l0,6 Z`, fill:ink}));
+    A("text", {x:(x1+x2)/2, y:y-5, "text-anchor":"middle", "font-size":15, fill:ink, "font-family":"Segoe UI, Arial, sans-serif"}, [t]); };
+  const ext = (x, y1, y2) => A("line", {x1:x, x2:x, y1, y2, stroke:ink, "stroke-width":.8});
+  xs.forEach((x,i) => ext(x, yc + (i===0?r[0]:i===3?r[2]:Math.max(r[i-1], r[i])), 186));
+  dim(xs[0], xs[1], 150, "20±0,1"); dim(xs[1], xs[2], 150, "35±0,2"); dim(xs[2], xs[3], 150, "15±0,1"); dim(xs[0], xs[3], 180, "70±0,2");
+};
 })();
 
 /* ============ Musterbeispiele LE 1 Wiederholung ============ */
