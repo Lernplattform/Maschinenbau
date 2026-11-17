@@ -533,15 +533,10 @@ ol.legend{margin:0; padding-left:22px; line-height:1.6}
 .lt-row .figcell p.small{margin:4px 0 0; line-height:1.35}
 @media (max-width:900px){ .lt-row{grid-template-columns:1fr} }
 @media (max-width:520px){ .lt-row svg.gfx.big .lbl-s{font-size:15px} .lt-row svg.gfx.big .lbl{font-size:16px} }
-/* LE 1.5 Toleranzen: eigenes CSS; Grundlayout in lib_zeichnung.css */
-.ctrl canvas.k3cv{border:1px solid var(--border); border-radius:6px; background:var(--surface)}
-.figcell canvas.k3cv{border-radius:6px}
-.ctrl input[type=range]{width:100%}
-.pfigw{max-width:640px; margin-bottom:8px}
+/* Toleranz-Bausteine (lib_zeichnung_tol.js): Toleranzangabe, Tabellen, Kopf-Button „📘 Tabellen“ – seit 17.11.2026 aus e.css (LE 1.5) */
 /* Toleranzangabe wie in der Zeichnung: Abmaße klein übereinander hinter dem Nennmaß */
 .tolst{display:inline-flex; flex-direction:column; vertical-align:middle; font-size:.72em; line-height:1.05; margin-left:2px; text-align:left}
-.tiles .tile .num{font-size:20px}
-/* Tabellen (DIN 2769, IT, Grenzabmaße) */
+/* Tabellen (DIN ISO 2768-1, IT, Grenzabmaße) */
 table.attab, table.isotab{border-collapse:collapse; width:100%; min-width:0}
 table.attab td, table.attab th, table.isotab td, table.isotab th{border:1px solid var(--border); padding:3px 5px; font-size:13px; text-align:center; line-height:1.25}
 table.attab td:first-child, table.isotab td:first-child{text-align:left; white-space:nowrap}
@@ -554,9 +549,15 @@ dialog.tbldlg::backdrop{background:rgba(0,0,0,.45)}
 .tbl-dlg-in{padding:12px 16px 18px}
 .tbl-dlg-in h2{margin:4px 0 6px; font-size:20px} .tbl-dlg-in h3{margin:14px 0 6px; font-size:16px}
 @media (max-width:520px){ .top-inner .tblbtn{padding:4px 8px; font-size:12px} }
+.lt-row .figcell .tbl-wrap, .figure .tbl-wrap{overflow-x:auto; max-width:100%}
+/* LE 1.5 Toleranzen: eigenes CSS; Grundlayout in lib_zeichnung.css */
+.ctrl canvas.k3cv{border:1px solid var(--border); border-radius:6px; background:var(--surface)}
+.figcell canvas.k3cv{border-radius:6px}
+.ctrl input[type=range]{width:100%}
+.pfigw{max-width:640px; margin-bottom:8px}
+.tiles .tile .num{font-size:20px}
 .ctrl label{display:block}
 @media (max-width:900px){ .lt-row{grid-template-columns:minmax(0,1fr)} }
-.lt-row .figcell .tbl-wrap, .figure .tbl-wrap{overflow-x:auto; max-width:100%}
 @media (max-width:520px){ svg.gfx.big .lbl-s{font-size:17px} svg.gfx.big .lbl{font-size:18px} .sim.kop svg.gfx.big .lbl-s{font-size:17px} }
 </style>
 <div class="site-head">
@@ -2508,7 +2509,7 @@ queueMicrotask(() => { build(); E.renderTabs(); });
    Gemeinsam genutzt von LE 1.1 (gfx_a.js) und Übung 1.1 (gfx_u.js); mk.py bindet alle lib_*.js des Ordners ein.
    Inhalt: Textbausteine (T, add, big), Segment-Knöpfe (segs, press, onSeg), Zahlformat f, Maßpfeil pfeil (DIN 406-11),
    Normschrift NS (ISO 3098 B), Bildausschnitt fit, Metallverläufe REF, Linienarten LT/LTK + ln, Isometrie isoKit, phase, Stückliste stlTable.
-   v1.5 (LE 1.5): Normschrift ± und Buchstaben H F G K N h n g f k r p e d j s x b.
+   v1.5 (LE 1.5): Normschrift ± und Buchstaben H F G K N h n g f k r p e d j s x b. v1.6 (LE 1.6): / P S E D J.
    v1.2 (LE 1.2): Maße dimH/dimV/dimD (Maßhilfslinien bis an die Kante, 2 mm Überstand), Strichlinie hid mit festem Anfang/Ende
    (Strich oder Lücke, versetzt), Mittelkreuz cross, Zeichen ° □ - + m in der Normschrift.
    Keine Formeln ($…$) in dieser Datei: tex.js liest nur gfx_/data_/muster_/body. */
@@ -2563,6 +2564,12 @@ const NG = {
   "d":[5,"M5,0 L5,10 M5,5 C4.5,3.8 3.6,3.2 2.5,3.2 C1,3.2 0,4.6 0,6.6 C0,8.6 1,10 2.5,10 C3.6,10 4.5,9.4 5,8.2"],
   "j":[2.6,"M2,3.4 L2,11.4 C2,12.5 1.4,13 0.4,13 M2,0.6 L2,1.2"], "x":[4.6,"M0,3.4 L4.6,10 M4.6,3.4 L0,10"], "b":[5,"M0,0 L0,10 M0,5 C0.5,3.8 1.4,3.2 2.5,3.2 C4,3.2 5,4.6 5,6.6 C5,8.6 4,10 2.5,10 C1.4,10 0.5,9.4 0,8.2"],
   "s":[4.4,"M4.2,4.2 C3.7,3.5 3,3.2 2.2,3.2 C1,3.2 0.3,3.9 0.3,4.9 C0.3,7 4.4,6.2 4.4,8.3 C4.4,9.4 3.5,10 2.2,10 C1.2,10 0.5,9.6 0,9"],
+  /* v1.6 (LE 1.6 Passungen): Bruchstrich für Passungsangaben (H7/f7) und Bohrungs-Grundabmaße P S E D J */
+  "/":[4.4,"M0,11 L4.4,-1"],
+  "P":[5.6,"M0,10 L0,0 L3.4,0 C4.9,0 5.6,1 5.6,2.6 C5.6,4.2 4.9,5.2 3.4,5.2 L0,5.2"],
+  "S":[5.6,"M5.2,1.4 C4.6,0.5 3.8,0 2.8,0 C1.3,0 0.3,0.9 0.3,2.4 C0.3,5.4 5.6,4.4 5.6,7.5 C5.6,9 4.5,10 2.8,10 C1.6,10 0.6,9.5 0,8.5"],
+  "E":[5,"M5,0 L0,0 L0,10 L5,10 M0,5 L4,5"], "D":[6,"M0,0 L0,10 L2.6,10 C4.8,10 6,8.2 6,5 C6,1.8 4.8,0 2.6,0 Z"],
+  "J":[4.6,"M4.4,0 L4.4,7.4 C4.4,9.1 3.4,10 2,10 C1,10 0.3,9.5 0,8.6"],
   " ":[3,""]
 };
 function NS(p, x, y, txt, h=14, anchor="middle", rot=0){
@@ -3328,26 +3335,35 @@ root.K3 = K3;
 if(typeof module !== "undefined") module.exports = K3;
 })(typeof window !== "undefined" ? window : globalThis);
 
-/* ============ Toleranzen-Baukasten (window.TOL) – seit LE 1.5 Toleranzen (17.11.2026) ============
-   Gemeinsam für LE 1.5 (gfx_e.js) und Übung 1.5 (gfx_u5.js); mk.py bindet alle lib_*.js des Ordners ein (nach lib_zeichnung.js und lib_zeichnung_3d.js).
-   Inhalt: Zahlformate (fz, fm, sg, sgN, sgU, dec), Maßzahl mit Toleranz in Normschrift tolT (Abmaße klein, ±, ISO-Klasse), tolHTML,
-   Allgemeintoleranzen DIN 2769 (ATR, ATV, ATN, ati, atTxt; Klassen a sehr fein, b mittel, c grob, d sehr grob, Werte wie frühere DIN ISO 2768-1 f, m, c, v),
-   ISO-Toleranzen DIN EN ISO 286-1 bis 120 mm (ITT, ESW, EIW, iso(N, Buchstabe, IT) → {es, ei, t} in µm; Bohrungen nur F, G, H), itGroup,
-   Toleranzfeld-Schema tfDiag (XS), HTML-Tabellen atTable, itTable, isoTable. Keine Formeln ($…$) in dieser Datei. */
+/* ============ Toleranz-Bausteine für LE 1.5, LE 1.6 und Übungen (window.TOL), seit 17.11.2026 ============
+   Herausgelöst aus gfx_e.js (LE 1.5), damit LE 1.6 Passungen und die Übungen dieselben Normwerte und Grafiken nutzen.
+   Normwerte (Fakten): Allgemeintoleranzen DIN 2769 (Klassen a–d; Werte wie frühere DIN ISO 2768-1 f, m, c, v),
+   Grundtoleranzen IT4–IT11 und Grundabmaße nach DIN EN ISO 286-1 (Nennmaß bis 120 mm), Passmaße wie im Tabellenbuch
+   (P_SH = G_oB − G_uW, P_SM = G_uB − G_oW, P_ÜH = G_uB − G_oW, P_ÜM = G_oB − G_uW; Übermaß negativ, wie im Video „Passungen“).
+   Inhalt:
+     Zahlen     fz (39,95), fm (feste Stellen), dec (Stellenzahl), sg/sgN/sgU (Vorzeichen; Normschrift; µm), nsW (Breite Normschrift)
+     Zeichnung  tolT(g, x, y, N, es, ei, {cls, h, rot, anchor}) Maßzahl mit Abmaßen/Toleranzklasse in Normschrift · tolHTML
+     Normwerte  ATR/ATV/ATN/ati/atTxt (DIN 2769) · RG/RG2/ri/rTxt/ITT/ESW/EIW (ISO 286) · iso(N, "g", 6) → {es, ei, t} in µm
+                Wellen d e f g h k m n p r s, Bohrungen D E F G H K M N P R S (K, M, N bis IT8; P, R, S mit Δ bis IT7) · itGroup(q)
+     Passungen  fit(N, "H7", "g6") → {b, w, a, c, art, ...} (µm) · fitTxt
+     Grafik     tfDiag (Toleranzfeld-Schema) · XS · fitDiag(g, id, fit, o) Passungs-Schema mit Passmaß-Pfeilen, Farben CB/CW/ART/AFILL, ST (Text mit Index), pm, names
+     Tabellen   atTable(hl), itTable(), isoTable(spalten), tabellen({titel, intro, extra}) = Kopf-Button „📘 Tabellen“ (#tbl-open, #tbl-dlg)
+   Abhängig von ZK (lib_zeichnung.js, wird vorher eingebunden). Keine $…$-Formeln hier (tex.js liest lib_*.js nicht). */
 (function(){
 "use strict";
-const {T, add, NS, NG} = ZK;
+const Z = () => window.ZK;
+
 /* ---------- Zahlen ---------- */
 const fz = x => (Math.round(x*1000)/1000).toFixed(3).replace(/0+$/, "").replace(/\.$/, "").replace(".", ",");   // 39,95 · 40 · 0,05
 const fm = (x, d=3) => x.toFixed(d).replace(".", ",");
 const sg = x => Math.abs(x) < 1e-9 ? "0" : (x > 0 ? "+" : "−") + fz(Math.abs(x));
 const sgN = x => Math.abs(x) < 1e-9 ? "0" : (x > 0 ? "+" : "-") + fz(Math.abs(x));    // Normschrift
 const sgU = x => x === 0 ? "0" : (x > 0 ? "+" : "−") + Math.abs(x);                  // µm
-const dec = (...v) => Math.max(1, ...v.map(x => { const s = fz(Math.abs(x)).split(",")[1]; return s ? s.length : 0; }));
-const nsW = (t, h) => ([...String(t)].reduce((a, c) => a + (NG[c] || NG[" "])[0] + 2, 0) - 2)*h/10;
+const dec = (...v) => Math.max(1, ...v.map(x => { const s = fz(Math.abs(x)).split(",")[1]; return s ? s.length : 0; }));   // Nachkommastellen für fm
+const nsW = (t, h) => { const NG = Z().NG; return ([...String(t)].reduce((a, c) => a + (NG[c] || NG[" "])[0] + 2, 0) - 2)*h/10; };
 /* Maßzahl mit Toleranz in Normschrift: y = Grundlinie des Nennmaßes; Abmaße kleiner, oberes oben, unteres auf der Grundlinie, ± in Zeilenhöhe; o.cls = ISO-Toleranzklasse */
 function tolT(g, x, y, N, es, ei, o={}){
-  const h = o.h || 14, hs = Math.round(h*7.2)/10, G = add(g, "g", o.rot ? {transform:`rotate(${o.rot} ${x} ${y})`} : {}), a = o.anchor || "middle";
+  const {NS, add} = Z(), h = o.h || 14, hs = Math.round(h*7.2)/10, G = add(g, "g", o.rot ? {transform:`rotate(${o.rot} ${x} ${y})`} : {}), a = o.anchor || "middle";
   if(o.cls){ NS(G, x, y, N + o.cls, h, a); return G; }
   if(es == null || (es === 0 && ei === 0)){ NS(G, x, y, String(N), h, a); return G; }
   if(es > 0 && Math.abs(es + ei) < 1e-9){ NS(G, x, y, N + "±" + fz(es), h, a); return G; }
@@ -3367,30 +3383,55 @@ const ATV = {a:[.05,.05,.1,.15,.2,.3,.5,null], b:[.1,.1,.2,.3,.5,.8,1.2,2], c:[.
 const ATN = {a:"sehr fein", b:"mittel", c:"grob", d:"sehr grob"};
 const ati = N => ATR.findIndex(([a, b], i) => i === 0 ? N >= a && N <= b : N > a && N <= b);
 const atTxt = i => i === 0 ? "0,5 bis 3" : `über ${fz(ATR[i][0])} bis ${fz(ATR[i][1])}`;
-/* ISO-Toleranzen DIN EN ISO 286-1 (Auszug bis 120 mm): Grundtoleranzen in µm, Grundabmaße der Wellen in µm */
+/* ISO-Toleranzen DIN EN ISO 286-1 (Auszug bis 120 mm): Grundtoleranzen in µm, Grundabmaße in µm */
 const RG = [3,6,10,18,30,50,80,120], RG2 = [3,6,10,18,30,50,80,120,180,250];
 const ri = N => RG.findIndex(b => N <= b);
 const rTxt = (i, R=RG) => i === 0 ? "bis 3" : `über ${R[i-1]} bis ${R[i]}`;
-const ITT = {5:[4,5,6,8,9,11,13,15,18,20], 6:[6,8,9,11,13,16,19,22,25,29], 7:[10,12,15,18,21,25,30,35,40,46], 8:[14,18,22,27,33,39,46,54,63,72], 9:[25,30,36,43,52,62,74,87,100,115], 10:[40,48,58,70,84,100,120,140,160,185], 11:[60,75,90,110,130,160,190,220,250,290]};
+const ITT = {4:[3,4,4,5,6,7,8,10,12,14], 5:[4,5,6,8,9,11,13,15,18,20], 6:[6,8,9,11,13,16,19,22,25,29], 7:[10,12,15,18,21,25,30,35,40,46], 8:[14,18,22,27,33,39,46,54,63,72], 9:[25,30,36,43,52,62,74,87,100,115], 10:[40,48,58,70,84,100,120,140,160,185], 11:[60,75,90,110,130,160,190,220,250,290]};
 const ESW = {d:[-20,-30,-40,-50,-65,-80,-100,-120], e:[-14,-20,-25,-32,-40,-50,-60,-72], f:[-6,-10,-13,-16,-20,-25,-30,-36], g:[-2,-4,-5,-6,-7,-9,-10,-12], h:[0,0,0,0,0,0,0,0]};
-const EIW = {k:[0,1,1,1,2,2,2,3], m:[2,4,6,7,8,9,11,13], n:[4,8,10,12,15,17,20,23], p:[6,12,15,18,22,26,32,37], r:[10,15,19,23,28,34,41,51]};
-const rEI = N => N > 100 ? 54 : N > 80 ? 51 : N > 65 ? 43 : N > 50 ? 41 : EIW.r[ri(N)];
-/* {es, ei, t} in µm; Bohrungen nur F, G, H (D, E): EI = −es der Welle */
+const EIW = {k:[0,1,1,1,2,2,2,3], m:[2,4,6,7,8,9,11,13], n:[4,8,10,12,15,17,20,23], p:[6,12,15,18,22,26,32,37], r:[10,15,19,23,28,34,41,51], s:[14,19,23,28,35,43,53,71]};
+/* r und s sind über 50 mm feiner unterteilt (50–65 / 65–80 / 80–100 / 100–120) */
+const EIF = {r:[41,43,51,54], s:[53,59,71,79]};
+const eiShaft = (N, l, q) => { if(l === "k") return q >= 4 && q <= 7 ? EIW.k[ri(N)] : 0;
+  if(EIF[l] && N > 50){ const F = EIF[l]; return N > 100 ? F[3] : N > 80 ? F[2] : N > 65 ? F[1] : F[0]; } return EIW[l][ri(N)]; };
+/* {es, ei, t} in µm. Bohrung (Großbuchstabe): A–H EI = −es der Welle; K, M, N (bis IT8) und P–S (bis IT7) ES = −ei + Δ mit Δ = IT(q) − IT(q−1);
+   P–S ab IT8 ES = −ei. Nicht enthaltene Klassen → null. */
 function iso(N, L, q){
-  const i = ri(N); if(i < 0 || !ITT[q]) return null; const t = ITT[q][i], l = L.toLowerCase(), hole = L !== l; let es, ei;
-  if(ESW[l]){ es = ESW[l][i]; ei = es - t; }
-  else if(EIW[l]){ ei = l === "k" ? (q <= 7 ? EIW.k[i] : 0) : l === "r" ? rEI(N) : EIW[l][i]; es = ei + t; }
-  else return null;
-  if(hole){ if(!ESW[l]) return null; return {es:-ei, ei:-es, t}; }
-  return {es, ei, t};
+  const i = ri(N); if(i < 0 || !ITT[q]) return null; const t = ITT[q][i], l = L.toLowerCase(), hole = L !== l;
+  if(!hole){
+    if(ESW[l]){ const es = ESW[l][i]; return {es, ei:es - t, t}; }
+    if(EIW[l]){ const ei = eiShaft(N, l, q); return {es:ei + t, ei, t}; }
+    return null;
+  }
+  if(ESW[l]){ const EI = -ESW[l][i] || 0; return {es:EI + t, ei:EI, t}; }
+  if(!EIW[l] || !ITT[q-1]) return null;
+  const D = i === 0 ? 0 : t - ITT[q-1][i], ein = eiShaft(N, l, q);
+  let ES;
+  if("kmn".includes(l)){ if(q > 8) return null; ES = -ein + D; }
+  else ES = q <= 7 ? -ein + D : -ein;
+  return {es:ES, ei:ES - t, t};
 }
 const itGroup = q => q <= 4 ? "IT1 bis IT4: sehr genau, z. B. Messwerkzeuge (Läppen, Honen, Feinstschleifen)" : q <= 11 ? "IT5 bis IT11: üblicher Maschinenbau (Drehen, Fräsen, Schleifen, Reiben)" : "ab IT12: grobe Teile (Walzen, Schmieden, Gießen)";
+const cls = s => { const m = /^([A-Za-z]+)(\d+)$/.exec(s); return m ? [m[1], +m[2]] : null; };
 
-/* ---------- Toleranzfeld-Schema (Station 1, Aufgabe 3, Simulator) ----------
+/* ---------- Passungen ----------
+   fit(N, "H7", "g6"): b/w = {es, ei, t, Go, Gu} (Abmaße µm, Grenzmaße mm). a = G_oB − G_uW (µm), c = G_uB − G_oW (µm).
+   c ≥ 0 → Spielpassung (P_SH = a, P_SM = c) · a ≤ 0 → Übermaßpassung (P_ÜM = a, P_ÜH = c) · sonst Übergangspassung (P_SH = a, P_ÜH = c).
+   PT = a − c = T_B + T_W (Passtoleranz). */
+function fit(N, B, W){
+  const [lb, qb] = cls(B), [lw, qw] = cls(W), b = iso(N, lb, qb), w = iso(N, lw, qw); if(!b || !w) return null;
+  [b, w].forEach(f => { f.Go = N + f.es/1000; f.Gu = N + f.ei/1000; });
+  const a = b.es - w.ei, c = b.ei - w.es, art = c >= 0 ? "Spielpassung" : a <= 0 ? "Übermaßpassung" : "Übergangspassung";
+  return {N, B, W, b, w, a, c, PT:a - c, art};
+}
+const um = x => fm(x/1000);   // µm → „0,021“
+const fitTxt = f => f.art === "Spielpassung" ? `P_SH = +${um(f.a)} mm, P_SM = +${um(f.c)} mm` : f.art === "Übermaßpassung" ? `P_ÜH = −${um(-f.c)} mm, P_ÜM = ${f.a ? "−" : ""}${um(-f.a)} mm` : `P_SH = +${um(f.a)} mm, P_ÜH = −${um(-f.c)} mm`;
+
+/* ---------- Toleranzfeld-Schema (LE 1.5) ----------
    Nulllinie bei yN, Bezugslinie unten bei yB (Nennmaß nicht maßstäblich: Bruchzeichen), Abweichungen mit s px/mm übertrieben groß */
 const XS = {N:40, Go:92, Gu:144, F0:180, F1:250, es:278, ei:310, T:352};
 function tfDiag(g, id, es, ei, o={}){
-  const yN = o.yN || 140, yB = o.yB || 262, m = Math.max(Math.abs(es), Math.abs(ei), 0.01), s = o.s || (o.room || 95)/m, Y = d => yN - d*s;
+  const {add} = Z(), yN = o.yN || 140, yB = o.yB || 262, m = Math.max(Math.abs(es), Math.abs(ei), 0.01), s = o.s || (o.room || 95)/m, Y = d => yN - d*s;
   const ln = (x1, y1, x2, y2, st) => add(g, "line", {x1, y1, x2, y2, style:st});
   ln(16, yN, 404, yN, "stroke:var(--ink);stroke-width:1.6");
   ln(16, yB, 170, yB, "stroke:var(--ink);stroke-width:1.1");
@@ -3405,38 +3446,86 @@ function tfDiag(g, id, es, ei, o={}){
   return {Y, s, yN, yB};
 }
 
+/* ---------- Tabellen (Klausur-Hilfsmittel, Auszüge) ---------- */
 function atTable(hl){ const H = ATR.map((r, i) => `<th>${atTxt(i).replace("über ", "über<br>")}</th>`).join("");
   return `<div class="tbl-wrap"><table class="attab"><tr><th>Klasse</th>${H}</tr>${Object.keys(ATV).map(c => `<tr><td><b>${c}</b> <span class="small muted">${ATN[c]}</span></td>${ATV[c].map((v, i) => `<td class="${hl && hl[0] === c && hl[1] === i ? "hl" : ""}">${v == null ? "–" : "±" + fz(v)}</td>`).join("")}</tr>`).join("")}</table></div>`; }
-function isoTable(){ const C = ["H7","H8","G7","F8","h6","h9","g6","f7","k6","m6","n6","r6"], R = [[2,3],[5,6],[8,10],[15,18],[25,30],[40,50],[60,65],[70,80],[90,100],[110,120]];
-  const lab = ["bis 3","über 3 bis 6","über 6 bis 10","über 10 bis 18","über 18 bis 30","über 30 bis 50","über 50 bis 65","über 65 bis 80","über 80 bis 100","über 100 bis 120"];
-  return `<div class="tbl-wrap"><table class="isotab"><tr><th>Nennmaß in mm</th>${C.map(c => `<th>${c}</th>`).join("")}</tr>${R.map(([n], i) => `<tr><td>${lab[i]}</td>${C.map(c => { const f = iso(n, c[0], +c.slice(1)); return `<td>${sgU(f.es)}<br>${sgU(f.ei)}</td>`; }).join("")}</tr>`).join("")}</table></div>`; }
 function itTable(){ const Q = [5,6,7,8,9,10,11];
   return `<div class="tbl-wrap"><table class="isotab"><tr><th>Nennmaß in mm</th>${Q.map(q => `<th>IT${q}</th>`).join("")}</tr>${RG2.map((b, i) => `<tr><td>${rTxt(i, RG2)}</td>${Q.map(q => `<td>${ITT[q][i]}</td>`).join("")}</tr>`).join("")}</table></div>`; }
-/* =====================================================================
-   Kopf-Button „📘 Tabellen“ (#tbl-open, <dialog id="tbl-dlg">): Klausur-Hilfsmittel (Auszüge), druckbar; nur aktiv, wenn beide im Body stehen
-   ===================================================================== */
-(function tabellen(){
-  const $ = q => document.querySelector(q), btn = $("#tbl-open"), dlg = $("#tbl-dlg"); if(!btn || !dlg) return;
-  const html = () => `<h2>Tabellen zu Toleranzen (Auszug)</h2>
-    <p class="small muted">Normwerte nach DIN 2769 und DIN EN ISO 286-1, als Ersatz fürs Tabellenbuch beim Üben. In der Klausur nimmst du dein Tabellenbuch.</p>
-    <h3>Allgemeintoleranzen für Längenmaße (DIN 2769), Grenzabmaße in mm</h3>${atTable()}
-    <h3>Grundtoleranzen IT5 bis IT11 in µm (DIN EN ISO 286-1)</h3>${itTable()}
-    <h3>Grenzabmaße häufiger Toleranzklassen in µm (oben oberes, unten unteres Abmaß)</h3>${isoTable()}`;
+const ISO15 = ["H7","H8","G7","F8","h6","h9","g6","f7","k6","m6","n6","r6"];
+function isoTable(C=ISO15){ const R = [[2,3],[5,6],[8,10],[15,18],[25,30],[40,50],[60,65],[70,80],[90,100],[110,120]];
+  const lab = ["bis 3","über 3 bis 6","über 6 bis 10","über 10 bis 18","über 18 bis 30","über 30 bis 50","über 50 bis 65","über 65 bis 80","über 80 bis 100","über 100 bis 120"];
+  return `<div class="tbl-wrap"><table class="isotab"><tr><th>Nennmaß in mm</th>${C.map(c => `<th>${c}</th>`).join("")}</tr>${R.map(([n], i) => `<tr><td>${lab[i]}</td>${C.map(c => { const [l, q] = cls(c), f = iso(n, l, q); return `<td>${sgU(f.es)}<br>${sgU(f.ei)}</td>`; }).join("")}</tr>`).join("")}</table></div>`; }
+/* Kopf-Button „📘 Tabellen“: o.titel, o.intro, o.parts = [[Überschrift, html], …] (Standard: Tabellen der LE 1.5) */
+function tabellen(o={}){
+  const btn = document.querySelector("#tbl-open"), dlg = document.querySelector("#tbl-dlg"); if(!btn || !dlg) return;
+  const parts = o.parts || [["Allgemeintoleranzen für Längenmaße (DIN 2769), Grenzabmaße in mm", atTable()], ["Grundtoleranzen IT5 bis IT11 in µm (DIN EN ISO 286-1)", itTable()], ["Grenzabmaße häufiger Toleranzklassen in µm (oben oberes, unten unteres Abmaß)", isoTable()]];
+  const titel = o.titel || "Tabellen zu Toleranzen (Auszug)";
+  const html = () => `<h2>${titel}</h2>
+    <p class="small muted">${o.intro || "Normwerte nach DIN 2769 und DIN EN ISO 286-1, als Ersatz fürs Tabellenbuch beim Üben. In der Klausur nimmst du dein Tabellenbuch."}</p>
+    ${parts.map(([h, t]) => `<h3>${h}</h3>${t}`).join("\n    ")}`;
   dlg.innerHTML = `<div class="tbl-dlg-in"><div class="row" style="justify-content:flex-end;gap:8px"><button type="button" class="btn small secondary" id="tbl-print">🖨 Drucken</button><button type="button" class="btn small" id="tbl-close">Schließen</button></div><div id="tbl-body">${html()}</div></div>`;
   btn.addEventListener("click", () => { if(dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); });
-  $("#tbl-close").addEventListener("click", () => dlg.close ? dlg.close() : dlg.removeAttribute("open"));
+  document.querySelector("#tbl-close").addEventListener("click", () => dlg.close ? dlg.close() : dlg.removeAttribute("open"));
   dlg.addEventListener("click", e => { if(e.target === dlg && dlg.close) dlg.close(); });
-  $("#tbl-print").addEventListener("click", () => { const w = window.open("", "_blank"); if(!w) return;
-    w.document.write(`<!doctype html><html lang="de"><head><meta charset="utf-8"><title>Tabellen Toleranzen</title><style>body{font-family:Segoe UI,Arial,sans-serif;font-size:13px;margin:12mm} table{border-collapse:collapse;margin:4px 0 14px} td,th{border:1px solid #888;padding:2px 5px;text-align:center} h2{font-size:16px} h3{font-size:13px;margin:10px 0 4px} .small{font-size:11px}</style></head><body>${html()}</body></html>`);
+  document.querySelector("#tbl-print").addEventListener("click", () => { const w = window.open("", "_blank"); if(!w) return;
+    w.document.write(`<!doctype html><html lang="de"><head><meta charset="utf-8"><title>${o.druck || "Tabellen Toleranzen"}</title><style>body{font-family:Segoe UI,Arial,sans-serif;font-size:13px;margin:12mm} table{border-collapse:collapse;margin:4px 0 14px} td,th{border:1px solid #888;padding:2px 5px;text-align:center} h2{font-size:16px} h3{font-size:13px;margin:10px 0 4px} .small{font-size:11px}</style></head><body>${html()}</body></html>`);
     w.document.close(); w.focus(); w.print(); });
-})();
+}
 
-window.TOL = {fz, fm, sg, sgN, sgU, dec, nsW, tolT, tolHTML, ATR, ATV, ATN, ati, atTxt, RG, RG2, ri, rTxt, ITT, ESW, EIW, iso, itGroup, XS, tfDiag, atTable, itTable, isoTable};
+/* ---------- Passungs-Schema (LE 1.6, Übung 1.6) ---------- */
+const CB = {f:"rgba(31,111,168,.24)", s:"#1f6fa8"}, CW = {f:"rgba(232,140,30,.30)", s:"#c26a10"};
+const ART = {Spielpassung:"#2f8f5b", Übergangspassung:"#b8860b", Übermaßpassung:"#b8473a"};
+const AFILL = {Spielpassung:"rgba(47,143,91,.22)", Übergangspassung:"rgba(220,170,30,.28)", Übermaßpassung:"rgba(184,71,58,.22)"};
+const HALO = "paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round";
+/* Text mit Index (SVG-Ausnahme von KaTeX): ST(g, x, y, "P", "SH") */
+const ST = (g, x, y, b, i, cls="lbl-s", ex={}) => Z().add(g, "text", Object.assign({x, y, class:cls}, ex), [b, LM.G.el("tspan", {"baseline-shift":"sub", "font-size":"75%"}, [i])]);
+const pm = u => (u > 0 ? "+" : u < 0 ? "−" : "") + fm(Math.abs(u)/1000);   // Passmaß µm → „+0,041“
+const NAME = {a:["P","SH"], cS:["P","SM"], cU:["P","ÜH"], aU:["P","ÜM"]};
+const names = f => [f.a > 0 ? NAME.a : NAME.aU, f.c >= 0 ? NAME.cS : NAME.cU];   // [Name für a = G_oB − G_uW, Name für c = G_uB − G_oW]
+/* ---------- Toleranzfeld-Schema einer Passung ----------
+   f = TOL.fit(…); o.xB/o.xW Felder, o.top = oberer Rand, o.span = Höhe von der höchsten bis zur tiefsten Abweichung (px), o.P = Passmaß-Pfeile, o.blank = ohne Text,
+   o.ist = {b, w} Istabweichungen in µm (Marken), o.lab = Feldnamen unten (Standard ja) */
+function fitDiag(g, id, f, o={}){
+  const V = [f.b.es, f.b.ei, f.w.es, f.w.ei], up = Math.max(0, ...V), dn = Math.max(0, ...V.map(v => -v));
+  const top = o.top || 48, s = (o.span || 196)/Math.max(up + dn, 1), yN = top + up*s, xb = o.xB || [150,210], xw = o.xW || [230,290], Y = d => yN - d*s;
+  Z().add(g, "line", {x1:o.x0 || 10, y1:yN, x2:o.x1 || 410, y2:yN, style:"stroke:var(--ink);stroke-width:1.6"});
+  const fld = (x, F, c) => Z().add(g, "rect", {x:x[0], y:Y(F.es), width:x[1] - x[0], height:Math.max(1.5, (F.es - F.ei)*s), style:`fill:${c.f};stroke:${c.s};stroke-width:1.8`});
+  fld(xb, f.b, CB); fld(xw, f.w, CW);
+  const dash = (x1, x2, y) => Z().add(g, "line", {x1, y1:y, x2, y2:y, style:"stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3"});
+  const arr = (x, y1, y2) => { if(Math.abs(y2 - y1) < 2) return; Z().add(g, "line", {x1:x, y1, x2:x, y2, style:"stroke:var(--ink);stroke-width:1.3", "marker-start":`url(#${id})`, "marker-end":`url(#${id})`}); };
+  const P = {};
+  if(o.P){
+    const xa = xw[1] + 22, xc = xb[0] - 22, [na, nc] = names(f);
+    dash(xb[1], xa + 6, Y(f.b.es)); dash(xw[1], xa + 6, Y(f.w.ei)); arr(xa, Y(f.b.es), Y(f.w.ei));
+    dash(xc - 6, xw[0], Y(f.w.es)); dash(xc - 6, xb[0], Y(f.b.ei)); arr(xc, Y(f.b.ei), Y(f.w.es));
+    P.a = [xa, (Y(f.b.es) + Y(f.w.ei))/2]; P.c = [xc, (Y(f.b.ei) + Y(f.w.es))/2];
+    if(!o.blank){
+      const lab = (x, y, n, v, anc) => { if(y > yN - 20 && y < yN + 22) y = y < yN ? yN - 20 : yN + 22;
+        ST(g, x, y - 3, n[0], n[1], "lbl", {"text-anchor":anc, style:`fill:${v >= 0 ? ART.Spielpassung : ART.Übermaßpassung};${HALO}`}); Z().T(g, x, y + 15, pm(v) + " mm", "lbl-s", {"text-anchor":anc, style:HALO}); };
+      lab(xa + 8, P.a[1], na, f.a, "start"); lab(xc - 8, P.c[1], nc, f.c, "end");
+    }
+  }
+  if(o.ist){ const mk = (x, d, c) => Z().add(g, "line", {x1:x[0] - 6, y1:Y(d), x2:x[1] + 6, y2:Y(d), style:`stroke:${c};stroke-width:3`}); mk(xb, o.ist.b, "#0d3f66"); mk(xw, o.ist.w, "#8a4300"); }
+  if(!o.blank){
+    Z().T(g, o.x0 || 10, yN - 6, "Nulllinie", "lbl-s", {style:HALO});
+    if(o.lab !== false){ const yl = o.yL || yN + dn*s + 36;
+      Z().T(g, (xb[0] + xb[1])/2, yl, (o.short ? "" : "Bohrung ") + f.B, "lbl-s", {"text-anchor":"middle", style:`fill:${CB.s};font-weight:700`});
+      Z().T(g, (xw[0] + xw[1])/2, yl, (o.short ? "" : "Welle ") + f.W, "lbl-s", {"text-anchor":"middle", style:`fill:${CW.s};font-weight:700`});
+      if(o.vals !== false){ Z().T(g, (xb[0] + xb[1])/2, Y(f.b.es) - 6, sgU(f.b.es), "lbl-s", {"text-anchor":"middle"}); Z().T(g, (xb[0] + xb[1])/2, Y(f.b.ei) + 15, sgU(f.b.ei), "lbl-s", {"text-anchor":"middle"});
+        Z().T(g, (xw[0] + xw[1])/2, Y(f.w.es) - 6, sgU(f.w.es), "lbl-s", {"text-anchor":"middle"}); Z().T(g, (xw[0] + xw[1])/2, Y(f.w.ei) + 15, sgU(f.w.ei), "lbl-s", {"text-anchor":"middle"}); }
+    }
+  }
+  return {Y, s, yN, P, xb, xw};
+}
+
+
+window.TOL = {fz, fm, sg, sgN, sgU, dec, nsW, tolT, tolHTML, ATR, ATV, ATN, ati, atTxt, RG, RG2, ri, rTxt, ITT, ESW, EIW, iso, itGroup, cls, fit, fitTxt, um, XS, tfDiag, atTable, itTable, isoTable, tabellen, CB, CW, ART, AFILL, HALO, ST, pm, names, fitDiag};
 })();
 
 /* ============ Grafiken und Simulationen LE 1.5 Toleranzen (17.11.2026) ============
    Alle Bauteile sind eigene Formen mit eigenen Maßen (nicht aus Skript, Präsentation, Aufgabenheft, Video oder Tabellenbuch); Ansichten rechnet K3.
    Normwerte (Fakten): Allgemeintoleranzen DIN 2769 (Klassen a, b, c, d; Werte wie die frühere DIN ISO 2768-1 f, m, c, v, Klasse b = früher m, so im Video der Lehrkraft), Grundtoleranzen IT5–IT11 und Grundabmaße nach DIN EN ISO 286-1 (Nennmaß bis 120 mm).
+   Zahlen, Normwerte, Toleranzfeld-Schema und Kopf-Button „📘 Tabellen“ kommen aus lib_zeichnung_tol.js (window.TOL, auch für LE 1.6).
    Simulationen: Toleranzfeld-Simulator (Station 1), Passprobe Schieber/Führung und Maßketten-Rechner (Station 2), Allgemeintoleranz-Finder (Station 3),
    ISO-Toleranz-Labor (Station 4). Kopf-Button „📘 Tabellen“ (Klausur-Hilfsmittel als HTML-Tabellen, druckbar).
    Aufgabengrafik mit fester viewBox (Kreise der Beschriftung in data_e.js hängen daran): lb-tf 420 × 280. */
@@ -3446,12 +3535,15 @@ const {svgRoot} = LM.G;
 const $ = s => document.querySelector(s);
 const {T, add, big, press, onSeg, pfeil, NS, NG, dimH, dimV, dimD, fit} = ZK;
 const {box, cyl, make, at} = K3;
-const {fz, fm, sg, sgN, sgU, dec, tolT, ATR, ATV, ATN, ati, atTxt, RG, ri, rTxt, ITT, iso, itGroup, XS, tfDiag, atTable, itTable, isoTable} = TOL;
-window.LM_ISO15 = iso;
 window.LM_FIG = window.LM_FIG || {};
 const BL = "var(--blue)", RU = "var(--rust)", OK = "var(--ok)", ER = "var(--err)";
 const note = (g, x, y, t, c=RU, anchor="start") => T(g, x, y, t, "lbl-s", {"text-anchor":anchor, style:`fill:${c};font-weight:700`});
 function sheet(h, W, H, aria){ const {svg, defs} = svgRoot(h, W, H, aria); big(svg); const id = "e" + Math.random().toString(36).slice(2,8); pfeil(defs, id); return {svg, defs, id, g:add(svg, "g")}; }
+
+/* Zahlen, Normwerte, Toleranzfeld-Schema und Tabellen: lib_zeichnung_tol.js (window.TOL, seit 17.11.2026) */
+const {fz, fm, sg, sgN, sgU, nsW, tolT, tolHTML, ATR, ATV, ATN, ati, atTxt, RG, RG2, ri, rTxt, ITT, ESW, EIW, iso, itGroup, XS, tfDiag, atTable, itTable, isoTable} = TOL;
+const dec = (...v) => Math.max(1, ...v.map(x => { const s = fz(Math.abs(x)).split(",")[1]; return s ? s.length : 0; }));
+window.LM_ISO15 = iso;
 
 /* ---------- Körper (K3, mm) ---------- */
 const KB = {
@@ -3740,6 +3832,7 @@ window.LM_FIG["le-grenz"] = h => {
   add(g, "circle", {cx:X(30), cy:90, r:6, style:"fill:var(--blue)"});
   note(svg, X(30), 150, "30 ist nicht „über 30“ → ±0,2 (Klasse b)", RU, "middle");
 };
+window.LM_AT15 = atTable;
 (function figAT(){
   const host = $("#fig-at"), ctrl = $("#ctrl-at"); if(!host || !ctrl) return;
   let N = 30, c = "b";
@@ -3887,6 +3980,11 @@ window.LM_FIG["zx-3"] = h => { const {svg, id, g} = sheet(h, 420, 210, "Haltepla
 window.LM_FIG["zx-4"] = h => { const {svg, id, g} = sheet(h, 420, 200, "Stufenstück: Gesamtlänge 80 plus minus 0,1, Stufe 48 minus 0,1, Restmaß x ohne Maß"); const k = 3.8, p = view(g, KB.z4, 50, 50, k);
   dH(g, id, p, 0, 80, 0, p.Y(0) + 28, 80, 0.1, -0.1); dH(g, id, p, 0, 48, 26, p.Y(-26) - 20, 48, 0, -0.1);
   dimH(g, id, p.X(48), p.X(80), p.Y(-26), p.Y(-12), p.Y(-26) - 20, null, {mm:k}); NS(g, (p.X(48) + p.X(80))/2, p.Y(-26) - 24, "x", 14); };
+
+/* =====================================================================
+   Kopf-Button „📘 Tabellen“: Klausur-Hilfsmittel (Auszüge), druckbar
+   ===================================================================== */
+TOL.tabellen();
 
 document.querySelectorAll("[data-fig]").forEach(d => { if(d.firstChild) return; const fn = window.LM_FIG[d.dataset.fig]; if(fn) fn(d); });
 /* Tabellen im Lesetext */
