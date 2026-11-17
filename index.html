@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="de">
-<title>Maschinenbau – Übersicht der Lerneinheiten</title>
+<title>Maschinenbau – Lerneinheiten und Übungsaufgaben</title>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -264,6 +264,12 @@ body.lm-gated{overflow:hidden}
 .saved.warn .linkbtn{color:#fff; text-decoration:underline; font-weight:800}
 @media (max-width:560px){ .lm-gate-card{padding:20px 18px} .lm-gate-card h2{font-size:20px} }
 
+.lm-name{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.lm-name label{display:flex; flex-direction:column; gap:4px; font-weight:600}
+.lm-name input{font:inherit; font-weight:400; padding:10px 12px; border:2px solid var(--line, #888); border-radius:8px; background:var(--bg); color:var(--ink); min-width:0}
+.lm-name input:focus{outline:3px solid var(--blue); outline-offset:1px}
+.lm-name .pflicht{color:var(--err, #c0392b)}
+@media (max-width:560px){ .lm-name{grid-template-columns:1fr} }
 .lm-gate-card.ok{border-top-color:var(--ok)} .lm-gate-card .no.ok{background:var(--ok)}
 body.lm-gated .site-head, body.lm-gated header.top, body.lm-gated main, body.lm-gated .site-foot{visibility:hidden}
 
@@ -346,11 +352,22 @@ body.gated main, body.gated .site-foot{visibility:hidden}
 @media (max-width:700px){ .ov-total{grid-template-columns:1fr} }
 @media (max-width:560px){ .units{grid-template-columns:1fr} .chapter-h h2{font-size:19px} .ov-total{padding:16px} }
 @media print{ #gate, .ov-src, .ov-hint, .site-foot{display:none!important} .le{break-inside:avoid} }
+
+/* Reiter Lerneinheiten / Übungsaufgaben (17.11.2026) */
+.ov-tabs{display:flex; gap:6px; border-bottom:2px solid var(--border); margin-bottom:-24px}
+.ov-tabs button{font:inherit; font-size:17px; font-weight:700; padding:10px 18px; border:1px solid var(--border); border-bottom:none; border-radius:8px 8px 0 0; background:var(--surface2); color:var(--muted); cursor:pointer; margin-bottom:-2px}
+.ov-tabs button[aria-selected="true"]{background:var(--bg); color:var(--blue); border-color:var(--border); border-bottom:2px solid var(--bg); box-shadow:inset 0 3px 0 var(--blue)}
+.ov-tabs button:focus-visible{outline:3px solid var(--rust); outline-offset:2px}
+.ov-tabs .tabcnt{display:inline-block; min-width:1.6em; margin-left:4px; padding:0 6px; border-radius:999px; background:var(--border); color:var(--muted); font-size:13px}
+.ov-tabs button[aria-selected="true"] .tabcnt{background:var(--blue-soft); color:var(--blue)}
+.le .le-pts{color:var(--muted)}
+.ov-empty{padding:12px 0}
+@media (max-width:560px){ .ov-tabs button{font-size:15px; padding:8px 8px; flex:1; white-space:nowrap} .ov-tabs .ic{display:none} }
 </style>
 <div class="site-head">
   <div class="site-inner">
     
-    <div class="unit"><span class="unit-k">Technisches Gymnasium</span><span class="brand">Maschinenbau · Alle Lerneinheiten</span></div>
+    <div class="unit"><span class="unit-k">Technisches Gymnasium</span><span class="brand">Maschinenbau · Lerneinheiten und Übungsaufgaben</span></div>
   </div>
 </div>
 
@@ -359,9 +376,14 @@ body.gated main, body.gated .site-foot{visibility:hidden}
 <main id="ov">
   <section class="ov-intro">
     <p class="eyebrow">Übersicht</p>
-    <h1>Deine Lerneinheiten in Maschinenbau</h1>
-    <p class="lead">Hier siehst du alle Lerneinheiten in der Reihenfolge des Lehrplans. Der Balken zeigt, wie viele Stationen du schon erledigt hast. Er wird aus deinen Speicherdateien (<span class="mono">…_Speicherstand.txt</span>) gelesen.</p>
+    <h1>Maschinenbau</h1>
+    <p class="lead" id="ov-lead"></p>
   </section>
+
+  <nav class="ov-tabs" role="tablist" aria-label="Bereich">
+    <button type="button" role="tab" id="tab-le" data-kind="le" aria-controls="chapters"><span class="ic" aria-hidden="true">📘 </span>Lerneinheiten <span class="tabcnt" id="cnt-le"></span></button>
+    <button type="button" role="tab" id="tab-ueb" data-kind="ueb" aria-controls="chapters"><span class="ic" aria-hidden="true">✏️ </span>Übungsaufgaben <span class="tabcnt" id="cnt-ueb"></span></button>
+  </nav>
 
   <section class="ov-total" aria-labelledby="total-h">
     <div class="ov-total-text">
@@ -391,9 +413,11 @@ body.gated main, body.gated .site-foot{visibility:hidden}
 <div class="dropmsg" aria-hidden="true">Speicherdateien hier ablegen</div>
 
 <script>
-const DATA = {"chapters": [{"no": "1", "title": "Technische Kommunikation"}, {"no": "2", "title": "Fertigungstechnik"}, {"no": "3", "title": "Werkstoffkunde"}, {"no": "4", "title": "Pneumatik"}], "units": [{"nr": "1.4", "title": "Prüfen, Messen, Lehren", "file": "Lehrplaneinheit_1.4_Pruefen_Messen_Lehren.html", "id": "lpe-1.4"}, {"nr": "1", "title": "Wiederholung – Klausurvorbereitung Technische Kommunikation", "file": "Lehrplaneinheit_1_Wiederholung_Technische_Kommunikation.html", "id": "lpe-1-wdh", "sort": "1.99"}], "soon": []};
+const DATA = {"chapters": [{"no": "1", "title": "Technische Kommunikation"}, {"no": "2", "title": "Fertigungstechnik"}, {"no": "3", "title": "Werkstoffkunde"}, {"no": "4", "title": "Pneumatik"}], "units": [{"nr": "1.1", "title": "Zeichnungsarten, Maßstab und Linienarten", "file": "Lehrplaneinheit_1.1_Zeichnungsarten_Massstab_Linienarten.html", "id": "lpe-1.1", "kind": "le"}, {"nr": "1.2", "title": "Darstellungsregeln und Bemaßung", "file": "Lehrplaneinheit_1.2_Darstellungsregeln_Bemassung.html", "id": "lpe-1.2", "kind": "le"}, {"nr": "1.3", "title": "Projektionsmethode 1", "file": "Lehrplaneinheit_1.3_Projektionsmethode_1.html", "id": "lpe-1.3", "kind": "le"}, {"nr": "1.4", "title": "Schnittdarstellung", "file": "Lehrplaneinheit_1.4_Schnittdarstellung.html", "id": "lpe-1.4", "kind": "le"}, {"nr": "2.0", "title": "Prüfen, Messen, Lehren", "file": "Lehrplaneinheit_2.0_Pruefen_Messen_Lehren.html", "id": "lpe-2.0", "kind": "le"}, {"nr": "1.1", "title": "Zeichnungsarten, Maßstab und Linienarten", "file": "Uebung_1.1_Zeichnungsarten_Massstab_Linienarten.html", "id": "ueb-1.1", "kind": "ueb"}, {"nr": "1.2", "title": "Darstellungsregeln und Bemaßung", "file": "Uebung_1.2_Darstellungsregeln_Bemassung.html", "id": "ueb-1.2", "kind": "ueb"}, {"nr": "1.3", "title": "Projektionsmethode 1", "file": "Uebung_1.3_Projektionsmethode_1.html", "id": "ueb-1.3", "kind": "ueb"}, {"nr": "1.4", "title": "Schnittdarstellung", "file": "Uebung_1.4_Schnittdarstellung.html", "id": "ueb-1.4", "kind": "ueb"}, {"nr": "2.0", "title": "Prüfen, Messen, Lehren", "file": "Uebung_2.0_Pruefen_Messen_Lehren.html", "id": "ueb-2.0", "kind": "ueb"}], "soon": []};
 /* Übersicht aller Lerneinheiten: liest *_Speicherstand.txt aus dem Speicherordner und zeigt den Fortschritt.
-   Erwartet global DATA = {chapters:[{no,title}], units:[{nr,title,file,id}], soon:[{nr,title}]} (von mk_uebersicht.py). */
+   Erwartet global DATA = {chapters:[{no,title}], units:[{nr,title,file,id,kind}], soon:[{nr,title}]} (von mk_uebersicht.py).
+   Zwei Reiter (17.11.2026): „Lerneinheiten“ (kind "le", Lehrplaneinheit_*.html) und „Übungsaufgaben“ (kind "ueb", Uebung_*.html);
+   gewählter Reiter steht in der Adresse (#uebungen), kein Speicher nötig. */
 (function(){
 "use strict";
 const $ = (s, r=document) => r.querySelector(s);
@@ -410,7 +434,10 @@ const IDB = {
 try { localStorage.setItem("lm-uebersicht-mb", location.href.split("#")[0]); } catch(e){}
 
 /* ---------- Daten ---------- */
-const units = DATA.units.map(u => Object.assign({}, u));
+const units = DATA.units.map(u => Object.assign({kind:"le"}, u));
+let kind = /uebung/i.test(location.hash) ? "ueb" : "le";
+const K = {le:{lbl:"LPE", what:"Lerneinheiten", step:"Stationen", lead:"Hier siehst du alle Lerneinheiten in der Reihenfolge des Lehrplans. Der Balken zeigt, wie viele Stationen du schon erledigt hast. Er wird aus deinen Speicherdateien (<span class=\"mono\">…_Speicherstand.txt</span>) gelesen."},
+           ueb:{lbl:"Übung", what:"Übungsaufgaben", step:"Niveaus", lead:"Zu den Lerneinheiten gibt es Übungsaufgaben in drei Niveaus: Grundlagen, Anwendung und Prüfungsniveau mit Punkten wie in der Klausur. Nutze sie zum Üben und zur Klausurvorbereitung. Der Balken zeigt, wie viele Niveaus du erledigt hast, darunter deine Punkte im Prüfungsniveau."}};
 const P = {};          // moduleId -> {done,total,ts,file,known}
 let dir = null, perm = "none", source = "", lastRead = null;
 
@@ -426,10 +453,10 @@ function take(id, rec){
 }
 function parseTxt(txt, fallbackTs, name){
   const id = (txt.match(/MODUL-ID: (\S+)/)||[])[1]; if(!id) return false;
-  const f = txt.match(/FORTSCHRITT: (\d+)\/(\d+)/);
+  const f = txt.match(/FORTSCHRITT: (\d+)\/(\d+)/), pk = txt.match(/PUNKTE: ([\d,]+)\/([\d,]+)[^\n]*?(?:Note ([\d,]+))?\s*$/m);
   const s = txt.match(/Stand: (\d{1,2})\.(\d{1,2})\.(\d{4}),? (\d{1,2}):(\d{2})/);
   const ts = s ? new Date(+s[3], +s[2]-1, +s[1], +s[4], +s[5]).getTime() : fallbackTs;
-  take(id, {done: f ? +f[1] : null, total: f ? +f[2] : null, ts, file: name, txt: f ? null : txt});
+  take(id, {done: f ? +f[1] : null, total: f ? +f[2] : null, ts, file: name, txt: f ? null : txt, pts: pk ? pk[1] + " von " + pk[2] + " Punkten" + (pk[3] ? " · Note " + pk[3] : "") : null});
   return true;
 }
 function fromBrowser(){
@@ -450,7 +477,7 @@ async function readDir(){
       if(/\.txt$/i.test(name)){
         const f = await h.getFile(); if(f.size > 3e6) continue;
         if(parseTxt(await f.text(), f.lastModified, name)) n++;
-      } else if(/^Lehrplaneinheit.*\.html$/i.test(name) && !units.some(u => u.file === name)){
+      } else if(/^(Lehrplaneinheit|Uebung).*\.html$/i.test(name) && !units.some(u => u.file === name)){
         found.push([name, h]);
       }
     } catch(e){}
@@ -459,10 +486,10 @@ async function readDir(){
   for(const [name, h] of found){
     try {
       const t = await (await h.getFile()).text();
-      const id = (t.match(/\bid:"(lpe-[^"]+)"/) || t.match(/MODULE_ID = "([^"]+)"/) || [])[1];
-      const title = ((t.match(/<title>([^<]*)<\/title>/)||[])[1]||name).replace(/^Lehrplaneinheit\s+/, "");
+      const id = (t.match(/\bid:"((?:lpe|ueb)-[^"]+)"/) || t.match(/MODULE_ID = "([^"]+)"/) || [])[1];
+      const title = ((t.match(/<title>([^<]*)<\/title>/)||[])[1]||name).replace(/^(Lehrplaneinheit|Übung)\s+/, "");
       const nr = (title.match(/^(\d+(?:\.\d+)*[a-z]?)/i)||name.match(/(\d+(?:\.\d+)*[a-z]?)/i)||[])[1] || "";
-      units.push({nr, title: title.replace(nr, "").trim(), file: name, id});
+      units.push({nr, title: title.replace(nr, "").trim(), file: name, id, kind: /^Uebung/i.test(name) ? "ueb" : "le"});
     } catch(e){}
   }
   lastRead = new Date();
@@ -520,6 +547,7 @@ document.addEventListener("click", async e => {
     else if(a === "skip"){ gate(null); render(); }
     return;
   }
+  const tb = e.target.closest("[data-kind]"); if(tb){ kind = tb.dataset.kind; history.replaceState(null, "", kind === "ueb" ? "#uebungen" : location.pathname + location.search); render(); return; }
   if(e.target.id === "pick"){ if(FS_OK) await connect(); else $("#load").click(); }
   if(e.target.id === "refresh"){ if(dir){ if(perm !== "granted") await resume(); else { await readDir(); render(); probeAll(); } } }
 });
@@ -579,7 +607,7 @@ function stateOf(u){
   if(!p) return {cls:"", chip:"offen", frac:"", pct:0, ts:null};
   if(p.total == null) return {cls:"started", chip:"begonnen", frac:"", pct:null, ts:p.ts};
   const pct = Math.round(100 * p.done / p.total);
-  return {cls: p.done >= p.total ? "done" : "started", chip: p.done >= p.total ? "✓ erledigt" : "begonnen", frac:`${p.done}/${p.total} Stationen`, pct, ts:p.ts};
+  return {cls: p.done >= p.total ? "done" : "started", chip: p.done >= p.total ? "✓ erledigt" : "begonnen", frac:`${p.done}/${p.total} ${K[u.kind||"le"].step}`, pct, ts:p.ts};
 }
 function card(u){
   const s = stateOf(u);
@@ -587,15 +615,18 @@ function card(u){
   const foot = s.ts ? `zuletzt ${dt(s.ts)}` : "noch nicht begonnen";
   const hint = s.pct == null && P[u.id] && P[u.id].probing ? `<span class="small muted">Stand wird ermittelt …</span>` : "";
   return `<a class="le ${s.cls}" href="${encodeURI(u.file)}" data-id="${esc(u.id||"")}">
-    <div class="le-k"><span class="le-no">LPE ${esc(u.nr)}</span><span class="chip ${s.cls}">${s.chip}</span></div>
+    <div class="le-k"><span class="le-no">${K[u.kind||"le"].lbl} ${esc(u.nr)}</span><span class="chip ${s.cls}">${s.chip}</span></div>
     <h3>${esc(u.title)}</h3>
-    <div class="le-bar">${bar}<span class="le-frac">${s.frac}</span></div>${hint}
+    <div class="le-bar">${bar}<span class="le-frac">${s.frac}</span></div>${hint}${P[u.id] && P[u.id].pts ? `<span class="small le-pts">Prüfungsniveau: <b>${esc(P[u.id].pts)}</b></span>` : ""}
     <div class="le-foot"><span>${foot}</span><span class="go">Öffnen →</span></div>
   </a>`;
 }
 function render(){
-  const list = units.slice().sort((a,b) => cmp(a.sort || a.nr, b.sort || b.nr));   /* sort: eigene Position (z. B. Wiederholung ans Kapitelende) */
-  const soon = DATA.soon.filter(s => !list.some(u => u.nr === s.nr || cmp(u.nr.replace(/[a-z]+$/i,""), s.nr) === 0 || u.nr.startsWith(s.nr + ".")));
+  $("#ov-lead").innerHTML = K[kind].lead;
+  ["le","ueb"].forEach(k => { const b = $("#tab-"+k); b.setAttribute("aria-selected", String(k === kind));
+    const n = units.filter(u => u.kind === k).length; $("#cnt-"+k).textContent = n; });
+  const list = units.filter(u => u.kind === kind).sort((a,b) => cmp(a.sort || a.nr, b.sort || b.nr));   /* sort: eigene Position (z. B. Wiederholung ans Kapitelende) */
+  const soon = kind !== "le" ? [] : DATA.soon.filter(s => !list.some(u => u.nr === s.nr || cmp(u.nr.replace(/[a-z]+$/i,""), s.nr) === 0 || u.nr.startsWith(s.nr + ".")));
   const ch = DATA.chapters.map(c => {
     const us = list.filter(u => u.nr.split(".")[0] === c.no), ss = soon.filter(s => s.nr.split(".")[0] === c.no);
     if(!us.length && !ss.length) return "";
@@ -603,14 +634,15 @@ function render(){
     const done = us.filter(u => stateOf(u).pct === 100).length;
     return `<section class="chapter"><div class="chapter-h"><span class="no">${esc(c.no)}</span><h2>${esc(c.title)}</h2><span class="cnt">${us.length ? `${done} von ${us.length} erledigt` : "folgt"}</span></div><div class="units">${items.map(i => i.html).join("")}</div></section>`;
   }).join("");
-  $("#chapters").innerHTML = ch;
+  $("#chapters").innerHTML = ch || `<p class="muted ov-empty">Hier gibt es noch keine ${K[kind].what}.</p>`;
 
   const pcts = list.map(u => stateOf(u).pct || 0), sum = pcts.reduce((a,b) => a+b, 0);
   const total = list.length ? Math.round(sum / list.length) : 0;
   const done = list.filter(u => stateOf(u).pct === 100).length, started = list.filter(u => P[u.id]).length;
   const tb = $("#total-bar"); tb.firstElementChild.style.width = total + "%"; tb.setAttribute("aria-valuenow", total); tb.classList.toggle("full", total === 100);
   $("#total-pct").textContent = total + " %";
-  $("#total-sub").textContent = `${done} von ${list.length} Lerneinheiten erledigt · ${started} begonnen`;
+  $("#total-h").textContent = kind === "le" ? "Dein Gesamtfortschritt: Lerneinheiten" : "Dein Gesamtfortschritt: Übungsaufgaben";
+  $("#total-sub").textContent = `${done} von ${list.length} ${K[kind].what} erledigt · ${started} begonnen`;
   const src = $("#src");
   src.textContent = source || (Object.keys(P).length ? "Stand aus diesem Browser" : "Noch keine Speicherdateien gelesen");
   src.className = "small " + (dir && perm === "granted" ? "ok" : "warn");

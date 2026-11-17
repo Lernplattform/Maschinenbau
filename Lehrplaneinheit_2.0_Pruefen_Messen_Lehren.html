@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="de">
-<title>Lehrplaneinheit 1.4 Prüfen, Messen, Lehren</title>
+<title>Lehrplaneinheit 2.0 Prüfen, Messen, Lehren</title>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -264,6 +264,12 @@ body.lm-gated{overflow:hidden}
 .saved.warn .linkbtn{color:#fff; text-decoration:underline; font-weight:800}
 @media (max-width:560px){ .lm-gate-card{padding:20px 18px} .lm-gate-card h2{font-size:20px} }
 
+.lm-name{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.lm-name label{display:flex; flex-direction:column; gap:4px; font-weight:600}
+.lm-name input{font:inherit; font-weight:400; padding:10px 12px; border:2px solid var(--line, #888); border-radius:8px; background:var(--bg); color:var(--ink); min-width:0}
+.lm-name input:focus{outline:3px solid var(--blue); outline-offset:1px}
+.lm-name .pflicht{color:var(--err, #c0392b)}
+@media (max-width:560px){ .lm-name{grid-template-columns:1fr} }
 .lm-gate-card.ok{border-top-color:var(--ok)} .lm-gate-card .no.ok{background:var(--ok)}
 body.lm-gated .site-head, body.lm-gated header.top, body.lm-gated main, body.lm-gated .site-foot{visibility:hidden}
 
@@ -457,7 +463,7 @@ ol.legend{margin:0; padding-left:22px; line-height:1.6}
 <div class="site-head">
   <div class="site-inner">
     
-    <div class="unit"><span class="unit-k">Technisches Gymnasium · Maschinenbau</span><span class="brand">LPE 1.4 · Prüfen, Messen, Lehren</span></div>
+    <div class="unit"><span class="unit-k">Technisches Gymnasium · Maschinenbau</span><span class="brand">LPE 2.0 · Prüfen, Messen, Lehren</span></div>
   </div>
 </div>
 <header class="top">
@@ -472,7 +478,7 @@ ol.legend{margin:0; padding-left:22px; line-height:1.6}
 
 <!-- START -->
 <section class="station" id="s0" data-title="Start">
-  <p class="eyebrow">Lehrplaneinheit 1.4 · Start · 0–5 Min.</p>
+  <p class="eyebrow">Lehrplaneinheit 2.0 · Start · 0–5 Min.</p>
   <h1>Prüfen, Messen, Lehren</h1>
   <div class="intro">
     <p class="lead">Eine technische Zeichnung legt fest, wie genau ein Bauteil sein muss. Ob das fertige Teil diese Vorgaben auch erfüllt, zeigt erst die <b>Prüfung</b>. Dafür gibt es Messgeräte, Maßverkörperungen und Lehren, und für jede Aufgabe ist ein anderes Prüfmittel das richtige.</p>
@@ -537,7 +543,7 @@ ol.legend{margin:0; padding-left:22px; line-height:1.6}
       <div class="figcell"><div id="bild-oel"></div><p class="small"><b>Ölstand</b> mit dem Ölpeilstab: zwischen MIN und MAX → <b>objektiv, Lehren</b></p></div>
     </div></div>
 
-  <details class="glossar"><summary>🔁 Das brauchst du aus LPE 1.10 Toleranzen <span class="small muted">(antippen zum Aufklappen)</span></summary>
+  <details class="glossar"><summary>🔁 Das brauchst du aus LE 1.5 Toleranzen <span class="small muted">(antippen zum Aufklappen)</span></summary>
     <ul>
       <li>Ein Maß wird nie exakt gefertigt. Die <b>Toleranz</b> gibt an, wie weit das Istmaß vom Nennmaß abweichen darf.</li>
       <li>Das <b>Höchstmaß</b> ist das größte, das <b>Mindestmaß</b> das kleinste erlaubte Maß. Die <b>Maßtoleranz</b> ist die Differenz der beiden.</li>
@@ -787,6 +793,58 @@ ol.legend{margin:0; padding-left:22px; line-height:1.6}
 
 <script>
 /* ============================================================
+   Signatur der Speicherstände (HMAC-SHA-256, ohne Bibliothek)
+   Der Schlüssel wird beim Bauen aus _werkzeuge/signatur_schluessel.txt eingesetzt
+   (Platzhalter unten). Schützt gegen Ändern der txt-Datei im Editor.
+   Kein Schutz gegen jemanden, der den Quelltext der Seite auswertet.
+   ============================================================ */
+const LMSIG = (function(){
+"use strict";
+const KK = new Uint32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+function sha256(m){
+  const l = m.length, n = ((l + 9 + 63) >> 6) << 6, b = new Uint8Array(n);
+  b.set(m); b[l] = 0x80; const dv = new DataView(b.buffer);
+  dv.setUint32(n-8, Math.floor(l/0x20000000)); dv.setUint32(n-4, (l*8)>>>0);
+  const H = new Uint32Array([0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19]), w = new Uint32Array(64);
+  const r = (x,k) => (x>>>k)|(x<<(32-k));
+  for(let o=0; o<n; o+=64){
+    for(let i=0;i<16;i++) w[i] = dv.getUint32(o+i*4);
+    for(let i=16;i<64;i++){ const a=w[i-15], c=w[i-2]; w[i] = (w[i-16] + (r(a,7)^r(a,18)^(a>>>3)) + w[i-7] + (r(c,17)^r(c,19)^(c>>>10)))>>>0; }
+    let [A,B,C,D,E,F,G,Hh] = H;
+    for(let i=0;i<64;i++){
+      const t1 = (Hh + (r(E,6)^r(E,11)^r(E,25)) + ((E&F)^(~E&G)) + KK[i] + w[i])>>>0;
+      const t2 = ((r(A,2)^r(A,13)^r(A,22)) + ((A&B)^(A&C)^(B&C)))>>>0;
+      Hh=G; G=F; F=E; E=(D+t1)>>>0; D=C; C=B; B=A; A=(t1+t2)>>>0;
+    }
+    H[0]+=A; H[1]+=B; H[2]+=C; H[3]+=D; H[4]+=E; H[5]+=F; H[6]+=G; H[7]+=Hh;
+  }
+  const out = new Uint8Array(32), ov = new DataView(out.buffer); for(let i=0;i<8;i++) ov.setUint32(i*4, H[i]); return out;
+}
+const utf8 = s => new TextEncoder().encode(s);
+function hmac(key, msg){
+  if(key.length > 64) key = sha256(key);
+  const k = new Uint8Array(64); k.set(key);
+  const ip = new Uint8Array(64 + msg.length), op = new Uint8Array(96);
+  for(let i=0;i<64;i++){ ip[i] = k[i]^0x36; op[i] = k[i]^0x5c; }
+  ip.set(msg, 64); op.set(sha256(ip), 64); return sha256(op);
+}
+const hex = a => Array.from(a, x => x.toString(16).padStart(2,"0")).join("");
+const Q = (function(){ const z = [16,130,172,250,18,202,234,221,153,160,211,149,115,32,246,76,135,64,229,88,59,92,192,57,52,207,72,29,252,36,164,107]; return Uint8Array.from(z, (v,i) => v ^ ((i*73 + 41) & 255)); })();
+/* Leerraum spielt keine Rolle: Zeilenenden (Windows), Umbrüche durch Mailprogramme, Kopieren vom iPad */
+const norm = t => String(t).replace(/\s+/g,"");
+const LINE = "SIGNATUR: ";
+function sign(t){ return hex(hmac(Q, utf8(norm(t)))); }
+/* Text mit Signaturzeile prüfen → "ok" | "bad" | "none" */
+function check(txt){
+  const t = String(txt).replace(/\r\n?/g,"\n"), i = t.lastIndexOf("\n" + LINE);
+  if(i < 0) return "none";
+  const sig = t.slice(i + 1 + LINE.length).trim().split(/\s+/)[0] || "";
+  return sig === sign(t.slice(0, i + 1)) ? "ok" : "bad";
+}
+return {sign, check, LINE, sha256: s => hex(sha256(utf8(s)))};
+})();
+
+/* ============================================================
    Gemeinsame Bausteine der Lernmodule
    - SaveKit: Speichern in drei Ebenen (Browser, Speicherordner, Datei)
    - Steps:   Musterbeispiel Schritt für Schritt
@@ -800,6 +858,22 @@ const MARK = "=== WIEDERHERSTELLUNG – diese Zeilen nicht verändern ===";
 const toB64 = s => btoa(unescape(encodeURIComponent(s)));
 const fromB64 = s => decodeURIComponent(escape(atob(s)));
 const hhmm = d => d.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+const dmy = ts => new Date(ts).toLocaleString("de-DE",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+const SIGN = typeof LMSIG !== "undefined" ? LMSIG : {sign:()=>"", check:()=>"none", LINE:"SIGNATUR: "};
+const rid = n => { try { return Array.from(crypto.getRandomValues(new Uint8Array(n)), x => x.toString(16).padStart(2,"0")).join(""); } catch(e){ let t=""; while(t.length<n*2) t += Math.random().toString(16).slice(2); return t.slice(0,n*2); } };
+/* Geräte-Kennung: zufällig, bleibt in diesem Browser (für alle Einheiten gleich) */
+function devId(){ try { let d = localStorage.getItem("lm-geraet"); if(!d){ d = rid(4); localStorage.setItem("lm-geraet", d); } return d; } catch(e){ return "ohne"; } }
+/* Arbeitsstand flach: Pfad → JSON (ohne interne Felder _…, Ansicht, Hilfsmarken) */
+function flat(st){
+  const o = {};
+  for(const k in st||{}){ if(k[0]==="_" || k==="tab" || k==="dirty") continue; const v = st[k];
+    if(v && typeof v==="object" && !Array.isArray(v)){ for(const j in v) o[k+"."+j] = JSON.stringify(v[j]); } else o[k] = JSON.stringify(v); }
+  return o;
+}
+const leer = v => v===undefined || v==="{}" || v==='""' || v==="[]" || v==="null";
+const hasContent = st => Object.values(flat(st)).some(v => !leer(v));
+const whoOf = st => (st && st._who && (st._who.v||"").trim() && (st._who.n||"").trim()) ? st._who : null;
+const whoTxt = w => w ? `${w.v.trim()} ${w.n.trim()}` : "";
 
 /* ---------- IndexedDB: gemerkter Speicherordner ---------- */
 const IDB = {
@@ -826,31 +900,81 @@ function SaveKit(cfg){
   function fullText(){
     const st = cfg.getState();
     const pr = progress();
-    return cfg.summary() + (pr ? `\n\nFORTSCHRITT: ${pr.done}/${pr.total} Stationen erledigt` : "") + "\n\nMODUL-ID: " + cfg.moduleId + "\n" + MARK + "\n" + toB64(JSON.stringify(st)) + "\n";
+    const body = `NAME: ${whoTxt(whoOf(st)) || "(nicht angegeben)"}\n` + cfg.summary() + (pr ? `\n\nFORTSCHRITT: ${pr.done}/${pr.total} Stationen erledigt` : "") + "\n\n" + workText(st) + "\n\nMODUL-ID: " + cfg.moduleId + "\n" + MARK + "\n" + toB64(JSON.stringify(st)) + "\n";
+    return body + SIGN.LINE + SIGN.sign(body) + "\n";
+  }
+  /* Lesbare Angaben zur Bearbeitung (die Lehrkraft wertet sie mit „Abgaben prüfen“ genauer aus) */
+  function workText(st){
+    const ses = Array.isArray(st._ses) ? st._ses : [], log = st._log || {}, fl = Array.isArray(st._fl) ? st._fl : [];
+    const L = ["BEARBEITUNG"];
+    if(!ses.length){ L.push("  noch keine Eingaben"); return L.join("\n"); }
+    const min = Math.round(ses.reduce((a,s)=>a + Math.max(0, s[1]-s[0]), 0) / 60000);
+    L.push(`  Erste Eingabe: ${dmy(ses[0][0])} · letzte Eingabe: ${dmy(ses[ses.length-1][1])}`);
+    L.push(`  Arbeitssitzungen: ${ses.length} · aktive Zeit ca. ${min} min · Geräte: ${new Set(ses.map(s=>s[2])).size} · bearbeitete Felder: ${Object.keys(log).length}`);
+    const pa = Object.values(st._pa||{}).reduce((a,b)=>a+(+b||0), 0); if(pa) L.push(`  Eingefügter Text (Strg+V): ${pa} Zeichen`);
+    const n = t => fl.filter(f => f[0]===t).length;
+    if(n("datei")) L.push("  ACHTUNG: Es wurde eine veränderte Speicherdatei geladen.");
+    if(n("browser")) L.push("  ACHTUNG: Der Speicher im Browser wurde verändert.");
+    if(n("alt")) L.push("  Hinweis: begonnen vor Einführung der Signatur.");
+    if(n("laden")) L.push(`  Hinweis: ${n("laden")}× von Hand aus Datei geladen.`);
+    return L.join("\n");
   }
   function parse(txt){
     const mm = txt.match(/MODUL-ID: (\S+)/);
     if(mm && mm[1] !== cfg.moduleId){ const t=(txt.match(/LEHRPLANEINHEIT: (.+)/)||[])[1]||mm[1]; return {err:`Diese Datei gehört zu einer anderen Lehrplaneinheit (${t}). Bitte die Datei zu „${cfg.moduleTitle}“ wählen.`}; }
     const i = txt.indexOf(MARK);
     if(i<0) return {err:"Diese Datei enthält keinen Speicherstand. Bitte die Datei wählen, die dieses Lernmodul gespeichert hat."};
-    try { return {data: JSON.parse(fromB64(txt.slice(i+MARK.length).trim().split(/\s+/)[0]))}; }
+    /* Datenblock bis zur Signaturzeile; Leerraum entfernen (Zeilenumbrüche durch Mailprogramme, Kopieren vom iPad) */
+    let b = txt.slice(i+MARK.length); const j = b.indexOf(SIGN.LINE); if(j >= 0) b = b.slice(0, j);
+    try { return {data: JSON.parse(fromB64(b.replace(/\s+/g,""))), sig: SIGN.check(txt)}; }
     catch(e){ return {err:"Der Speicherstand in dieser Datei ist beschädigt."}; }
   }
   /* Dateiname nur mit sicheren Zeichen: Umlaute umschreiben, Leerzeichen als _ */
   const safe = t => String(t||"").replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/Ä/g,"Ae").replace(/Ö/g,"Oe").replace(/Ü/g,"Ue").replace(/ß/g,"ss")
     .normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[–—]/g,"-").replace(/[^A-Za-z0-9.\- ]+/g,"").trim().replace(/\s+/g,"_");
-  function fileName(){ return `${safe(cfg.fileStem)}_Speicherstand.txt`; }
+  const oldName = () => `${safe(cfg.fileStem)}_Speicherstand.txt`;   // vor Einführung der Namen
+  function fileName(){ const w = whoOf(cfg.getState()); return w ? `${safe(cfg.fileStem)}_${safe(w.n)}_${safe(w.v)}_Speicherstand.txt` : oldName(); }
 
   /* --- Ebene 1: Browser --- */
   let lsOk = true;
-  function writeLocal(){ if(PROBE) return; try { localStorage.setItem(cfg.key, JSON.stringify(cfg.getState())); lsOk = true; } catch(e){ lsOk = false; } writeProgress(); }
+  function writeLocal(){ if(PROBE) return; try { const j = JSON.stringify(cfg.getState()); localStorage.setItem(cfg.key, j); localStorage.setItem(cfg.key+"~", SIGN.sign(j)); lsOk = true; } catch(e){ lsOk = false; } writeProgress(); }
   /* Fortschritt für die Übersicht (Stationen wie in der Ablauftabelle) */
   function progress(){ try { const p = cfg.progress && cfg.progress(); return p && p.total ? {done:p.done|0, total:p.total|0} : null; } catch(e){ return null; } }
   function writeProgress(){
     const p = progress(), st = cfg.getState(); if(!p || !st._ts) return;
     try { const all = JSON.parse(localStorage.getItem("lm-fortschritt")||"{}") || {}; all[cfg.moduleId] = {done:p.done, total:p.total, ts:st._ts}; localStorage.setItem("lm-fortschritt", JSON.stringify(all)); } catch(e){}
   }
-  function readLocal(){ if(PROBE) return {}; try { return JSON.parse(localStorage.getItem(cfg.key)||"{}") || {}; } catch(e){ return {}; } }
+  function readLocal(){
+    if(PROBE) return {};
+    let st = {};
+    try {
+      const j = localStorage.getItem(cfg.key), sg = localStorage.getItem(cfg.key+"~");
+      st = JSON.parse(j||"{}") || {};
+      if(j && hasContent(st)){
+        if(!sg) addFlag(st, "alt", true);
+        else if(sg !== SIGN.sign(j)) addFlag(st, "browser");
+      }
+    } catch(e){ st = {}; }
+    base = flat(st);
+    return st;
+  }
+
+  /* --- Protokoll: wann wurde was bearbeitet (Zeitstempel je Aufgabe), Arbeitssitzungen, Hinweise --- */
+  let base = {};
+  function addFlag(st, t, once){ if(!Array.isArray(st._fl)) st._fl = []; if(once && st._fl.some(f => f[0]===t)) return; st._fl.push([t, Date.now(), devId()]); }
+  function track(st){
+    const now = Date.now(), dev = devId(), cur = flat(st);
+    if(!st._log || typeof st._log!=="object") st._log = {};
+    let n = 0;
+    for(const k of new Set([...Object.keys(cur), ...Object.keys(base)])){
+      if(cur[k] === base[k] || (base[k]===undefined && leer(cur[k]))) continue;
+      const e = st._log[k]; if(e) { e[1] = now; e[2]++; } else st._log[k] = [now, now, 1]; n++;
+    }
+    base = cur; if(!n) return;
+    if(!Array.isArray(st._ses)) st._ses = [];
+    const s = st._ses[st._ses.length-1];
+    if(s && s[2]===dev && now - s[1] < 20*60000){ s[1] = now; s[3]++; } else st._ses.push([now, now, dev, 1]);
+  }
 
   /* --- Ebene 2: Speicherordner --- */
   async function writeFile(){
@@ -861,7 +985,7 @@ function SaveKit(cfg){
       const st = cfg.getState(), name = fileName();
       const fh = await dir.getFileHandle(name, {create:true});
       const w = await fh.createWritable(); await w.write(fullText()); await w.close();
-      if(st._file && st._file !== name){ try { await dir.removeEntry(st._file); } catch(e){} }
+      if(st._file && st._file !== name && st._file !== oldName()){ try { await dir.removeEntry(st._file); } catch(e){} }
       if(st._file !== name){ st._file = name; writeLocal(); }
       lastFileSave = new Date(); lastErr = "";
     } catch(e){
@@ -881,7 +1005,7 @@ function SaveKit(cfg){
         const f = await h.getFile(); if(f.size > 3e6) continue;
         const txt = await f.text(); if(!txt.includes("MODUL-ID: "+cfg.moduleId)) continue;
         const p = parse(txt); if(!p.data) continue;
-        out.push({file:n, data:p.data, ts:p.data._ts||f.lastModified, who:(p.data.name||"").trim()});
+        out.push({file:n, data:p.data, sig:p.sig, ts:p.data._ts||f.lastModified, who:whoTxt(whoOf(p.data))});
       } catch(e){}
     }
     return out.sort((a,b)=>b.ts-a.ts);
@@ -891,11 +1015,22 @@ function SaveKit(cfg){
     let files = [];
     try { files = await listFiles(); } catch(e){ files = []; }
     const st = cfg.getState();
-    const hit = files.find(f => f.file===fileName()) || files[0] || null;   // neuester Speicherstand dieser Einheit
-    if(hit && (!st._ts || hit.ts > st._ts)){ apply(hit.data, `Speicherstand aus „${hit.file}“ eingelesen.`); }
+    const me = whoTxt(whoOf(st));
+    const hit = files.find(f => f.file===fileName())                       // eigene Datei
+      || (me && files.find(f => f.who===me))                               // gleicher Name, anderer Dateiname
+      || files.find(f => !f.who && f.file===oldName())                     // alte Datei ohne Namen
+      || (!me && files[0]) || null;
+    if(hit && (!st._ts || hit.ts > st._ts)){ apply(hit.data, `Speicherstand aus „${hit.file}“ eingelesen.`, hit.sig); }
     else { scheduleFile(); flash(hit ? "Dein Stand im Browser ist neuer als die Datei. Die Datei wird aktualisiert." : "Verbunden. Ab jetzt wird automatisch gespeichert."); }
   }
-  function apply(data, msg){
+  function apply(data, msg, sig, manual){
+    data = data || {};
+    const cur = cfg.getState();
+    if(!whoOf(data) && whoOf(cur) && !(data._log && Object.keys(data._log).length)) data._who = cur._who;   // alte Datei ohne Namen
+    if(sig==="bad") addFlag(data, "datei");
+    else if(sig==="none" && hasContent(data)) addFlag(data, "alt", true);
+    if(manual) addFlag(data, "laden");
+    base = flat(data);
     cfg.setState(data); writeLocal(); flash(msg); render(); scheduleFile();
   }
   let skipped = false, failed = false, begun = false;
@@ -918,13 +1053,21 @@ function SaveKit(cfg){
   function renderGate(){
     let g = document.getElementById("lm-gate");
     const ready = FS_OK && dir && perm==="granted";
-    const need = !skipped && !begun;
+    const need = !PROBE && (!whoOf(cfg.getState()) || (!skipped && !begun));
     if(!need){ if(g){ g.remove(); document.body.classList.remove("lm-gated"); window.scrollTo(0,0); } return; }
     const first = !g;
     if(!g){ g = document.createElement("div"); g.id = "lm-gate"; g.setAttribute("role","dialog"); g.setAttribute("aria-modal","true"); g.setAttribute("aria-labelledby","lm-gate-h"); document.body.appendChild(g); document.body.classList.add("lm-gated"); }
     const head = `<p class="eyebrow">${esc(cfg.moduleTitle)}</p>`;
     let body;
-    if(ready){
+    if(!whoOf(cfg.getState())){
+      body = `<h2 id="lm-gate-h"><span class="no">0</span>Wer bearbeitet diese Einheit?</h2>
+        <p>Trage deinen Vor- und Nachnamen ein. Er wird in deinem Speicherstand vermerkt und kann später nicht mehr geändert werden, sobald du mit den Aufgaben begonnen hast.</p>
+        <div class="lm-name"><label>Vorname <span class="pflicht">*</span><input type="text" id="lm-vn" autocomplete="given-name" required value="${esc(nameDraft.v)}"></label>
+        <label>Nachname <span class="pflicht">*</span><input type="text" id="lm-nn" autocomplete="family-name" required value="${esc(nameDraft.n)}"></label></div>
+        <div class="row"><button type="button" class="btn big" data-lm="name">Weiter →</button>
+        <label class="filebtn" for="lm-name-load">Ich habe schon eine Speicherdatei</label><input type="file" id="lm-name-load" accept=".txt,text/plain" class="visually-hidden"></div>
+        <p class="small muted">* Pflichtangaben</p>`;
+    } else if(ready){
       body = `<h2 id="lm-gate-h"><span class="no ok">✓</span>Speicherort ist verbunden</h2>
         <p>Ordner <b>„${esc(dir.name)}“</b> · Datei <span class="mono">${esc(fileName())}</span></p>
         <p>Ab jetzt wird jede Eingabe automatisch gespeichert. Oben rechts siehst du jederzeit, wann zuletzt gespeichert wurde.</p>
@@ -932,7 +1075,7 @@ function SaveKit(cfg){
     } else if(!FS_OK){
       body = `<h2 id="lm-gate-h"><span class="no">0</span>Bevor es losgeht: So sicherst du deine Arbeit</h2>
         <p>Dein Browser kann nicht automatisch in eine Datei speichern (z. B. Firefox, Safari, iPad, Smartphone). Deine Eingaben bleiben in diesem Browser erhalten, aber nur auf diesem Gerät.</p>
-        <ol class="lm-gate-steps"><li>Hast du schon eine Speicherdatei? Dann lade sie jetzt.</li><li>Sichere am Ende der Stunde mit <b>„Zwischenstand als Datei sichern“</b> (Startseite oder letzte Station).</li><li>Tipp: Am PC mit <b>Chrome oder Edge</b> wird automatisch gespeichert.</li></ol>
+        <ol class="lm-gate-steps"><li>Hast du schon eine Speicherdatei? Dann lade sie jetzt.</li><li>Zum Abgeben: auf der Startseite <b>„Zwischenstand als Datei sichern“</b> oder <b>„Als Text kopieren“</b> und den Text an die Lehrkraft schicken.</li><li>Tipp: Am PC mit <b>Chrome oder Edge</b> wird automatisch gespeichert.</li></ol>
         <div class="row"><label class="filebtn" for="lm-gate-load">Speicherdatei laden</label><input type="file" id="lm-gate-load" accept=".txt,text/plain" class="visually-hidden">
         <button type="button" class="btn big" data-lm="skip">Verstanden – Lerneinheit starten</button></div>`;
     } else if(dir){
@@ -948,8 +1091,23 @@ function SaveKit(cfg){
     }
     const esc2 = FS_OK && failed ? `<div class="fb maybe small">Kein Ordner gewählt. Versuche es noch einmal. <b>Geht es gar nicht</b> (z. B. gesperrter Schulrechner)? <button type="button" class="linkbtn" data-lm="skip">Ohne automatisches Speichern starten</button> – dann am Ende unbedingt per Datei sichern.</div>` : "";
     g.innerHTML = `<div class="lm-gate-card${ready?" ok":""}">${head}${body}${esc2}${msg&&!ready?`<p class="score small" role="status">${esc(msg)}</p>`:""}</div>`;
-    const bt = g.querySelector(".btn.big"); if(bt && (first || ready)) bt.focus();
+    const nf = g.querySelector("#lm-vn"); if(nf && !nameDraft.v) nf.focus();
+    else { const bt = g.querySelector(".btn.big"); if(bt && (first || ready)) bt.focus(); }
   }
+  let nameDraft = {v:"", n:""};
+  function setName(){
+    const vi = $("#lm-vn"), ni = $("#lm-nn");
+    const clean = t => String(t||"").replace(/\s+/g," ").trim().slice(0,40);
+    const v = clean(vi && vi.value), n = clean(ni && ni.value);
+    nameDraft = {v, n};
+    if(!v || !n){ flash(!v && !n ? "Bitte Vor- und Nachnamen eintragen." : !v ? "Bitte deinen Vornamen eintragen." : "Bitte deinen Nachnamen eintragen."); const f = !v ? vi : ni; if(f) f.focus(); return; }
+    const st = cfg.getState();
+    st._who = {v, n, ts: Date.now(), wid: (st._who && st._who.wid) || rid(6)};
+    writeLocal(); render();
+    if(dir && perm==="granted") syncFromDir();
+  }
+  function nameLocked(st){ return !!(st._log && Object.keys(st._log).length); }
+  function changeName(){ const st = cfg.getState(); if(nameLocked(st)) return; nameDraft = st._who ? {v:st._who.v, n:st._who.n} : nameDraft; delete st._who; begun = false; skipped = false; writeLocal(); render(); }
   async function disconnect(){ dir = null; perm = "none"; choice = null; await IDB.del("ordner"); render(); flash("Speicherordner getrennt. Gespeichert wird nur noch im Browser."); }
 
   /* --- Ebene 3: Datei herunterladen / laden --- */
@@ -963,7 +1121,18 @@ function SaveKit(cfg){
     } catch(e){ flash("Speichern nicht möglich. Bitte den Text unten kopieren."); }
     return t;
   }
-  function loadText(txt){ const p = parse(String(txt)); if(p.err){ flash(p.err); return false; } apply(p.data, "Zwischenstand geladen."); return true; }
+  /* Abgabe ohne Datei (z. B. Schul-iPad): ganzer Speicherstand samt Signatur in die Zwischenablage */
+  function copyText(){
+    const t = fullText();
+    const fallback = () => {
+      const ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly",""); ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+      document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, t.length);
+      let ok = false; try { ok = document.execCommand("copy"); } catch(e){}
+      ta.remove(); flash(ok ? "Kopiert. Füge den Text in deine Mail oder Nachricht an die Lehrkraft ein (nichts daran ändern)." : "Kopieren nicht möglich. Bitte „Zwischenstand als Datei sichern“ verwenden.");
+    };
+    try { navigator.clipboard.writeText(t).then(() => flash("Kopiert. Füge den Text in deine Mail oder Nachricht an die Lehrkraft ein (nichts daran ändern)."), fallback); } catch(e){ fallback(); }
+  }
+  function loadText(txt){ const p = parse(String(txt)); if(p.err){ flash(p.err); return false; } apply(p.data, p.sig==="bad" ? "Zwischenstand geladen. Achtung: Die Datei wurde verändert, das wird im Speicherstand vermerkt." : "Zwischenstand geladen.", p.sig, true); return true; }
   function loadBlob(f){ if(!f) return; const r = new FileReader(); r.onload = () => loadText(r.result); r.readAsText(f, "utf-8"); }
 
   /* --- Anzeige --- */
@@ -1001,10 +1170,13 @@ function SaveKit(cfg){
       lvl2 = `<p class="small"><b>Empfohlen am PC (Chrome oder Edge):</b> Wähle einmal den Ordner, in dem diese HTML-Datei liegt. Danach wird jede Eingabe automatisch in die Datei <span class="mono">${esc(fileName())}</span> geschrieben. Beim nächsten Öffnen liest das Lernmodul sie nach einem Klick automatisch wieder ein.</p>
         <div class="row"><button type="button" class="btn" data-lm="connect">Speicherordner verbinden</button></div>`;
     }
-    p.innerHTML = `${lvl2}
+    const w = whoOf(cfg.getState());
+    const whoLine = w ? `<p class="small">Bearbeitet von: <b>${esc(whoTxt(w))}</b>${nameLocked(cfg.getState()) ? "" : ` · <button type="button" class="linkbtn" data-lm="rename">Name ändern</button>`}</p>` : "";
+    p.innerHTML = `${whoLine}${lvl2}
       <details class="lm-more" ${FS_OK?"":"open"}><summary>Zwischenstand von Hand sichern oder laden</summary>
         <div class="row" style="margin-top:10px">
           <button type="button" class="btn secondary" data-lm="download">Zwischenstand als Datei sichern</button>
+          <button type="button" class="btn secondary" data-lm="copy">Als Text kopieren (für Mail, Teams …)</button>
           <label class="filebtn" for="lm-load">Zwischenstand laden</label>
           <input type="file" id="lm-load" accept=".txt,text/plain" class="visually-hidden">
           <button type="button" class="linkbtn" data-lm="askreset">Alles löschen</button>
@@ -1021,20 +1193,33 @@ function SaveKit(cfg){
     if(b.dataset.lmPick!=null){
       const k = b.dataset.lmPick, files = choice || []; choice = null;
       if(k==="new"){ render(); scheduleFile(); flash("Neuer Speicherstand angelegt."); }
-      else apply(files[+k].data, `Speicherstand „${files[+k].file}“ eingelesen.`);
+      else apply(files[+k].data, `Speicherstand „${files[+k].file}“ eingelesen.`, files[+k].sig);
       return;
     }
     const a = b.dataset.lm;
     if(a==="begin"){ begun = true; render(); }
+    else if(a==="name") setName();
+    else if(a==="rename") changeName();
     else if(a==="connect") connect();
     else if(a==="resume") resume();
     else if(a==="disconnect") disconnect();
     else if(a==="skip") skip();
     else if(a==="download") download();
+    else if(a==="copy") copyText();
     else if(a==="askreset"){ const r = $("#lm-reset"); if(r) r.hidden = !r.hidden; }
-    else if(a==="reset"){ cfg.setState({}); writeLocal(); scheduleFile(); flash("Alle Eingaben gelöscht."); }
+    else if(a==="reset"){ const w = cfg.getState()._who; base = {}; cfg.setState(w ? {_who:{v:w.v, n:w.n, ts:Date.now(), wid:rid(6)}} : {}); writeLocal(); scheduleFile(); flash("Alle Eingaben gelöscht."); }
   });
-  document.addEventListener("change", e => { if(e.target && (e.target.id==="lm-load" || e.target.id==="lm-gate-load")){ if(e.target.id==="lm-gate-load") skip(); loadBlob(e.target.files && e.target.files[0]); e.target.value=""; } });
+  document.addEventListener("change", e => { if(e.target && (e.target.id==="lm-load" || e.target.id==="lm-gate-load" || e.target.id==="lm-name-load")){ if(e.target.id==="lm-gate-load") skip(); loadBlob(e.target.files && e.target.files[0]); e.target.value=""; } });
+  document.addEventListener("keydown", e => { if(e.key==="Enter" && e.target && (e.target.id==="lm-vn" || e.target.id==="lm-nn")){ e.preventDefault(); if(e.target.id==="lm-vn" && !$("#lm-nn").value.trim()) $("#lm-nn").focus(); else setName(); } });
+  document.addEventListener("input", e => { if(e.target && (e.target.id==="lm-vn" || e.target.id==="lm-nn")) nameDraft[e.target.id==="lm-vn"?"v":"n"] = e.target.value; });
+  /* Eingefügter Text (Strg+V) wird je Feld mitgezählt */
+  document.addEventListener("paste", e => {
+    const t = e.target; if(!t || !/^(INPUT|TEXTAREA)$/.test(t.tagName) || t.id==="lm-vn" || t.id==="lm-nn" || t.id==="summary") return;
+    let len = 0; try { len = ((e.clipboardData||window.clipboardData).getData("text")||"").length; } catch(_){}
+    if(!len) return;
+    const st = cfg.getState(), host = t.closest("[data-task]"), k = (host ? host.dataset.task + ":" : "") + (t.id || "feld");
+    if(!st._pa || typeof st._pa!=="object") st._pa = {}; st._pa[k] = (st._pa[k]||0) + len;
+  });
   const hasFiles = e => e.dataTransfer && Array.from(e.dataTransfer.types||[]).includes("Files");
   document.addEventListener("dragover", e => { if(hasFiles(e)){ e.preventDefault(); document.body.classList.add("lm-drop"); } });
   document.addEventListener("dragleave", e => { if(e.target===document.documentElement || e.clientX<=0 || e.clientY<=0) document.body.classList.remove("lm-drop"); });
@@ -1068,7 +1253,7 @@ function SaveKit(cfg){
 
   return {
     initial: readLocal,
-    changed(meta){ const st = cfg.getState(); if(meta){ writeLocal(); return; } st._ts = Date.now(); writeLocal(); scheduleFile(); render(); },   // meta: nur Ansicht (z. B. Station), kein neuer Arbeitsstand
+    changed(meta){ const st = cfg.getState(); if(meta){ writeLocal(); return; } track(st); st._ts = Date.now(); writeLocal(); scheduleFile(); render(); },   // meta: nur Ansicht (z. B. Station), kein neuer Arbeitsstand
     init, download, fullText, loadText, render,
     _test:{ setDir(h){ dir=h; perm="granted"; return syncFromDir(); }, writeNow: writeFile, listFiles }
   };
@@ -1280,9 +1465,9 @@ return { SaveKit, Steps, Merke, ZxClock, G:{el, lin, rad, shadow, MAT, svgRoot, 
 </script>
 <script>
 const U = {
-  id:"lpe-1.4", key:"lernmodul-mb-pruef-a-v1",
-  title:"LPE 1.4 Prüfen, Messen, Lehren",
-  fileStem:"LPE 1.4 Pruefen Messen Lehren",
+  id:"lpe-2.0", key:"lernmodul-mb-pruef-a-v1",
+  title:"LPE 2.0 Prüfen, Messen, Lehren",
+  fileStem:"LPE 2.0 Pruefen Messen Lehren",
   kopf:"Technisches Gymnasium · Maschinenbau · Eingangsklasse",
   plan:[
     ["s1","Was heißt Prüfen?","5–25 Min.","Lesetext, Baum zum Antippen, Prüfmittel einteilen, Messen oder Lehren, Fachsprache prüfen"],
@@ -2394,7 +2579,7 @@ function inspect(p, K, o){
 window.BILD = {kit, caliper, micrometer, plug, snap, dial, rule, tape, tyre, dipstick, feeler, radius, square, protractor, blocks, angleblocks, inspect, el, add};
 })();
 
-/* ============ Grafiken und Simulationen LE 1.4 Prüfen, Messen, Lehren ============
+/* ============ Grafiken und Simulationen LE 2.0 Prüfen, Messen, Lehren ============
    Alle Grafiken schmal (viewBox 420) im Layout „sim kop“ mit Schriftklasse „big“.
    Bausteine: Messschieber (Übersicht + Lupe), Bügelmessschraube, Grenzlehren, Messreihe, Prüfmittel-Baum. */
 (function(){
@@ -2890,7 +3075,7 @@ mk("bild-endmass", 420, 170, "Parallelendmaße: Satz und zusammengeschobener Sta
 });
 })();
 
-/* ============ Musterbeispiele LE 1.4 ============ */
+/* ============ Musterbeispiele LE 2.0 ============ */
 (function(){
 const {Steps} = LM, $ = E.$;
 Steps($("#ex-a5"), {
