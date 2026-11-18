@@ -3330,11 +3330,14 @@ if(typeof module !== "undefined") module.exports = K3;
 })(typeof window !== "undefined" ? window : globalThis);
 
 /* ============ Oberflächen-Bausteine (window.OFL) – seit LE 1.7 Oberflächen (17.11.2026) ============
-   Ergänzt lib_zeichnung.js (ZK, Normschrift) und lib_zeichnung_3d.js (K3). Genutzt von LE 1.7 (gfx_g.js) und Übung 1.7 (gfx_u7.js).
-   Symbole wie im Skript der Lehrkraft (DIN ISO 1302, Strich nur mit Zusatzangaben: alt:true); ohne alt wie ISO 21920 (immer mit Strich, Video „roughness“):
+   Ergänzt lib_zeichnung.js (ZK, Normschrift) und lib_zeichnung_3d.js (K3). Genutzt von LE 1.7 (gfx_g.js), Übung 1.7 (gfx_u7.js) und 1 Wiederholung (gfx_w.js).
+   v2 (18.11.2026): Symbole nach aktueller Norm ISO 21920-1 (Vorlage der Lehrkraft, Video „roughness“): kurzer waagerechter Strich über dem kurzen
+   Schenkel (Kennzeichen der neuen Norm) und waagerechter Strich am langen Schenkel immer, auch ohne Angabe. alt:true = alte Norm DIN ISO 1302 wie im Skript
+   (ohne Kennzeichen, Strich nur mit Zusatzangaben), nur noch für den Vergleich alt/neu.
      sym(g, x, y, o)   Spitze in (x, y) auf der Fläche; o = {art:"g" Grundsymbol | "m" materialabtrennend | "k" Materialabtrag unzulässig,
                        wert:"Rz 6,3" (unter dem Strich), verf:"geschliffen" (über dem Strich), zug:"0,5" (Bearbeitungszugabe, links),
-                       rund:true (Kreis: ringsum gleich), alt:true (alte Norm ISO 1302: Strich nur mit Zusatzangaben), rot:0 | -90 (von rechts lesbar) | 90 | 180 (Fehlerbilder), h (Schrifthöhe px), col, top:true (Fehlerbild: Wert über dem Strich)}
+                       rund:true (Kreis: ringsum gleich), alt:true (alte Norm), rot:0 | -90 (von rechts lesbar) | 90 | 180 (Fehlerbilder), h (Schrifthöhe px), col,
+                       top:true (Fehlerbild: Wert über dem Strich)}
      symExt(o)         Ausdehnung des Symbols ab der Spitze (links, rechts, Höhe) zum Platzieren
      leader(g, id, ax, ay, kx, ky, o)  Hinweislinie mit Maßpfeil auf die Fläche (ax, ay), Knick (kx, ky), Bezugslinie nach o.side (±1, sonst vom Pfeil weg), Symbol aufrecht darauf
    Rauheitsprofile:
@@ -3362,9 +3365,11 @@ function symExt(o={}){
 }
 function sym(g, x, y, o={}){
   const {add, NS} = Z(), e = symExt(o), {h, H1, H2, bx, bar} = e, col = o.col || "var(--ink)", sw = o.sw || 1.1;
-  const G = add(g, "g", {transform:`translate(${x} ${y}) rotate(${o.rot || 0})`, "data-sym":o.art || "g", "aria-label":"Oberflächensymbol " + [o.verf, o.wert].filter(Boolean).join(" ")});
+  const G = add(g, "g", {transform:`translate(${x} ${y}) rotate(${o.rot || 0})`, "data-sym":o.art || "g", "data-norm":o.alt ? "alt" : "neu", "aria-label":"Oberflächensymbol " + [o.verf, o.wert].filter(Boolean).join(" ")});
   const st = `fill:none;stroke:${col};stroke-width:${sw};stroke-linejoin:round;stroke-linecap:round`;
   add(G, "path", {d:`M${(-TAN30*H1).toFixed(2)},${(-H1).toFixed(2)} L0,0 L${bx.toFixed(2)},${(-H2).toFixed(2)}` + (o.alt && !o.wert && !o.verf ? "" : ` L${(bx + bar).toFixed(2)},${(-H2).toFixed(2)}`), style:st});
+  /* v2: Kennzeichen ISO 21920 – kurzer waagerechter Strich über dem kurzen Schenkel (Maße nach der Vorlage der Lehrkraft: 0,46·H1 über dem Dreieck, von −0,55·H1 bis 0,47·H1) */
+  if(!o.alt) add(G, "path", {d:`M${(-0.55*H1).toFixed(2)},${(-1.46*H1).toFixed(2)} L${(0.47*H1).toFixed(2)},${(-1.46*H1).toFixed(2)}`, style:st, "data-sub":"Normstrich"});
   if(o.art === "m") add(G, "path", {d:`M${(-TAN30*H1).toFixed(2)},${(-H1).toFixed(2)} L${(TAN30*H1).toFixed(2)},${(-H1).toFixed(2)}`, style:st});
   if(o.art === "k"){ const d = H1/1.5, r = d/2; add(G, "circle", {cx:0, cy:-d, r, style:st}); }
   if(o.rund) add(G, "circle", {cx:bx, cy:-H2, r:0.32*h, style:st.replace("fill:none", "fill:var(--surface)")});
@@ -3654,9 +3659,9 @@ window.LM_FIG = window.LM_FIG || {}; window.LM_HT = window.LM_HT || {};
 const BL = "var(--blue)", RU = "var(--rust)";
 const note = (g, x, y, t, c=RU, anchor="start") => T(g, x, y, t, "lbl-s", {"text-anchor":anchor, style:`fill:${c};font-weight:700`});
 function sheet(h, W, H, aria){ const {svg, defs} = svgRoot(h, W, H, aria); big(svg); const id = "w" + Math.random().toString(36).slice(2,8); pfeil(defs, id); return {svg, defs, id, g:add(svg, "g")}; }
-/* Oberflächensymbole wie im Skript (DIN ISO 1302, alt:true), Schrifthöhe 11 px */
-const S = (g, x, y, o) => OFL.sym(g, x, y, Object.assign({alt:true, h:11}, o));
-const L = (g, id, ax, ay, kx, ky, o) => OFL.leader(g, id, ax, ay, kx, ky, Object.assign({alt:true, h:11}, o));
+/* Oberflächensymbole nach DIN EN ISO 21920 (OFL v2, 18.11.2026), Schrifthöhe 11 px */
+const S = (g, x, y, o) => OFL.sym(g, x, y, Object.assign({h:11}, o));     // v2 (18.11.2026): neue Norm DIN EN ISO 21920
+const L = (g, id, ax, ay, kx, ky, o) => OFL.leader(g, id, ax, ay, kx, ky, Object.assign({h:11}, o));
 const num = v => { const x = parseFloat(String(v || "").replace(/\s/g, "").replace(",", ".").replace(/[−–]/g, "-")); return isFinite(x) ? x : NaN; };
 const rnd = a => a[Math.floor(Math.random()*a.length)];
 
