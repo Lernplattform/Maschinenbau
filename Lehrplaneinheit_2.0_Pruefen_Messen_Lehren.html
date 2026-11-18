@@ -215,8 +215,10 @@ svg.gfx .hot:focus{outline:none}
 svg.gfx .hot:focus-visible .ring, svg.gfx .hot.on .ring{stroke:var(--rust); stroke-width:3}
 svg.gfx .ring{fill:var(--surface); stroke:var(--blue); stroke-width:2}
 svg.gfx .ringtxt{font-size:13px; font-weight:700; fill:var(--blue); text-anchor:middle; dominant-baseline:central; pointer-events:none}
-.sim{display:grid; grid-template-columns:minmax(0,1.6fr) minmax(220px,1fr); gap:16px; align-items:start}
-@media (max-width:760px){ .sim{grid-template-columns:1fr} }
+/* 18.11.2026 (Lehrkraft: „Grafik in groß unter den text in derselben breite. vor allem bei den interaktiven simulationen kann man damit besser arbeiten!“):
+   Simulation untereinander – Grafik in voller Breite, Bedienung darunter; Grafik höchstens 70 % der Fensterhöhe, damit die Bedienung sichtbar bleibt. */
+.sim{display:grid; grid-template-columns:minmax(0,1fr); gap:14px; align-items:start}
+.sim > :first-child svg.gfx{max-height:70vh}
 .sim.wide{grid-template-columns:1fr}
 .sim.wide .ctrl{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px 20px; align-items:start}
 .sim.wide .ctrl .readout, .sim.wide .ctrl > p{grid-column:1/-1}
@@ -375,7 +377,7 @@ input.err{border-color:var(--err)!important; background:var(--err-soft)}
 .fx{color:var(--blue)} .fy{color:var(--vap)}
 
 /* Grafik beschriften (Typ label) */
-.lblwrap{display:grid; grid-template-columns:minmax(0,440px) minmax(220px,1fr); gap:16px; align-items:start; margin-top:6px}
+.lblwrap{display:grid; grid-template-columns:minmax(0,600px) minmax(220px,1fr); gap:16px; align-items:start; margin-top:6px}
 @media (max-width:760px){ .lblwrap{grid-template-columns:1fr} }
 .lblfig{position:relative}
 .lblfig .pin{position:absolute; transform:translate(-50%,-50%); width:30px; height:30px; border-radius:50%; border:2.4px dashed var(--blue); background:var(--surface); color:var(--blue); font:inherit; font-size:14px; font-weight:800; cursor:pointer; padding:0; box-shadow:0 1px 4px #0004}
@@ -387,6 +389,72 @@ input.err{border-color:var(--err)!important; background:var(--err-soft)}
 .bank .chip .pn{display:inline-flex; width:22px; height:22px; border-radius:50%; border:1.6px solid currentColor; font-weight:800; font-size:12px; align-items:center; justify-content:center; margin-right:6px; flex:none}
 .bank .chip{display:inline-flex; align-items:center}
 .bank .chip.used{opacity:.6}
+
+/* ---------- Übungen (17.11.2026): Punkte, Fehler einkreisen (spots), Papieraufgabe (paper), Auswertung ---------- */
+.ptsbadge{display:inline-block; margin-left:10px; padding:1px 9px; border-radius:999px; background:var(--blue-soft); color:var(--blue); font-weight:800; letter-spacing:0; text-transform:none}
+.taskfig{max-width:760px; margin:4px 0 8px}   /* 18.11.2026: Grafiken größer (vorher 480 px) */
+.solbox [data-fig]{max-width:760px}
+.spotfig{max-width:760px}
+.spotfig .spot{position:absolute; border-radius:50%; border:2.6px solid transparent; background:transparent; padding:0; cursor:pointer}
+.spotfig button.spot:hover{border:1.5px dotted color-mix(in srgb, var(--blue) 45%, transparent)}
+.spotfig .spot.marked, .spotfig button.spot.marked:hover{border:2.6px solid var(--blue)}
+.spotfig .spot.found{border:2.6px solid var(--ok)}
+.spotfig .spot.wrong{border:2.6px solid var(--err)}
+.spotfig .spot.missed{border:2.6px dashed var(--maybe)}
+.spotfig .spn{position:absolute; right:-14px; top:-14px; width:22px; height:22px; border-radius:50%; background:var(--ok); color:var(--bg); font-size:13px; display:flex; align-items:center; justify-content:center}
+ol.spotsol{margin:10px 0 0; padding-left:22px; line-height:1.5}
+.paper{display:flex; flex-direction:column; gap:10px}
+.papertask{background:var(--surface2); border-left:4px solid var(--blue); border-radius:6px; padding:10px 12px}
+.paperdone{display:flex; gap:8px; align-items:center; font-weight:700}
+.paperdone input{width:20px; height:20px}
+table.crit td:last-child{white-space:nowrap}
+table.crit .seg button{min-width:44px}
+.evbar{height:10px; border-radius:999px; background:var(--border); overflow:hidden}
+.evbar > span{display:block; height:100%; background:var(--blue); border-radius:inherit}
+.evpts{display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:14px 16px; margin:12px 0}
+.evbig{font-size:30px; font-weight:800; font-variant-numeric:tabular-nums}
+ul.evweak{margin:6px 0 0; padding-left:20px; line-height:1.55}
+@media print{ .spotfig button.spot:hover{border-color:transparent} }
+
+/* Einstellen an der Simulation (Typ adjust, Übung 2.0) */
+.adjlist{display:flex; flex-direction:column; gap:18px}
+.adjrow{border:1px solid var(--border); border-radius:8px; padding:10px 12px; background:var(--surface)}
+.adjq{font-weight:600; margin-bottom:6px}
+.adjfig{max-width:640px; touch-action:none; cursor:ew-resize}
+.adjctl{max-width:640px; display:flex; flex-direction:column; gap:6px; margin-top:6px}
+.adjctl input[type=range]{width:100%; accent-color:var(--blue)}
+.adjbtns{gap:6px; flex-wrap:wrap}
+@media (max-width:520px){ .adjrow{padding:8px 2px} .adjq{padding:0 6px} }
+
+/* Fehlende Linien ergänzen (Typ lines, seit LE 1.3) */
+.lnfig{max-width:760px}
+.lnfig .lnc{position:absolute; height:18px; padding:0; border:0; background:transparent; cursor:pointer; display:flex; align-items:center; border-radius:6px}
+.lnfig .lnc span{display:block; width:100%; height:0; border-top:2px dotted color-mix(in srgb, var(--blue) 80%, transparent)}
+.lnfig .lnc:hover{background:color-mix(in srgb, var(--blue) 12%, transparent)}
+.lnfig .lnc.s1 span{border-top:3px solid var(--ink)}
+.lnfig .lnc.s2 span{border-top:0; height:1.6px; background:repeating-linear-gradient(90deg, var(--ink) 0 8px, transparent 8px 11px)}
+.lnfig .lnc.ok.s1 span{border-top-color:var(--ok)} .lnfig .lnc.ok.s2 span{background:repeating-linear-gradient(90deg, var(--ok) 0 8px, transparent 8px 11px)}
+.lnfig .lnc.err{background:color-mix(in srgb, var(--err) 18%, transparent)}
+.lnfig .lnc.err.s0 span{border-top:2px dashed var(--err)}
+.lnfig .lnc.err.s1 span{border-top-color:var(--err)} .lnfig .lnc.err.s2 span{background:repeating-linear-gradient(90deg, var(--err) 0 8px, transparent 8px 11px)}
+.lnfig .lnc:disabled{cursor:default}
+.lnfig .lnc:disabled.s0{display:none}
+
+/* Schnittflächen schraffieren (Typ hatch, LE 1.4); --hs = Schraffurabstand der Fläche (setzt engine.js) */
+.htfig{max-width:760px}
+.htfig .htc{position:absolute; padding:0; border:0; margin:0; cursor:pointer; background:transparent; --hs:7px}
+.htfig .htc:hover{background:color-mix(in srgb, var(--blue) 14%, transparent)}
+.htfig .htc.on{background:repeating-linear-gradient(-45deg, transparent 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc.on.neg{background:repeating-linear-gradient(45deg, transparent 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc.ok{background:repeating-linear-gradient(-45deg, color-mix(in srgb, var(--ok) 18%, transparent) 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc.ok.neg{background:repeating-linear-gradient(45deg, color-mix(in srgb, var(--ok) 18%, transparent) 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc.err{background:color-mix(in srgb, var(--err) 28%, transparent)}
+.htfig .htc.err.on{background:repeating-linear-gradient(-45deg, color-mix(in srgb, var(--err) 24%, transparent) 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc.err.on.neg{background:repeating-linear-gradient(45deg, color-mix(in srgb, var(--err) 24%, transparent) 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc:disabled.ok{background:repeating-linear-gradient(-45deg, transparent 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc:disabled.ok.neg{background:repeating-linear-gradient(45deg, transparent 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc:disabled{cursor:default} .htfig .htc:disabled:not(.on){display:none}
+.htfig .htc:focus-visible{outline:none; background:color-mix(in srgb, var(--blue) 24%, transparent)}
 /* Zusatz (freiwillig): Transfer mit Spielelement – Baukasten zusatz.js */
 .zx{display:flex; flex-direction:column; gap:12px; padding:18px; border:1px solid var(--border); border-left:6px solid var(--blue); border-radius:10px; background:var(--surface)}
 .zx.solved{border-left-color:var(--ok)}
@@ -436,8 +504,7 @@ input.err{border-color:var(--err)!important; background:var(--err-soft)}
 .zx table.rfa td.mono{white-space:nowrap}
 .zx{scroll-margin-top:90px}
 /* LE 1.4 Prüfen, Messen, Lehren: schmale Grafik links, Bedienung rechts */
-.sim.kop{grid-template-columns:minmax(0,440px) minmax(240px,1fr)}
-@media (max-width:760px){ .sim.kop{grid-template-columns:1fr} }
+.sim.kop{grid-template-columns:minmax(0,1fr)}   /* 18.11.2026: Grafik groß oben, Bedienung darunter */
 svg.gfx.big .lbl-s{font-size:14px}
 svg.gfx.big .lbl{font-size:16px}
 .ctrl .segbtns button{padding:5px 10px; font-size:13px}
@@ -885,7 +952,7 @@ const IDB = {
 
 /* ============================================================
    SaveKit
-   cfg: key, moduleId, moduleTitle, fileStem,
+   cfg: key, moduleId, moduleTitle, fileStem, art (Bezeichnung im Startfenster, Standard „Lerneinheit“; Übungen: „Übung“),
         getState(), setState(obj), summary() -> lesbarer Text (ohne Speicherblock)
    ============================================================ */
 function SaveKit(cfg){
@@ -894,6 +961,7 @@ function SaveKit(cfg){
   let dir = null;          // FileSystemDirectoryHandle
   let perm = "none";       // none | prompt | granted
   let lastFileSave = null, lastErr = "", writing = false, pending = false, timer = null, choice = null;
+  const ART = cfg.art || "Lerneinheit";   // Übungen (17.11.2026): „Übung beginnen →“
   const statusEl = () => $("#saved"), panel = () => $("#savepanel"), bar = () => $("#resumebar");
 
   /* --- Text der Datei --- */
@@ -1071,20 +1139,20 @@ function SaveKit(cfg){
       body = `<h2 id="lm-gate-h"><span class="no ok">✓</span>Speicherort ist verbunden</h2>
         <p>Ordner <b>„${esc(dir.name)}“</b> · Datei <span class="mono">${esc(fileName())}</span></p>
         <p>Ab jetzt wird jede Eingabe automatisch gespeichert. Oben rechts siehst du jederzeit, wann zuletzt gespeichert wurde.</p>
-        <div class="row"><button type="button" class="btn big" data-lm="begin">Lerneinheit beginnen →</button></div>`;
+        <div class="row"><button type="button" class="btn big" data-lm="begin">${ART} beginnen →</button></div>`;
     } else if(!FS_OK){
       body = `<h2 id="lm-gate-h"><span class="no">0</span>Bevor es losgeht: So sicherst du deine Arbeit</h2>
         <p>Dein Browser kann nicht automatisch in eine Datei speichern (z. B. Firefox, Safari, iPad, Smartphone). Deine Eingaben bleiben in diesem Browser erhalten, aber nur auf diesem Gerät.</p>
         <ol class="lm-gate-steps"><li>Hast du schon eine Speicherdatei? Dann lade sie jetzt.</li><li>Zum Abgeben: auf der Startseite <b>„Zwischenstand als Datei sichern“</b> oder <b>„Als Text kopieren“</b> und den Text an die Lehrkraft schicken.</li><li>Tipp: Am PC mit <b>Chrome oder Edge</b> wird automatisch gespeichert.</li></ol>
         <div class="row"><label class="filebtn" for="lm-gate-load">Speicherdatei laden</label><input type="file" id="lm-gate-load" accept=".txt,text/plain" class="visually-hidden">
-        <button type="button" class="btn big" data-lm="skip">Verstanden – Lerneinheit starten</button></div>`;
+        <button type="button" class="btn big" data-lm="skip">Verstanden – ${ART} starten</button></div>`;
     } else if(dir){
       body = `<h2 id="lm-gate-h"><span class="no">0</span>Willkommen zurück!</h2>
         <p>Dein Speicherordner <b>„${esc(dir.name)}“</b> ist bekannt. Klicke auf <b>„Weiterarbeiten“</b> und bestätige die Frage des Browsers. Dann wird dein Speicherstand geladen und jede Eingabe wieder automatisch gespeichert.</p>
         <div class="row"><button type="button" class="btn big" data-lm="resume">Weiterarbeiten</button><button type="button" class="btn secondary" data-lm="connect">Anderen Ordner wählen</button></div>`;
     } else {
       body = `<h2 id="lm-gate-h"><span class="no">0</span>Bevor es losgeht: Speicherort wählen</h2>
-        <p>Diese Lerneinheit speichert jede deiner Eingaben automatisch in eine Datei. So geht nichts verloren, und beim nächsten Öffnen ist alles wieder da.</p>
+        <p>Diese ${ART} speichert jede deiner Eingaben automatisch in eine Datei. So geht nichts verloren, und beim nächsten Öffnen ist alles wieder da.</p>
         <ol class="lm-gate-steps"><li>Klicke auf <b>„Speicherordner wählen“</b>.</li><li>${location.protocol==="file:" ? "Wähle den Ordner, in dem diese HTML-Datei liegt (oder deinen eigenen Schulordner)" : "Wähle einen Ordner auf deinem Rechner für deine Speicherdateien, z. B. deinen Schulordner für Produktionstechnologie"}, und klicke auf <b>„Ordner auswählen“</b>.</li><li>Bestätige die Frage des Browsers mit <b>„Dateien bearbeiten“</b> bzw. <b>„Zulassen“</b>.</li></ol>
         <div class="row"><button type="button" class="btn big" data-lm="connect">Speicherordner wählen</button></div>
         <p class="small muted">Deine Datei heißt dann: <span class="mono">${esc(fileName())}</span></p>`;
@@ -1228,7 +1296,7 @@ function SaveKit(cfg){
   /* --- Start --- */
   async function init(){
     if(PROBE){ probe(); return; }
-    backLink();
+    backLink(ART);
     render();
     if(!FS_OK) return;
     const h = window.__lmTestDir || await IDB.get("ordner");
@@ -1260,10 +1328,10 @@ function SaveKit(cfg){
 }
 
 /* Link „Alle Lerneinheiten“: nur wenn die Übersicht in diesem Browser schon einmal geöffnet wurde */
-function backLink(){
+function backLink(art){   // Übungen (17.11.2026): Link auf den Reiter „Übungsaufgaben“
   let href = ""; try { href = localStorage.getItem("lm-uebersicht-mb") || ""; } catch(e){}
   const host = $(".site-inner"); if(!href || !host || $(".lm-back", host)) return;
-  const a = document.createElement("a"); a.className = "lm-back"; a.href = href; a.textContent = "← Alle Lerneinheiten";
+  const a = document.createElement("a"); a.className = "lm-back"; const ueb = art === "Übung"; a.href = href + (ueb ? "#uebungen" : ""); a.textContent = ueb ? "← Alle Übungsaufgaben" : "← Alle Lerneinheiten";
   host.appendChild(a);
 }
 
@@ -1750,7 +1818,14 @@ const U = {
 /* ============================================================
    Aufgaben-Engine (datengetrieben) für Lerneinheiten
    Erwartet global: U = {id, title, fileStem, key, plan, tasks, problem}
-   Aufgabentypen: toggle, tiles, select, num, text, assign, label (Grafik beschriften), sort, matrix, errors, mc, cases
+   Aufgabentypen: toggle, tiles, select, num, text, assign, label (Grafik beschriften), sort, matrix, errors, mc, cases,
+                  spots (Fehler in einer Zeichnung einkreisen), paper (Papieraufgabe mit Selbstbewertung nach Kriterien),
+                  adjust (Messgerät in einer Simulation auf ein Maß einstellen, seit Übung 2.0),
+                  lines (fehlende Linien in einer Zeichnung ergänzen: keine / sichtbare / verdeckte Kante, seit LE 1.3),
+                  hatch (Schnittflächen in einer Zeichnung antippen und schraffieren, seit LE 1.4)
+   Übungen (17.11.2026): U.art = "Übung"; Punkte je Aufgabe über t.pts (Punkte je richtigem Item) bzw. it.p (je Item),
+   bei spots/paper über ty.points/ty.maxPts; U.note = "linear" → Note in Auswertung und txt; t.exam = Prüfungsniveau wie „Zettel und Stift“ (Physik): kein Tipp, „Ergebnis prüfen“,
+   Punkte beim ersten Prüfen festgelegt (spätere Versuche ändern sie nicht); Auswertung in #auswertung (Tabelle je Station, Punkte, „Das solltest du noch üben“).
    ============================================================ */
 const E = (function(){
 "use strict";
@@ -1761,14 +1836,14 @@ const esc = LM.esc;
 
 let S = {};
 const SK = SaveKit({
-  key:U.key, moduleId:U.id, moduleTitle:U.title, fileStem:U.fileStem,
+  key:U.key, moduleId:U.id, moduleTitle:U.title, fileStem:U.fileStem, art:U.art,
   getState:()=>S, setState:o=>{ S = o||{}; ensure(); renderAll(); }, summary:()=>summaryText(),
   progress:()=>({done:U.plan.filter(p=>doneFor(p[0])).length, total:U.plan.length})
 });
 S = SK.initial();
-function ensure(){ ["t","sc","dirty"].forEach(k => { if(!S[k] || typeof S[k] !== "object") S[k] = {}; }); Object.keys(U.tasks).forEach(id => { if(!S.t[id] || typeof S.t[id] !== "object") S.t[id] = {}; }); }
+function ensure(){ ["t","sc","dirty","pt"].forEach(k => { if(!S[k] || typeof S[k] !== "object") S[k] = {}; }); Object.keys(U.tasks).forEach(id => { if(!S.t[id] || typeof S.t[id] !== "object") S.t[id] = {}; }); }
 ensure();
-function save(){ SK.changed(); renderTabs(); if(current===last) updateSummary(); }
+function save(){ SK.changed(); renderTabs(); if(current===last) updateSummary(); renderEval(); }
 const H = {};
 
 /* ---------- Navigation ---------- */
@@ -1788,6 +1863,7 @@ function taskDone(id){
   const t = U.tasks[id], a = S.t[id];
   if(t.type==="mc") return Object.keys(a).length === t.items.length;
   if(t.type==="cases") return t.items.every((c,i)=>a[i] && a[i].revealed);
+  if(t.type==="paper") return T.paper.rated(t,a);
   return S.sc[id] != null;
 }
 function doneFor(sid){
@@ -1817,7 +1893,7 @@ const num = v => { const x = parseFloat(String(v||"").replace(/\s/g,"").replace(
 const fmt = x => String(x).replace(".", ",");
 const norm = v => String(v||"").replace(/[\s ]/g,"").replace(/[–—]/g,"-").toUpperCase();
 const ckd = id => S.sc[id] != null && !S.dirty[id];
-const fbLine = (ok, it) => ok ? `<div class="fb ok small">✓ Richtig.${it.e?" "+it.e:""}</div>` : `<div class="fb err small">✗ Noch nicht richtig. Nutze den Tipp.</div>`;
+const fbLine = (ok, it, t) => ok ? `<div class="fb ok small">✓ Richtig.${it.e?" "+it.e:""}</div>` : `<div class="fb err small">✗ Noch nicht richtig. ${t&&t.exam?"Vergleiche mit der Lösung.":"Nutze den Tipp."}</div>`;
 function shuffled(n, seed){ const a = [...Array(n).keys()]; let s = seed||7; for(let i=n-1;i>0;i--){ s=(s*9301+49297)%233280; const j=Math.floor(s/233280*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } if(a.every((v,i)=>v===i) && n>1) [a[0],a[1]]=[a[1],a[0]]; return a; }
 
 /* ---------- Aufgabentypen ---------- */
@@ -1825,7 +1901,7 @@ const T = {};
 T.toggle = {
   body(t,a,ck){ const tiles = t.type==="tiles";
     return `<div class="${tiles?"tiles":"rw"}">` + t.items.map((it,i)=>{ const v=a[i], ok = v===it.a;
-      return `<div class="${tiles?"tile":"rw-item"} ${tiles&&ck&&v!=null?(ok?"ok":"err"):""}">${tiles?`<div class="num mono">${it.t}</div>${it.sub?`<div class="small muted">${it.sub}</div>`:""}`:`<span>${it.t}</span>`}<div class="seg" role="group" aria-label="${esc(String(it.t).replace(/<[^>]+>/g,""))}">${t.opts.map((o,j)=>`<button type="button" data-v="${i}:${j}" aria-pressed="${v===j}">${o}</button>`).join("")}</div>${ck&&v!=null?(tiles?`<div class="small">${ok?"✓ richtig":"✗ falsch"}</div>`:fbLine(ok,it)):""}</div>`; }).join("") + `</div>`; },
+      return `<div class="${tiles?"tile":"rw-item"} ${tiles&&ck&&v!=null?(ok?"ok":"err"):""}">${tiles?`<div class="num mono">${it.t}</div>${it.sub?`<div class="small muted">${it.sub}</div>`:""}`:`<span>${it.t}</span>`}<div class="seg" role="group" aria-label="${esc(String(it.t).replace(/<[^>]+>/g,""))}">${t.opts.map((o,j)=>`<button type="button" data-v="${i}:${j}" aria-pressed="${v===j}">${o}</button>`).join("")}</div>${ck&&v!=null?(tiles?`<div class="small">${ok?"✓ richtig":"✗ falsch"}</div>`:fbLine(ok,it,t)):""}</div>`; }).join("") + `</div>`; },
   click(t,a,b){ if(!b.dataset.v) return false; const [i,j]=b.dataset.v.split(":").map(Number); a[i]=j; return true; },
   ok:(t,it,v)=>v===it.a,
   sol:t=>`<div class="solbox">${t.items.map(it=>`<b>${it.t}</b> → ${t.opts[it.a]}${it.e?". "+it.e:""}`).join("<br>")}</div>`
@@ -1840,14 +1916,14 @@ T.select = {
 };
 T.num = {
   body(t,a,ck){ return `<div class="numlist">${t.items.map((it,i)=>{ const v=a[i]||"", ok=T.num.ok(t,it,v);
-    return `<div class="numrow"><label for="${t.id}-n${i}">${it.t}</label><div class="row" style="gap:6px;flex-wrap:nowrap"><input type="text" inputmode="decimal" id="${t.id}-n${i}" data-i="${i}" value="${esc(v)}" class="numin ${ck&&v?(ok?"ok":"err"):""}" autocomplete="off"><span class="mono">${it.u||""}</span></div>${ck&&v?fbLine(ok,it):""}</div>`; }).join("")}</div>`; },
+    return `<div class="numrow"><label for="${t.id}-n${i}">${it.t}</label><div class="row" style="gap:6px;flex-wrap:nowrap"><input type="text" inputmode="decimal" id="${t.id}-n${i}" data-i="${i}" value="${esc(v)}" class="numin ${ck&&v?(ok?"ok":"err"):""}" autocomplete="off"><span class="mono">${it.u||""}</span></div>${ck&&v?fbLine(ok,it,t):""}</div>`; }).join("")}</div>`; },
   input(t,a,e){ const s=e.target.closest("input[data-i]"); if(!s) return false; a[s.dataset.i]=s.value; return "soft"; },
   ok:(t,it,v)=>{ const x=num(v); return isFinite(x) && Math.abs(x-it.a) <= (it.tol!=null?it.tol:Math.abs(it.a)*0.01+1e-9); },
   sol:t=>`<div class="solbox">${t.items.map(it=>`${it.t} <b>${fmt(it.a)} ${it.u||""}</b>${it.w?`<div class="small">${it.w}</div>`:""}`).join("<br>")}</div>`
 };
 T.text = {
   body(t,a,ck){ return `<div class="numlist">${t.items.map((it,i)=>{ const v=a[i]||"", ok=T.text.ok(t,it,v);
-    return `<div class="numrow"><label for="${t.id}-x${i}">${it.t}</label><input type="text" id="${t.id}-x${i}" data-i="${i}" value="${esc(v)}" class="mono txtin ${ck&&v?(ok?"ok":"err"):""}" autocomplete="off" spellcheck="false" placeholder="${esc(it.ph||t.ph||"Kurzname")}">${ck&&v?fbLine(ok,it):""}</div>`; }).join("")}</div>`; },
+    return `<div class="numrow"><label for="${t.id}-x${i}">${it.t}</label><input type="text" id="${t.id}-x${i}" data-i="${i}" value="${esc(v)}" class="mono txtin ${ck&&v?(ok?"ok":"err"):""}" autocomplete="off" spellcheck="false" placeholder="${esc(it.ph||t.ph||"Kurzname")}">${ck&&v?fbLine(ok,it,t):""}</div>`; }).join("")}</div>`; },
   input:T.num.input,
   ok:(t,it,v)=>v && [].concat(it.a).some(x=>norm(x)===norm(v)),
   sol:t=>`<div class="solbox">${t.items.map(it=>`${it.t} → <b class="mono">${[].concat(it.a)[0]}</b>${it.e?`<div class="small">${it.e}</div>`:""}`).join("<br>")}</div>`
@@ -1939,27 +2015,145 @@ T.cases = {
     a[i]=st; st.revealed=true; return true; }
 };
 
+/* Fehler einkreisen (wie in der Klausur): Zeichnung t.fig (window.LM_FIG, viewBox t.w × t.h) mit unsichtbaren Feldern
+   items:[{x, y, rx, ry, f, e}] – f = hier steckt ein Fehler, e = Beschreibung (Lösung). Antippen = einkreisen / wieder entfernen.
+   Punkte: t.pts je gefundenem Fehler, je falsch eingekreister Stelle t.pts Abzug (mindestens 0). */
+const ring = (t, it, cls) => `left:${((it.x-(it.rx||16))/t.w*100).toFixed(2)}%;top:${((it.y-(it.ry||12))/t.h*100).toFixed(2)}%;width:${(2*(it.rx||16)/t.w*100).toFixed(2)}%;height:${(2*(it.ry||12)/t.h*100).toFixed(2)}%`;
+T.spots = {
+  body(t,a,ck){ const n = t.items.filter((it,i)=>a[i]).length;
+    const zones = t.items.map((it,i)=>{ const m=!!a[i], ok=m===!!it.f, cls = ck ? (m ? (ok?"found":"wrong") : (ok?"":"missed")) : (m?"marked":"");
+      return `<button type="button" class="spot ${cls}" data-sp="${i}" aria-pressed="${m}" style="${ring(t,it)}" aria-label="Stelle ${i+1}${m?" (eingekreist)":""}"></button>`; }).join("");
+    return `<div class="lblfig spotfig"><div data-fig="${t.fig}"></div>${zones}</div><p class="small muted spotinfo">${n ? `${n} Stelle${n===1?"":"n"} eingekreist.` : "Noch nichts eingekreist."} Tippe auf eine Stelle der Zeichnung, um sie einzukreisen, noch einmal tippen entfernt den Kreis.${ck?" <b>Grün</b>: richtig gefunden · <b>Rot</b>: hier ist kein Fehler · <b>Orange gestrichelt</b>: übersehen.":""}</p>`; },
+  click(t,a,b){ if(b.dataset.sp==null) return false; const i=b.dataset.sp; if(a[i]) delete a[i]; else a[i]=true; return true; },
+  ok:(t,it,v)=>!!v===!!it.f,
+  points(t,a){ const p=t.pts||1, hit=t.items.filter((it,i)=>it.f&&a[i]).length, miss=t.items.filter((it,i)=>!it.f&&a[i]).length; return Math.max(0, (hit-miss)*p); },
+  maxPts:t=>t.items.filter(it=>it.f).length*(t.pts||1),
+  sol:t=>`<div class="solbox"><div class="lblfig spotfig">${`<div data-fig="${t.fig}"></div>`}${t.items.filter(it=>it.f).map((it,k)=>`<span class="spot found" style="${ring(t,it)}"><b class="spn">${k+1}</b></span>`).join("")}</div><ol class="spotsol">${t.items.filter(it=>it.f).map(it=>`<li>${it.e}</li>`).join("")}</ol></div>`
+};
+/* Papieraufgabe: auf Papier (oder im Textfeld, t.field) lösen, dann Musterlösung (t.sol, darf <div data-fig> enthalten) aufdecken
+   und jedes Kriterium t.crit:[{t, p}] selbst bewerten (0 … p in 0,5-Schritten). Wird nicht automatisch geprüft. */
+const steps = p => Array.from({length:Math.round(p*2)+1}, (_,i)=>i/2);
+T.paper = {
+  rated:(t,a)=>!!a.open && t.crit.every((c,i)=>a.r && a.r[i]!=null),
+  body(t,a){ const txt=(a.text||"").trim(), ready = t.field ? txt.length>=15 : !!a.done;
+    const inp = t.field ? `<label for="${t.id}-pt">${t.fieldLabel||"Deine Antwort"} <span class="small muted">(oder auf Papier)</span></label><textarea id="${t.id}-pt" data-pf="text" style="min-height:90px" ${a.open?"readonly":""}>${esc(a.text||"")}</textarea>`
+      : `<label class="paperdone"><input type="checkbox" data-pf="done" ${a.done?"checked":""} ${a.open?"disabled":""}> Ich habe die Aufgabe auf Papier bearbeitet.</label>`;
+    const crit = a.open ? `<div class="fb info small"><b>Selbstbewertung wie in der Klausur.</b> Deine Lösung kann nicht automatisch geprüft werden. Vergleiche sie ehrlich Punkt für Punkt mit der Musterlösung und vergib für jedes Kriterium deine Punkte.</div>
+      <div class="solbox">${t.sol}</div>
+      <div class="tbl-wrap"><table class="crit"><tr><th>Kriterium</th><th>Punkte</th></tr>${t.crit.map((c,i)=>{ const v=a.r&&a.r[i];
+        return `<tr><td>${c.t}</td><td><div class="seg" role="group" aria-label="Punkte Kriterium ${i+1}">${steps(c.p).map(x=>`<button type="button" data-cr="${i}:${x}" aria-pressed="${v===x}">${fmt(x)}</button>`).join("")}</div><div class="small muted">von ${fmt(c.p)}</div></td></tr>`; }).join("")}</table></div>` : "";
+    return `<div class="paper">${t.task?`<div class="papertask">${t.task}</div>`:""}${inp}
+      <div class="row"><button type="button" class="btn secondary" data-popen aria-disabled="${ready||a.open?"false":"true"}">${a.open?"Musterlösung angezeigt":"Musterlösung und Bewertung anzeigen"}</button><span class="lock-msg small" role="status" id="${t.id}-plock"></span></div>${crit}</div>`; },
+  input(t,a,e){ const x=e.target.closest("[data-pf]"); if(!x) return false; if(x.dataset.pf==="done"){ a.done=x.checked; return true; }
+    a.text=x.value; const b=document.querySelector(`#task-${t.id} [data-popen]`); if(b&&!a.open) b.setAttribute("aria-disabled", a.text.trim().length>=15?"false":"true"); return "soft"; },
+  click(t,a,b){ if(b.hasAttribute("data-popen")){ if(a.open) return false; const ok = t.field ? (a.text||"").trim().length>=15 : a.done;
+      if(!ok){ document.getElementById(`${t.id}-plock`).textContent = t.field ? "Schreib zuerst deine eigene Antwort (oder hake ab, dass du auf Papier gearbeitet hast)." : "Bearbeite die Aufgabe zuerst auf Papier und hake das Kästchen an."; return false; }
+      a.open=true; return true; }
+    if(b.dataset.cr){ const [i,x]=b.dataset.cr.split(":"); a.r=a.r||{}; a.r[i]=+x; return true; } return false; },
+  score:(t,a)=>t.crit.filter((c,i)=>a.r&&a.r[i]!=null).length,
+  points:(t,a)=>t.crit.reduce((s,c,i)=>s+((a.r&&a.r[i])||0),0),
+  maxPts:t=>t.crit.reduce((s,c)=>s+c.p,0)
+};
+
+/* Einstellen an der Simulation (Übung 2.0, 17.11.2026): je Item ein Messgerät aus window.LM_ADJ[it.inst||t.inst]
+   ({min, max, step, steps:[[Text, Δ]], draw(host, v, onUser) → {set(v)}}), das auf das Maß it.a eingestellt werden muss.
+   Der eingestellte Wert wird nicht angezeigt (selbst ablesen!). Bedienung: Ziehen in der Grafik, Schieberegler, Feinschritte. */
+const adjOf = (t, it) => (window.LM_ADJ || {})[it.inst || t.inst];
+const adjRound = (A, v) => +(Math.min(A.max, Math.max(A.min, Math.round(v/A.step)*A.step))).toFixed(4);
+T.adjust = {
+  val(t, it, a, i){ const A = adjOf(t, it); return a[i] != null ? a[i] : (it.start != null ? it.start : A ? A.min : 0); },
+  body(t,a,ck){ if(t.items.some(it=>!adjOf(t,it)) && !t._wait){ t._wait = 1; setTimeout(()=>renderTask(t.id), 0); return `<p class="small muted">Messgerät wird geladen …</p>`; }   // LM_ADJ kommt aus lib_*.js (nach engine.js eingebunden)
+    return `<div class="adjlist">${t.items.map((it,i)=>{ const A = adjOf(t,it), v = T.adjust.val(t,it,a,i), ok = a[i]!=null && T.adjust.ok(t,it,a[i]);
+    if(!A) return `<div class="fb err small">Messgerät „${it.inst||t.inst}“ fehlt.</div>`;
+    return `<div class="adjrow"><div class="adjq">${it.t}</div><div class="adjfig" data-adj="${i}"></div>
+      <div class="adjctl"><input type="range" data-ai="${i}" min="${A.min}" max="${A.max}" step="${A.step}" value="${v}" aria-label="Messgerät einstellen ${i+1}">
+      <div class="row adjbtns">${A.steps.map(([l,d])=>`<button type="button" class="btn small secondary" data-ad="${i}:${d}">${l}</button>`).join("")}</div></div>
+      ${ck&&a[i]!=null?fbLine(ok,it,t):""}</div>`; }).join("")}</div>`; },
+  mount(t,a,host){ $$("[data-adj]",host).forEach(h => { const i=+h.dataset.adj, it=t.items[i], A=adjOf(t,it); if(!A) return;
+    const r = $(`input[data-ai="${i}"]`, host);
+    h._adj = A.draw(h, T.adjust.val(t,it,a,i), v => { r.value = adjRound(A, v); r.dispatchEvent(new Event("input", {bubbles:true})); }); }); },
+  input(t,a,e){ const r=e.target.closest("input[data-ai]"); if(!r) return false; const i=+r.dataset.ai, A=adjOf(t,t.items[i]);
+    a[i] = adjRound(A, +r.value); const h=r.closest(".adjrow").querySelector("[data-adj]"); if(h && h._adj) h._adj.set(a[i]); return "soft"; },
+  click(t,a,b){ if(!b.dataset.ad) return false; const [i,d]=b.dataset.ad.split(":").map(Number), it=t.items[i], A=adjOf(t,it);
+    a[i] = adjRound(A, T.adjust.val(t,it,a,i) + d); return true; },
+  ok:(t,it,v)=>v!=null && Math.abs(v-it.a) <= (it.tol!=null?it.tol:1e-6),
+  sol:t=>`<div class="solbox">${t.items.map(it=>`${it.t} <b>${fmt(it.a)} ${it.u||"mm"}</b>${it.w?`<div class="small">${it.w}</div>`:""}`).join("<br>")}</div>`
+};
+
+/* Fehlende Linien ergänzen (LE 1.3, 17.11.2026): Zeichnung t.fig (window.LM_FIG) mit Kandidaten-Linien; Antippen wechselt
+   keine Linie → sichtbare Kante (breite Volllinie) → verdeckte Kante (Strichlinie) → keine. items:[{vw, xy:[u1,v1,u2,v2], a:0|1|2, e}]
+   in Bildkoordinaten der Ansicht vw; die Lage in der Zeichnung liefert window.LM_LN[t.fig] = {w, h, P(vw, u, v) → [x, y]} (aus gfx_/lib_).
+   a = 0: Ablenker (hier gehört keine Linie hin). Bewertet wird jede Kandidaten-Linie. */
+const lnOf = t => (window.LM_LN || {})[t.fig];
+T.lines = {
+  st:["keine Linie","sichtbare Kante","verdeckte Kante"],
+  geo(t, it){ const L = lnOf(t), a = L.P(it.vw, it.xy[0], it.xy[1]), b = L.P(it.vw, it.xy[2], it.xy[3]), dx = b[0]-a[0], dy = b[1]-a[1];
+    return {mx:(a[0]+b[0])/2, my:(a[1]+b[1])/2, l:Math.hypot(dx, dy), ang:Math.atan2(dy, dx)*180/Math.PI, W:L.w, H:L.h}; },
+  btn(t, it, i, v, cls, dis){ const g = T.lines.geo(t, it);
+    return `<button type="button" class="lnc s${v||0} ${cls}" data-ln="${i}" ${dis?"disabled":""} aria-label="Linie ${i+1}: ${T.lines.st[v||0]}" style="left:${(g.mx/g.W*100).toFixed(2)}%;top:${(g.my/g.H*100).toFixed(2)}%;width:${(g.l/g.W*100).toFixed(2)}%;transform:translate(-50%,-50%) rotate(${g.ang.toFixed(2)}deg)"><span></span></button>`; },
+  body(t,a,ck){ if(!lnOf(t)){ if(!t._wait){ t._wait = 1; setTimeout(()=>{ t._wait = 0; renderTask(t.id); }, 30); } return `<p class="small muted">Zeichnung wird geladen …</p>`; }
+    const n = t.items.filter((it,i)=>a[i]).length;
+    return `<div class="lblfig lnfig"><div data-fig="${t.fig}"></div>${t.items.map((it,i)=>{ const v=a[i]||0, ok=v===it.a; return T.lines.btn(t, it, i, v, ck?(ok?(v?"ok":""):"err"):"", false); }).join("")}</div>
+      <p class="small muted spotinfo">${n?`${n} Linie${n===1?"":"n"} eingetragen.`:"Noch keine Linie eingetragen."} Die gepunkteten Stellen sind mögliche Linien. Antippen wechselt: keine Linie → <b>sichtbare Kante</b> → <b>verdeckte Kante</b> → keine Linie.${ck?" <b>Grün</b>: richtig · <b>Rot</b>: falsch oder fehlt.":""}</p>`; },
+  click(t,a,b){ if(b.dataset.ln==null) return false; const i=b.dataset.ln; a[i] = ((a[i]||0) + 1) % 3; if(!a[i]) delete a[i]; return true; },
+  ok:(t,it,v)=>(v||0)===it.a,
+  sol:t=>`<div class="solbox"><div class="lblfig lnfig"><div data-fig="${t.fig}"></div>${t.items.map((it,i)=>T.lines.btn(t, it, i, it.a, it.a?"ok":"", true)).join("")}</div>${t.items.some(it=>it.e)?`<ul>${t.items.filter(it=>it.e).map(it=>`<li>${it.e}</li>`).join("")}</ul>`:""}</div>`
+};
+
+/* Schnittflächen schraffieren (LE 1.4, 17.11.2026): Zeichnung t.fig (window.LM_FIG, viewBox 0 0 t.w t.h) ohne Schraffur; die Flächen liefert
+   window.LM_HT[t.fig] = {R:{name:[[x,y, x,y, …], …]}} (ein oder mehrere Polygone je Fläche, in Bildkoordinaten). items:[{r, a:0|1, e, ang}] –
+   a = 1: hier ist Schnittfläche (schraffieren), a = 0: nicht schraffieren (Hohlraum, Fläche hinter der Schnittebene, Normteil). Antippen schaltet um.
+   Die Flächen sind Knöpfe mit clip-path (Bedienung wie bei lines/spots, auch mit Tastatur). R[name] = ein Polygon oder eine Liste von Polygonen. */
+const htOf = t => (window.LM_HT || {})[t.fig];
+T.hatch = {
+  btns(t, a, ck, sol){ const H = htOf(t); return t.items.map((it,i)=>{ const on = sol ? !!it.a : !!a[i], ok = on === !!it.a, cls = (on?"on ":"") + (ck||sol ? (ok ? (on?"ok":"") : "err") : "") + (it.ang < 0 ? " neg" : "");
+    const Ls = H.R[it.r]||[]; return (typeof Ls[0] === "number" ? [Ls] : Ls).map(P => { let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9; for(let k=0;k<P.length;k+=2){ x0=Math.min(x0,P[k]); x1=Math.max(x1,P[k]); y0=Math.min(y0,P[k+1]); y1=Math.max(y1,P[k+1]); }
+      const w = x1-x0, h = y1-y0, poly = []; for(let k=0;k<P.length;k+=2) poly.push(`${((P[k]-x0)/w*100).toFixed(2)}% ${((P[k+1]-y0)/h*100).toFixed(2)}%`);
+      return `<button type="button" class="htc ${cls}" data-ht="${i}" data-hs="${it.s||t.s||7}" ${sol?"disabled":""} aria-pressed="${on}" aria-label="Fläche ${i+1}: ${on?"schraffiert":"nicht schraffiert"}" style="left:${(x0/t.w*100).toFixed(2)}%;top:${(y0/t.h*100).toFixed(2)}%;width:${(w/t.w*100).toFixed(2)}%;height:${(h/t.h*100).toFixed(2)}%;clip-path:polygon(${poly.join(",")})"></button>`; }).join(""); }).join(""); },
+  body(t,a,ck){ if(!htOf(t)){ if(!t._wait){ t._wait = 1; setTimeout(()=>{ t._wait = 0; renderTask(t.id); }, 30); } return `<p class="small muted">Zeichnung wird geladen …</p>`; }
+    const n = t.items.filter((it,i)=>a[i]).length;
+    return `<div class="lblfig htfig"><div data-fig="${t.fig}"></div>${T.hatch.btns(t, a, ck, false)}</div>
+      <p class="small muted spotinfo">${n?`${n} Fläche${n===1?"":"n"} schraffiert.`:"Noch keine Fläche schraffiert."} Tippe eine Fläche an, um sie zu schraffieren, noch einmal tippen entfernt die Schraffur.${ck?" <b>Grün</b>: richtig schraffiert · <b>Rot</b>: falsch schraffiert oder fehlt.":""}</p>`; },
+  /* Schraffurabstand je Fläche (it.s in Bildkoordinaten, größere Fläche = größerer Abstand, gleiches Bauteil = gleicher Abstand), mitskaliert mit der angezeigten Breite */
+  mount(t,a,host){ const sc = () => $$(".htfig", host).forEach(f => { const k = f.clientWidth / t.w; if(k > 0) $$(".htc", f).forEach(b => b.style.setProperty("--hs", (+b.dataset.hs*k).toFixed(2) + "px")); });
+    sc(); requestAnimationFrame(sc); if(!host._hsro && "ResizeObserver" in window){ host._hsro = new ResizeObserver(sc); host._hsro.observe(host); } },
+  click(t,a,b){ if(b.dataset.ht==null) return false; const i=b.dataset.ht; if(a[i]) delete a[i]; else a[i]=true; return true; },
+  ok:(t,it,v)=>!!v===!!it.a,
+  sol:t=>`<div class="solbox"><div class="lblfig htfig"><div data-fig="${t.fig}"></div>${T.hatch.btns(t, {}, false, true)}</div>${t.items.some(it=>it.e)?`<ul>${t.items.filter(it=>it.e).map(it=>`<li>${it.e}</li>`).join("")}</ul>`:""}</div>`
+};
+
+/* ---------- Punkte (Übungen, Prüfungsniveau) ---------- */
+const hasPts = t => t.pts!=null || (T[t.type].maxPts && (t.exam || t.type==="paper")) || (t.items||[]).some(it=>it.p!=null);   // v1.2 (17.11.2026): spots ohne exam/pts zählen keine Punkte (Übung 1.2, Niveau 2)
+function maxPts(id){ const t=U.tasks[id], ty=T[t.type]; return ty.maxPts ? ty.maxPts(t) : t.items.reduce((s,it)=>s+(it.p!=null?it.p:(t.pts||0)),0); }
+function ptsNow(id){ const t=U.tasks[id], a=S.t[id], ty=T[t.type];
+  if(ty.points) return ty.points(t,a);
+  if(t.type==="mc") return t.items.reduce((s,it,i)=>s+(a[i]===it.a?(it.p!=null?it.p:t.pts||0):0),0);
+  return t.items.reduce((s,it,i)=>s+(ty.ok(t,it,a[i])?(it.p!=null?it.p:t.pts||0):0),0); }
+const ptTxt = id => `${fmt(S.pt[id]||0)} von ${fmt(maxPts(id))} Punkten`;
+
 /* ---------- Aufgaben rendern ---------- */
 function scoreOf(id){ const t=U.tasks[id], a=S.t[id], ty=T[t.type];
   if(ty.score) return ty.score(t,a);
   return t.items.filter((it,i)=>ty.ok(t,it,a[i])).length; }
 function scoreText(id){ const t=U.tasks[id], a=S.t[id];
-  if(t.type==="mc"){ const d=Object.keys(a).length, r=t.items.filter((it,i)=>a[i]===it.a).length; return d?`${r} von ${d} beantworteten Fragen richtig`+(d===t.items.length?" · abgeschlossen":""):""; }
+  if(t.type==="mc"){ const d=Object.keys(a).length, r=t.items.filter((it,i)=>a[i]===it.a).length; return d?`${r} von ${d} beantworteten Fragen richtig`+(d===t.items.length?" · abgeschlossen":"")+(hasPts(t)?" · "+ptTxt(id):""):""; }
+  if(t.type==="paper") return a.open ? `Selbstbewertung: ${ptTxt(id)}`+(T.paper.rated(t,a)?"":" (noch nicht alle Kriterien bewertet)") : "";
   if(t.type==="cases") return "";
   if(S.sc[id]==null) return "";
   if(S.dirty[id]) return "Geändert: bitte erneut prüfen.";
   const N=t.items.length, n=S.sc[id];
-  return `${n} von ${N} richtig` + (t.goal ? (n>=t.goal?" · Ziel erreicht":` · Ziel: ${t.goal}`) : ""); }
+  return `${n} von ${N} richtig` + (t.goal ? (n>=t.goal?" · Ziel erreicht":` · Ziel: ${t.goal}`) : "") + (hasPts(t)?" · "+ptTxt(id):""); }
 function frame(id){
   const t=U.tasks[id], host=document.getElementById("task-"+id);
-  const help = !["mc","cases"].includes(t.type);
-  host.innerHTML = `<p class="tag">${t.tag}</p><h2>${t.title}</h2>${t.intro?`<p class="muted small">${t.intro}</p>`:""}<div class="tb"></div>
-    ${help?`<div class="row helpbar"><button type="button" class="btn" data-check>Prüfen</button><button type="button" class="btn secondary" data-help="hint">Tipp</button><button type="button" class="btn secondary" data-help="sol">Lösung</button><span class="score" role="status"></span></div><div class="th"></div>`:`<div class="row"><span class="score" role="status"></span></div>`}${t.after||""}`;
+  const help = !["mc","cases","paper"].includes(t.type), pts = hasPts(t) ? `<span class="ptsbadge">${fmt(maxPts(id))} P.</span>` : "";
+  host.innerHTML = `<p class="tag">${t.tag}${pts}</p><h2>${t.title}</h2>${t.intro?`<p class="muted small">${t.intro}</p>`:""}${t.fig&&!["label","spots","lines","hatch"].includes(t.type)?`<div class="taskfig"><div data-fig="${t.fig}"></div></div>`:""}<div class="tb"></div>
+    ${t.type==="paper"?`<div class="row helpbar">${t.exam?"":`<button type="button" class="btn secondary" data-help="hint">Tipp</button>`}<span class="score" role="status"></span></div><div class="th"></div>`:help?`<div class="row helpbar"><button type="button" class="btn" data-check>${t.exam?"Ergebnis prüfen":"Prüfen"}</button>${t.exam?"":`<button type="button" class="btn secondary" data-help="hint">Tipp</button>`}<button type="button" class="btn secondary" data-help="sol">Lösung</button><span class="score" role="status"></span></div><div class="th"></div>`:`<div class="row"><span class="score" role="status"></span></div>`}${t.after||""}`;
 }
 function renderTask(id){
   const t=U.tasks[id], host=document.getElementById("task-"+id); if(!host) return;
-  $(".tb",host).innerHTML = T[t.type].body(t, S.t[id], ckd(id));
-  $$("[data-fig]",host).forEach(d => { const f = window.LM_FIG && window.LM_FIG[d.dataset.fig]; if(f) f(d); });   // Zeichnung für „Grafik beschriften“
+  $(".tb",host).innerHTML = T[t.type].body(t, S.t[id], ckd(id) || t.type==="paper");
+  if(T[t.type].mount) T[t.type].mount(t, S.t[id], host);   // z. B. Messgeräte bei „adjust“
+  $$("[data-fig]",host).forEach(d => { if(d.firstChild) return; const f = window.LM_FIG && window.LM_FIG[d.dataset.fig]; if(f) f(d); });   // Zeichnung für „Grafik beschriften“
   $(".score",host).textContent = scoreText(id);
   renderHelp(id);
 }
@@ -1968,7 +2162,9 @@ function renderHelp(id){
   const ready = S.sc[id]!=null;
   $$("[data-help='sol']",host).forEach(b=>{ b.setAttribute("aria-disabled", ready?"false":"true"); b.title = ready?"":"Erst prüfen, dann ist die Lösung freigeschaltet."; });
   th.innerHTML = (H[id+"hint"]?`<div class="fb info small"><b>Tipp:</b> ${t.hint}</div>`:"") +
-    (H[id+"sol"] ? (ready ? (t.sol || T[t.type].sol(t)) : `<div class="fb err small">Erst prüfen, dann ist die Lösung freigeschaltet.</div>`) : "");
+    (H[id+"sol"] && t.type!=="paper" ? (ready ? (t.sol || T[t.type].sol(t)) : `<div class="fb err small">Erst prüfen, dann ist die Lösung freigeschaltet.</div>`) : "");
+  $$("[data-fig]",th).forEach(d => { const f = window.LM_FIG && window.LM_FIG[d.dataset.fig]; if(f) f(d); });   // Zeichnungen in Lösungen
+  if(t.type==="hatch" && T.hatch.mount) T.hatch.mount(t, S.t[id], th);
 }
 function initTasks(){
   Object.keys(U.tasks).forEach(id => {
@@ -1976,15 +2172,15 @@ function initTasks(){
     host.classList.add("task"); host.dataset.task=id; frame(id);
     host.addEventListener("click", e => {
       const b=e.target.closest("button"); if(!b || b.closest(".th")) return;
-      if(b.hasAttribute("data-check")){ S.sc[id]=scoreOf(id); delete S.dirty[id]; save(); renderTask(id); return; }
+      if(b.hasAttribute("data-check")){ S.sc[id]=scoreOf(id); if(hasPts(t) && !(t.exam && S.pt[id]!=null)) S.pt[id]=ptsNow(id); delete S.dirty[id]; save(); renderTask(id); return; }
       if(b.dataset.help){ H[id+b.dataset.help]=!H[id+b.dataset.help]; renderHelp(id); return; }
       const ty=T[t.type]; if(!ty.click) return;
       const r=ty.click(t,S.t[id],b); if(!r) return;
-      if(r===true){ if(t.type==="mc"||t.type==="cases") S.sc[id]=scoreOf(id); else if(S.sc[id]!=null) S.dirty[id]=true; save(); }
+      if(r===true){ if(["mc","cases","paper"].includes(t.type)){ S.sc[id]=scoreOf(id); if(hasPts(t)) S.pt[id]=ptsNow(id); } else if(S.sc[id]!=null) S.dirty[id]=true; save(); }   // paper: Selbstbewertung bleibt änderbar
       renderTask(id);
     });
     const onIn = e => { const ty=T[t.type]; if(!ty.input) return; const r=ty.input(t,S.t[id],e); if(!r) return;
-      if(S.sc[id]!=null && t.type!=="cases"){ S.dirty[id]=true; $(".score",host).textContent="Geändert: bitte erneut prüfen."; }
+      if(S.sc[id]!=null && !["cases","paper"].includes(t.type)){ S.dirty[id]=true; $(".score",host).textContent="Geändert: bitte erneut prüfen."; }
       save(); if(r!=="soft") renderTask(id); };
     host.addEventListener("input", onIn);
     if(t.type==="assign" || t.type==="label"){
@@ -2022,19 +2218,24 @@ document.addEventListener("click", e => { const b=e.target.closest("[data-phelp]
 function summaryText(){
   const L=[], d=new Date();
   L.push(U.kopf || "Technisches Gymnasium · Maschinenbau");
-  L.push("LERNEINHEIT: " + U.title);
+  L.push((U.art==="Übung"?"ÜBUNG: ":"LERNEINHEIT: ") + U.title);
   L.push("Stand: " + d.toLocaleDateString("de-DE") + " " + d.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"}));
   plain.forEach(sec => {
+    if(!$$("[data-task],textarea[data-field]", sec).length) return;   // z. B. Auswertung
     L.push(""); L.push(sec.dataset.title.toUpperCase());
     $$("[data-task],textarea[data-field]", sec).forEach(x => {
       if(x.dataset.task){ const id=x.dataset.task, t=U.tasks[id], a=S.t[id];
         if(t.type==="cases"){ L.push("  "+t.tag); t.items.forEach((c,i)=>{ const st=a[i]||{}; L.push(`    Fall ${i+1} ${c.t}: ${st.choice||"–"}`); L.push(`       Begründung: ${(st.text||"–").trim()}`); }); }
-        else if(t.type==="mc"){ L.push(`  ${t.tag}: ${t.items.filter((it,i)=>a[i]===it.a).length}/${t.items.length} richtig (${Object.keys(a).length} beantwortet)`); }
-        else L.push(`  ${t.tag}: ${S.sc[id]!=null?S.sc[id]+"/"+t.items.length+" richtig":"nicht geprüft"}`);
+        else if(t.type==="mc"){ L.push(`  ${t.tag}: ${t.items.filter((it,i)=>a[i]===it.a).length}/${t.items.length} richtig (${Object.keys(a).length} beantwortet)`+(hasPts(t)?` · ${fmt(S.pt[id]||0)}/${fmt(maxPts(id))} P.`:"")); }
+        else if(t.type==="paper"){ L.push(`  ${t.tag}: ${a.open?"Selbstbewertung "+fmt(S.pt[id]||0)+"/"+fmt(maxPts(id))+" P.":"Musterlösung noch nicht aufgedeckt"}`); if(t.field) L.push(`     Antwort: ${(a.text||"–").trim()}`); }
+        else L.push(`  ${t.tag}: ${S.sc[id]!=null?S.sc[id]+"/"+t.items.length+" richtig"+(hasPts(t)?` · ${fmt(S.pt[id]||0)}/${fmt(maxPts(id))} P.`:""):"nicht geprüft"}`);
       } else { L.push("  " + (x.dataset.label||x.id) + ": " + ((S[x.id]||"–").trim())); }
     });
   });
   if(window.LM_ZX){ L.push(""); L.push(LM_ZX.summary()); }
+  if(document.getElementById("auswertung")){ const ev=evalData(); L.push(""); L.push("AUSWERTUNG");
+    ev.rows.forEach(r=>L.push(`  ${r.title}: ${r.ok}/${r.n} richtig`+(r.max?` · ${fmt(r.pts)}/${fmt(r.max)} P.`:"")));
+    if(ev.max){ const nt=noteOf(ev); L.push(""); L.push(`PUNKTE: ${fmt(ev.pts)}/${fmt(ev.max)} (${ev.pct} %)`+(nt?` · Note ${nt.n} (${nt.w})`:"")); } }
   return L.join("\n");
 }
 function updateSummary(){
@@ -2047,10 +2248,36 @@ const cp=$("#copy"); if(cp) cp.addEventListener("click", () => {
   try { navigator.clipboard.writeText(t).then(()=>{ $("#save-msg").textContent="Kopiert."; }, fb); } catch(e){ fb(); }
 });
 
+/* ---------- Auswertung (Übungen): je Station richtig/gesamt und Punkte; Aufgaben unter 75 % → „noch üben“ ---------- */
+function evalData(){
+  const rows = U.plan.map(([sid,title]) => { const sec=document.getElementById(sid), ids=sec?$$("[data-task]",sec).map(d=>d.dataset.task):[];
+    let ok=0, n=0, pts=0, max=0; const weak=[];
+    ids.forEach(id => { const t=U.tasks[id], a=S.t[id], N = t.type==="paper" ? t.crit.length : t.items.length;
+      const r = t.type==="paper" ? (a.open?Math.round(N*(S.pt[id]||0)/maxPts(id)):0) : t.type==="mc"||t.type==="cases" ? scoreOf(id) : (S.sc[id]!=null && !S.dirty[id] ? S.sc[id] : 0);
+      ok+=r; n+=N; if(hasPts(t)){ pts+=S.pt[id]||0; max+=maxPts(id); }
+      const begun = t.type==="paper" ? a.open : t.type==="mc" ? Object.keys(a).length : S.sc[id]!=null;
+      if(!begun || r < 0.75*N) weak.push({id, t, begun}); });
+    return {sid, title, ok, n, pts, max, weak, done:doneFor(sid)}; });
+  const pts = rows.reduce((s,r)=>s+r.pts,0), max = rows.reduce((s,r)=>s+r.max,0);
+  return {rows, pts, max, pct: max ? Math.round(100*pts/max) : 0};
+}
+/* Note (Übungen, Prüfungsniveau): U.note = "linear" wie Physik (Lehrkraft, 17.11.2026): Note = 6 − 5 · Anteil, eine Nachkommastelle */
+const NWORT = ["sehr gut","gut","befriedigend","ausreichend","mangelhaft","ungenügend"];
+function noteOf(ev){ if(U.note !== "linear" || !ev.max) return null; const v = Math.round((6 - 5*ev.pts/ev.max)*10)/10; return {n: v.toFixed(1).replace(".", ","), w: NWORT[Math.min(6, Math.max(1, Math.round(v)))-1]}; }
+function renderEval(){
+  const h=$("#auswertung"); if(!h) return; const ev=evalData();
+  const bar = (v,n) => `<div class="evbar"><span style="width:${n?Math.round(100*v/n):0}%"></span></div>`;
+  const weak = ev.rows.flatMap(r=>r.weak.map(w=>({...w, st:r.title, sid:r.sid})));
+  h.innerHTML = `<div class="tbl-wrap"><table class="evtab"><tr><th>Niveau</th><th>richtig</th><th></th><th>Punkte</th><th>Stand</th></tr>${ev.rows.map(r=>`<tr><td><a href="#${r.sid}" data-go="${r.sid}"><b>${r.title}</b></a></td><td class="nowrap">${r.ok} von ${r.n}</td><td style="min-width:120px">${bar(r.ok,r.n)}</td><td class="nowrap">${r.max?`${fmt(r.pts)} von ${fmt(r.max)}`:"–"}</td><td>${r.done?'<span class="okmark">✓ erledigt</span>':'<span class="muted small">offen</span>'}</td></tr>`).join("")}</table></div>
+    ${ev.max?`<div class="evpts"><div><div class="small muted">Prüfungsniveau</div><div class="evbig">${fmt(ev.pts)} <span class="small">von ${fmt(ev.max)} Punkten</span></div></div><div style="flex:1">${bar(ev.pts,ev.max)}<div class="small muted">${ev.pct} % der Punkte</div></div>${noteOf(ev)?`<div><div class="small muted">Note</div><div class="evbig">${noteOf(ev).n} <span class="small">${noteOf(ev).w}</span></div></div>`:""}</div>`:""}
+    <h3>Das solltest du noch üben</h3>${weak.some(w=>w.begun)?`<ul class="evweak">${weak.filter(w=>w.begun).map(w=>`<li><a href="#task-${w.id}" data-jump="${w.sid}:${w.id}">${w.st} · ${w.t.tag.replace(/<[^>]+>/g,"").split(" · ")[0]}: ${w.t.title}</a> <span class="small muted">weniger als drei Viertel richtig${w.t.le?` · Nachlesen: ${w.t.le}`:""}</span></li>`).join("")}</ul>`:weak.length?`<p class="small muted">Noch nichts, was du nachholen musst. Bearbeite zuerst die offenen Aufgaben.</p>`:`<p class="fb ok small">Alles mindestens zu drei Vierteln richtig. Stark!</p>`}
+    ${ev.rows.filter(r=>r.weak.some(w=>!w.begun)).map(r=>`<p class="small"><b>${r.title}, noch offen:</b> ${r.weak.filter(w=>!w.begun).map(w=>`<a href="#task-${w.id}" data-jump="${r.sid}:${w.id}">${w.t.tag.replace(/<[^>]+>/g,"").split(" · ")[0].replace("Aufgabe ","")}</a>`).join(", ")}</p>`).join("")}`;
+}
+document.addEventListener("click", e => { const j=e.target.closest("[data-jump]"); if(!j) return; e.preventDefault(); const [sid,id]=j.dataset.jump.split(":"); show(sid); const x=document.getElementById("task-"+id); if(x) x.scrollIntoView({block:"start"}); });
 function renderAll(){
   fields.forEach(f => { f.value = S[f.id] || ""; });
   Object.keys(U.tasks).forEach(renderTask);
-  renderProblemHelp(); updateSummary(); renderTabs();
+  renderProblemHelp(); updateSummary(); renderTabs(); renderEval();
   document.dispatchEvent(new CustomEvent("lm-render"));   // z. B. Zusatz nach dem Laden eines Speicherstands neu zeichnen
 }
 initTasks();
@@ -2577,6 +2804,106 @@ function inspect(p, K, o){
   add(g, "path", {d:`M${x+84*u},${y+48*u} a28,28 0 0 1 22,-8`, fill:"none", stroke:"#fff", "stroke-width":2.4, "stroke-opacity":.8});
 }
 window.BILD = {kit, caliper, micrometer, plug, snap, dial, rule, tape, tyre, dipstick, feeler, radius, square, protractor, blocks, angleblocks, inspect, el, add};
+})();
+
+/* ============ Gemeinsame Messgeräte-Simulationen Prüftechnik (Übung 2.0, 17.11.2026) ============
+   window.PM = {caliper, micrometer}: Messschieber mit Lupe auf Haupt- und Noniusskala, Bügelmessschraube mit Lupe
+   auf Skalenhülse und Skalentrommel (Steigung 0,5 mm, 50 Teile). Zeichnung über window.BILD (lib_bild.js).
+   window.LM_ADJ = Messgeräte zum Einstellen für den Engine-Typ „adjust“: ms10 (Nonius 1/10 mm), ms20 (1/20 mm), mm (Messschraube).
+   Herkunft: caliper/micrometer aus gfx_a.js (LE 2.0) übernommen; LE 2.0 nutzt beim nächsten Neubau PM statt der eigenen Kopie. */
+(function(){
+"use strict";
+const {el, svgRoot} = LM.G;
+const add = (p, tag, a, k) => p.appendChild(el(tag, a, k));
+const T = (p, x, y, txt, cls="lbl-s", extra={}) => add(p, "text", Object.assign({x, y, class:cls}, extra), [txt]);
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+
+/* ---------- Messschieber: Übersicht oben, Lupe unten. o = {v, res (0.1|0.05), help, wp} ---------- */
+function caliper(host, o){
+  o = Object.assign({v:23.4, res:0.1, help:false, wp:true}, o||{});
+  const {svg, defs} = svgRoot(host, 420, 330, "Messschieber mit Werkstück; darunter vergrößert die Hauptskala und der Nonius.");
+  svg.classList.add("big");
+  const KB = BILD.kit(defs), g1 = add(svg, "g"), g2 = add(svg, "g");
+  function overview(){
+    g1.replaceChildren(); const v = o.v;
+    const C = BILD.caliper(g1, KB, {x:46, y:34, s:1.75, v, len:186, work:o.wp, rod:false});
+    const x1 = C.X(v)-6, x2 = Math.min(416, C.X(v+44)+6), y1 = C.Y(11), y2 = C.Y(27);
+    add(g1, "rect", {x:x1, y:y1, width:x2-x1, height:y2-y1, rx:3, fill:"none", style:"stroke:var(--rust);stroke-width:1.8;stroke-dasharray:5 3"});
+    add(g1, "line", {x1, y1:y2, x2:14, y2:166, style:"stroke:var(--rust);stroke-width:1;stroke-dasharray:3 3"});
+    add(g1, "line", {x1:x2, y1:y2, x2:406, y2:166, style:"stroke:var(--rust);stroke-width:1;stroke-dasharray:3 3"});
+  }
+  function loupe(){
+    g2.replaceChildren(); const v = o.v, res = o.res;
+    const N = res === 0.1 ? 10 : 20, step = res === 0.1 ? 1.9 : 1.95, len = N*step;
+    const lo = Math.floor(v) - 3, hi = lo + len + 8, s = 392/(hi-lo), X = mm => 14 + (mm-lo)*s, y0 = 246;
+    add(g2, "rect", {x:14, y:166, width:392, height:y0-166, fill:KB.v("stahl"), style:"stroke:var(--rust);stroke-width:1.6"});
+    add(g2, "rect", {x:Math.max(14, X(v)-30), y:y0, width:Math.min(406, X(v+len)+30)-Math.max(14, X(v)-30), height:72, fill:"#f2f4f6", stroke:"#6b747d", "stroke-width":1});
+    for(let m=Math.ceil(lo); m<=hi; m++){ const x = X(m); if(x<14||x>406) continue;
+      const L = m%10===0 ? 30 : m%5===0 ? 22 : 14;
+      add(g2, "line", {x1:x, x2:x, y1:y0, y2:y0-L, stroke:"#1c232a", "stroke-width":m%5===0?2.4:1.9});
+      if(m%10===0) T(g2, x, y0-36, String(m/10), "lbl", {"text-anchor":"middle", style:"fill:#1c232a"}); }
+    const kAl = Math.round(((v % 1) + 1e-9) / res) % (N+1);
+    for(let k=0; k<=N; k++){ const x = X(v + k*step), lab = res===0.1 ? (k%5===0) : (k%2===0), on = o.help && k===kAl;
+      add(g2, "line", {x1:x, x2:x, y1:y0, y2:y0+(lab?24:15), style:`stroke:${on?"var(--rust)":"#1c232a"};stroke-width:${on?3.2:(lab?2.4:1.9)}`});
+      if(lab) T(g2, x, y0+42, String(res===0.1 ? k : k/2), "lbl-s", {"text-anchor":"middle", style:`fill:${on?"var(--rust)":"#1c232a"};font-weight:${on?700:400}`}); }
+    T(g2, Math.min(400, X(v+len)+26), y0+64, res===0.1 ? "1/10 mm" : "1/20 mm", "lbl-s", {"text-anchor":"end", style:"fill:#1c232a"});
+    T(g2, 20, 184, "Hauptskala: Zahlen = cm, Striche = mm", "lbl-s", {style:"fill:#1c232a"});
+    if(o.help) add(g2, "line", {x1:X(Math.floor(v)), x2:X(Math.floor(v)), y1:y0-14, y2:y0, style:"stroke:var(--blue);stroke-width:3"});
+  }
+  function draw(){ overview(); loupe(); }
+  draw();
+  return { svg, set(p){ Object.assign(o, p); draw(); }, get v(){ return o.v; } };
+}
+
+/* ---------- Bügelmessschraube: o = {v, help, wp, d, loupe} ---------- */
+function micrometer(host, o){
+  o = Object.assign({v:7.38, help:false, wp:true, x:50, y:92, fs:2.6, s:5, loupe:true}, o||{});
+  const H = o.H || (o.loupe ? 380 : 215);
+  const {svg, defs} = svgRoot(host, 420, H, "Bügelmessschraube; darunter vergrößert Skalenhülse und Skalentrommel");
+  svg.classList.add("big"); const KB = BILD.kit(defs), g = add(svg, "g");
+  function loupe(M){
+    const v = clamp(o.v, 0, 25), Ly = 296, k = 26, Xe = 262, t = ((v % .5) + 1e-9)*100;
+    const fx1 = M.XE-48, fx2 = M.XE+34, fy1 = o.y-30, fy2 = o.y+30;
+    add(g, "rect", {x:fx1, y:fy1, width:fx2-fx1, height:fy2-fy1, rx:4, fill:"none", style:"stroke:var(--rust);stroke-width:1.8;stroke-dasharray:5 3"});
+    add(g, "line", {x1:fx1, y1:fy2, x2:14, y2:216, style:"stroke:var(--rust);stroke-width:1;stroke-dasharray:3 3"});
+    add(g, "line", {x1:fx2, y1:fy2, x2:406, y2:216, style:"stroke:var(--rust);stroke-width:1;stroke-dasharray:3 3"});
+    add(g, "rect", {x:14, y:216, width:392, height:158, rx:8, fill:"var(--surface)", style:"stroke:var(--rust);stroke-width:1.6"});
+    add(g, "rect", {x:16, y:Ly-38, width:Xe-16, height:76, fill:KB.v("matt"), stroke:"#3a4148", "stroke-width":.8});
+    add(g, "line", {x1:16, x2:Xe, y1:Ly, y2:Ly, stroke:"#14181c", "stroke-width":2});
+    for(let m=Math.floor(v)-12; m<=Math.floor(v); m++){ if(m<0) continue;
+      const xm = Xe - (v-m)*k; if(xm >= 18){ add(g, "line", {x1:xm, x2:xm, y1:Ly, y2:Ly-(m%5===0?30:20), stroke:"#14181c", "stroke-width":2.4});
+        if(m%5===0) T(g, xm, Ly-36, String(m), "lbl", {"text-anchor":"middle", style:"fill:#14181c"}); }
+      const xh = Xe - (v-m-.5)*k; if(m+.5 <= v+1e-9 && xh >= 18) add(g, "line", {x1:xh, x2:xh, y1:Ly, y2:Ly+20, stroke:"#14181c", "stroke-width":2.4}); }
+    add(g, "path", {d:`M${Xe},${Ly-40} L${Xe+16},${Ly-74} L404,${Ly-74} L404,${Ly+74} L${Xe+16},${Ly+74} L${Xe},${Ly+40} Z`, fill:KB.v("chrom"), stroke:"#3a4148", "stroke-width":.8});
+    for(let n=Math.floor(t)-7; n<=Math.ceil(t)+7; n++){ const yy = Ly - (n-t)*11; if(Math.abs(yy-Ly) > 66) continue;
+      const nn = ((n%50)+50)%50, on = o.help && Math.abs(n-t) < .5;
+      add(g, "line", {x1:Xe+16, x2:Xe+16+(nn%5===0?30:18), y1:yy, y2:yy, style:`stroke:${on?"var(--rust)":"#14181c"};stroke-width:${on?3:2}`});
+      if(nn%5===0) T(g, Xe+52, yy+6, String(nn), "lbl", {style:`fill:${on?"var(--rust)":"#14181c"}`}); }
+    if(o.help) add(g, "line", {x1:16, x2:404, y1:Ly, y2:Ly, style:"stroke:var(--rust);stroke-width:1;stroke-dasharray:4 3"});
+    T(g, 22, 234, "Lupe: Hülse und Trommel", "lbl-s", {style:"fill:var(--ink)"});
+  }
+  function draw(){ g.replaceChildren(); const M = BILD.micrometer(g, KB, {x:o.x, y:o.y, fs:o.fs, s:o.s, v:o.v, d:o.wp ? o.d : null, help:o.help, labels:!o.loupe}); if(o.loupe) loupe(M); }
+  draw();
+  return { svg, set(p){ Object.assign(o, p); draw(); }, get v(){ return o.v; } };
+}
+
+/* ---------- Ziehen in der Grafik: waagerecht ziehen ändert den Wert (k = viewBox-Einheiten je Einheit des Werts) ---------- */
+function dragX(svg, get, k, onUser){
+  let x0 = null, v0 = 0;
+  const vbx = e => { const r = svg.getBoundingClientRect(); return (e.clientX - r.left) * svg.viewBox.baseVal.width / r.width; };
+  svg.addEventListener("pointerdown", e => { x0 = vbx(e); v0 = get(); try{ svg.setPointerCapture(e.pointerId); }catch(_){} });
+  svg.addEventListener("pointermove", e => { if(x0 == null) return; onUser(v0 + (vbx(e) - x0)/k); });
+  ["pointerup","pointercancel","lostpointercapture"].forEach(n => svg.addEventListener(n, () => { x0 = null; }));
+}
+const msAdj = res => ({ min:0, max:140, step:res,
+  steps:[["−1 mm",-1],["− "+(res===0.1?"0,1":"0,05"),-res],["+ "+(res===0.1?"0,1":"0,05"),res],["+1 mm",1]],
+  draw(host, v, onUser){ const C = caliper(host, {v, res, help:false, wp:false}); dragX(C.svg, () => C.v, 6, onUser); return {set: x => C.set({v:x})}; } });
+window.PM = {caliper, micrometer};
+window.LM_ADJ = Object.assign(window.LM_ADJ || {}, {
+  ms10: msAdj(0.1), ms20: msAdj(0.05),
+  mm: { min:0, max:25, step:0.01, steps:[["−½ Umdrehung",-0.5],["−0,01",-0.01],["+0,01",0.01],["+½ Umdrehung",0.5]],
+    draw(host, v, onUser){ const M = micrometer(host, {v, help:false, wp:false}); dragX(M.svg, () => M.v, 40, onUser); return {set: x => M.set({v:x})}; } }
+});
 })();
 
 /* ============ Grafiken und Simulationen LE 2.0 Prüfen, Messen, Lehren ============

@@ -215,8 +215,10 @@ svg.gfx .hot:focus{outline:none}
 svg.gfx .hot:focus-visible .ring, svg.gfx .hot.on .ring{stroke:var(--rust); stroke-width:3}
 svg.gfx .ring{fill:var(--surface); stroke:var(--blue); stroke-width:2}
 svg.gfx .ringtxt{font-size:13px; font-weight:700; fill:var(--blue); text-anchor:middle; dominant-baseline:central; pointer-events:none}
-.sim{display:grid; grid-template-columns:minmax(0,1.6fr) minmax(220px,1fr); gap:16px; align-items:start}
-@media (max-width:760px){ .sim{grid-template-columns:1fr} }
+/* 18.11.2026 (Lehrkraft: „Grafik in groß unter den text in derselben breite. vor allem bei den interaktiven simulationen kann man damit besser arbeiten!“):
+   Simulation untereinander – Grafik in voller Breite, Bedienung darunter; Grafik höchstens 70 % der Fensterhöhe, damit die Bedienung sichtbar bleibt. */
+.sim{display:grid; grid-template-columns:minmax(0,1fr); gap:14px; align-items:start}
+.sim > :first-child svg.gfx{max-height:70vh}
 .sim.wide{grid-template-columns:1fr}
 .sim.wide .ctrl{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px 20px; align-items:start}
 .sim.wide .ctrl .readout, .sim.wide .ctrl > p{grid-column:1/-1}
@@ -375,7 +377,7 @@ input.err{border-color:var(--err)!important; background:var(--err-soft)}
 .fx{color:var(--blue)} .fy{color:var(--vap)}
 
 /* Grafik beschriften (Typ label) */
-.lblwrap{display:grid; grid-template-columns:minmax(0,440px) minmax(220px,1fr); gap:16px; align-items:start; margin-top:6px}
+.lblwrap{display:grid; grid-template-columns:minmax(0,600px) minmax(220px,1fr); gap:16px; align-items:start; margin-top:6px}
 @media (max-width:760px){ .lblwrap{grid-template-columns:1fr} }
 .lblfig{position:relative}
 .lblfig .pin{position:absolute; transform:translate(-50%,-50%); width:30px; height:30px; border-radius:50%; border:2.4px dashed var(--blue); background:var(--surface); color:var(--blue); font:inherit; font-size:14px; font-weight:800; cursor:pointer; padding:0; box-shadow:0 1px 4px #0004}
@@ -390,9 +392,9 @@ input.err{border-color:var(--err)!important; background:var(--err-soft)}
 
 /* ---------- Übungen (17.11.2026): Punkte, Fehler einkreisen (spots), Papieraufgabe (paper), Auswertung ---------- */
 .ptsbadge{display:inline-block; margin-left:10px; padding:1px 9px; border-radius:999px; background:var(--blue-soft); color:var(--blue); font-weight:800; letter-spacing:0; text-transform:none}
-.taskfig{max-width:480px; margin:4px 0 8px}
-.solbox [data-fig]{max-width:520px}
-.spotfig{max-width:560px}
+.taskfig{max-width:760px; margin:4px 0 8px}   /* 18.11.2026: Grafiken größer (vorher 480 px) */
+.solbox [data-fig]{max-width:760px}
+.spotfig{max-width:760px}
 .spotfig .spot{position:absolute; border-radius:50%; border:2.6px solid transparent; background:transparent; padding:0; cursor:pointer}
 .spotfig button.spot:hover{border:1.5px dotted color-mix(in srgb, var(--blue) 45%, transparent)}
 .spotfig .spot.marked, .spotfig button.spot.marked:hover{border:2.6px solid var(--blue)}
@@ -418,14 +420,14 @@ ul.evweak{margin:6px 0 0; padding-left:20px; line-height:1.55}
 .adjlist{display:flex; flex-direction:column; gap:18px}
 .adjrow{border:1px solid var(--border); border-radius:8px; padding:10px 12px; background:var(--surface)}
 .adjq{font-weight:600; margin-bottom:6px}
-.adjfig{max-width:440px; touch-action:none; cursor:ew-resize}
-.adjctl{max-width:440px; display:flex; flex-direction:column; gap:6px; margin-top:6px}
+.adjfig{max-width:640px; touch-action:none; cursor:ew-resize}
+.adjctl{max-width:640px; display:flex; flex-direction:column; gap:6px; margin-top:6px}
 .adjctl input[type=range]{width:100%; accent-color:var(--blue)}
 .adjbtns{gap:6px; flex-wrap:wrap}
 @media (max-width:520px){ .adjrow{padding:8px 2px} .adjq{padding:0 6px} }
 
 /* Fehlende Linien ergänzen (Typ lines, seit LE 1.3) */
-.lnfig{max-width:560px}
+.lnfig{max-width:760px}
 .lnfig .lnc{position:absolute; height:18px; padding:0; border:0; background:transparent; cursor:pointer; display:flex; align-items:center; border-radius:6px}
 .lnfig .lnc span{display:block; width:100%; height:0; border-top:2px dotted color-mix(in srgb, var(--blue) 80%, transparent)}
 .lnfig .lnc:hover{background:color-mix(in srgb, var(--blue) 12%, transparent)}
@@ -439,7 +441,7 @@ ul.evweak{margin:6px 0 0; padding-left:20px; line-height:1.55}
 .lnfig .lnc:disabled.s0{display:none}
 
 /* Schnittflächen schraffieren (Typ hatch, LE 1.4); --hs = Schraffurabstand der Fläche (setzt engine.js) */
-.htfig{max-width:560px}
+.htfig{max-width:760px}
 .htfig .htc{position:absolute; padding:0; border:0; margin:0; cursor:pointer; background:transparent; --hs:7px}
 .htfig .htc:hover{background:color-mix(in srgb, var(--blue) 14%, transparent)}
 .htfig .htc.on{background:repeating-linear-gradient(-45deg, transparent 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
@@ -502,8 +504,7 @@ ul.evweak{margin:6px 0 0; padding-left:20px; line-height:1.55}
 .zx table.rfa td.mono{white-space:nowrap}
 .zx{scroll-margin-top:90px}
 /* Gemeinsames Layout Technische Kommunikation (LE 1.1 und Übung 1.1): schmale Grafik links, Bedienung rechts; Lesetext mit Bild. mk.py bindet alle lib_*.css ein. */
-.sim.kop{grid-template-columns:minmax(0,440px) minmax(240px,1fr)}
-@media (max-width:760px){ .sim.kop{grid-template-columns:minmax(0,1fr)} }
+.sim.kop{grid-template-columns:minmax(0,1fr)}   /* 18.11.2026: Grafik groß oben, Bedienung darunter (vorher 440 px links, Bedienung rechts) */
 svg.gfx.big .lbl-s{font-size:14px}
 svg.gfx.big .lbl{font-size:16px}
 .ctrl .segbtns button{padding:5px 10px; font-size:13px}
@@ -527,11 +528,11 @@ table.stl{border-collapse:collapse} table.stl td, table.stl th{border:1px solid 
 ol.legend{margin:0; padding-left:22px; line-height:1.6}
 .ctrl ol.legend{display:block} ol.legend li{display:list-item}
 @media (max-width:520px){ .rw-item .seg{flex-wrap:wrap} }
-/* Lesetext: Absatz links, Bild rechts (Bild 420 px, damit Schrift in der Grafik groß genug bleibt) */
-.lt-row{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,420px); gap:18px; align-items:start; margin:4px 0 12px}
+/* Lesetext: Absatz, darunter das Bild in voller Breite (18.11.2026, vorher Bild 420 px rechts daneben); Bild höchstens 70 % der Fensterhöhe */
+.lt-row{display:grid; grid-template-columns:minmax(0,1fr); gap:10px; align-items:start; margin:4px 0 14px}
+.lt-row .figcell svg.gfx{max-height:70vh}
 .lt-row > div > p:first-child{margin-top:0}
 .lt-row .figcell p.small{margin:4px 0 0; line-height:1.35}
-@media (max-width:900px){ .lt-row{grid-template-columns:1fr} }
 @media (max-width:520px){ .lt-row svg.gfx.big .lbl-s{font-size:15px} .lt-row svg.gfx.big .lbl{font-size:16px} }
 /* Toleranz-Bausteine (lib_zeichnung_tol.js): Toleranzangabe, Tabellen, Kopf-Button „📘 Tabellen“ – seit 17.11.2026 aus e.css (LE 1.5) */
 /* Toleranzangabe wie in der Zeichnung: Abmaße klein übereinander hinter dem Nennmaß */
@@ -554,10 +555,9 @@ dialog.tbldlg::backdrop{background:rgba(0,0,0,.45)}
 .ctrl canvas.k3cv{border:1px solid var(--border); border-radius:6px; background:var(--surface)}
 .figcell canvas.k3cv{border-radius:6px}
 .ctrl input[type=range]{width:100%}
-.pfigw{max-width:640px; margin-bottom:8px}
+.pfigw{max-width:760px; margin-bottom:8px}
 .tiles .tile .num{font-size:20px}
 .ctrl label{display:block}
-@media (max-width:900px){ .lt-row{grid-template-columns:minmax(0,1fr)} }
 @media (max-width:520px){ svg.gfx.big .lbl-s{font-size:17px} svg.gfx.big .lbl{font-size:18px} .sim.kop svg.gfx.big .lbl-s{font-size:17px} }
 </style>
 <div class="site-head">
@@ -2509,7 +2509,7 @@ queueMicrotask(() => { build(); E.renderTabs(); });
    Gemeinsam genutzt von LE 1.1 (gfx_a.js) und Übung 1.1 (gfx_u.js); mk.py bindet alle lib_*.js des Ordners ein.
    Inhalt: Textbausteine (T, add, big), Segment-Knöpfe (segs, press, onSeg), Zahlformat f, Maßpfeil pfeil (DIN 406-11),
    Normschrift NS (ISO 3098 B), Bildausschnitt fit, Metallverläufe REF, Linienarten LT/LTK + ln, Isometrie isoKit, phase, Stückliste stlTable.
-   v1.5 (LE 1.5): Normschrift ± und Buchstaben H F G K N h n g f k r p e d j s x b. v1.6 (LE 1.6): / P S E D J.
+   v1.5 (LE 1.5): Normschrift ± und Buchstaben H F G K N h n g f k r p e d j s x b. v1.6 (LE 1.6): / P S E D J. v1.7 (LE 1.7): a ä c i l o u ü w z A C L T U X ⊥.
    v1.2 (LE 1.2): Maße dimH/dimV/dimD (Maßhilfslinien bis an die Kante, 2 mm Überstand), Strichlinie hid mit festem Anfang/Ende
    (Strich oder Lücke, versetzt), Mittelkreuz cross, Zeichen ° □ - + m in der Normschrift.
    Keine Formeln ($…$) in dieser Datei: tex.js liest nur gfx_/data_/muster_/body. */
@@ -2570,6 +2570,18 @@ const NG = {
   "S":[5.6,"M5.2,1.4 C4.6,0.5 3.8,0 2.8,0 C1.3,0 0.3,0.9 0.3,2.4 C0.3,5.4 5.6,4.4 5.6,7.5 C5.6,9 4.5,10 2.8,10 C1.6,10 0.6,9.5 0,8.5"],
   "E":[5,"M5,0 L0,0 L0,10 L5,10 M0,5 L4,5"], "D":[6,"M0,0 L0,10 L2.6,10 C4.8,10 6,8.2 6,5 C6,1.8 4.8,0 2.6,0 Z"],
   "J":[4.6,"M4.4,0 L4.4,7.4 C4.4,9.1 3.4,10 2,10 C1,10 0.3,9.5 0,8.6"],
+  /* v1.7 (LE 1.7 Oberflächen): Kennwerte Rz/Ra/Rt, Fertigungsverfahren (gedreht, gefräst, geschliffen, gerieben, poliert, geläppt), Grenzen U/L, Rillenrichtung */
+  "a":[5,"M0.4,3.9 C1,3.4 1.7,3.2 2.5,3.2 C4,3.2 4.8,4 4.8,5.4 L4.8,10 M4.8,6.4 C4.2,6.2 3.4,6.1 2.5,6.1 C1,6.1 0,6.8 0,8.1 C0,9.3 0.9,10 2.1,10 C3.3,10 4.2,9.4 4.8,8.6"],
+  "ä":[5,"M0.4,3.9 C1,3.4 1.7,3.2 2.5,3.2 C4,3.2 4.8,4 4.8,5.4 L4.8,10 M4.8,6.4 C4.2,6.2 3.4,6.1 2.5,6.1 C1,6.1 0,6.8 0,8.1 C0,9.3 0.9,10 2.1,10 C3.3,10 4.2,9.4 4.8,8.6 M1.4,0.9 L1.4,1.5 M3.6,0.9 L3.6,1.5"],
+  "c":[4.6,"M4.5,4.4 C4,3.6 3.3,3.2 2.5,3.2 C1,3.2 0,4.6 0,6.6 C0,8.6 1,10 2.5,10 C3.3,10 4,9.6 4.5,8.8"],
+  "i":[1.2,"M0.6,3.4 L0.6,10 M0.6,0.6 L0.6,1.2"], "l":[1.2,"M0.6,0 L0.6,10"],
+  "o":[5,"M2.5,3.2 C4,3.2 5,4.6 5,6.6 C5,8.6 4,10 2.5,10 C1,10 0,8.6 0,6.6 C0,4.6 1,3.2 2.5,3.2 Z"],
+  "u":[5,"M0,3.4 L0,7.6 C0,9.1 0.9,10 2.3,10 C3.4,10 4.4,9.2 5,7.9 M5,3.4 L5,10"],
+  "ü":[5,"M0,3.4 L0,7.6 C0,9.1 0.9,10 2.3,10 C3.4,10 4.4,9.2 5,7.9 M5,3.4 L5,10 M1.4,0.9 L1.4,1.5 M3.6,0.9 L3.6,1.5"],
+  "w":[7,"M0,3.4 L1.7,10 L3.5,4.6 L5.3,10 L7,3.4"], "z":[4.6,"M0.2,3.4 L4.4,3.4 L0.2,10 L4.6,10"],
+  "A":[6.4,"M0,10 L3.2,0 L6.4,10 M1.1,6.6 L5.3,6.6"], "C":[6,"M5.8,1.6 C5.1,0.5 4.2,0 3.1,0 C1.1,0 0,2 0,5 C0,8 1.1,10 3.1,10 C4.2,10 5.1,9.5 5.8,8.4"],
+  "L":[5,"M0,0 L0,10 L5,10"], "T":[6,"M0,0 L6,0 M3,0 L3,10"], "U":[6,"M0,0 L0,7 C0,8.9 1.2,10 3,10 C4.8,10 6,8.9 6,7 L6,0"],
+  "X":[6,"M0,0 L6,10 M6,0 L0,10"], "⊥":[7,"M3.5,1 L3.5,10 M0,10 L7,10"],
   " ":[3,""]
 };
 function NS(p, x, y, txt, h=14, anchor="middle", rot=0){
@@ -3334,6 +3346,130 @@ K3.faceImage = function(g, B, vw, X, Y, key, col="rgba(245,170,40,.55)"){
 root.K3 = K3;
 if(typeof module !== "undefined") module.exports = K3;
 })(typeof window !== "undefined" ? window : globalThis);
+
+/* ============ Oberflächen-Bausteine (window.OFL) – seit LE 1.7 Oberflächen (17.11.2026) ============
+   Ergänzt lib_zeichnung.js (ZK, Normschrift) und lib_zeichnung_3d.js (K3). Genutzt von LE 1.7 (gfx_g.js), Übung 1.7 (gfx_u7.js) und 1 Wiederholung (gfx_w.js).
+   v2 (18.11.2026): Symbole nach aktueller Norm ISO 21920-1 (Vorlage der Lehrkraft, Video „roughness“): kurzer waagerechter Strich über dem kurzen
+   Schenkel (Kennzeichen der neuen Norm) und waagerechter Strich am langen Schenkel immer, auch ohne Angabe. alt:true = alte Norm DIN ISO 1302 wie im Skript
+   (ohne Kennzeichen, Strich nur mit Zusatzangaben), nur noch für den Vergleich alt/neu.
+     sym(g, x, y, o)   Spitze in (x, y) auf der Fläche; o = {art:"g" Grundsymbol | "m" materialabtrennend | "k" Materialabtrag unzulässig,
+                       wert:"Rz 6,3" (unter dem Strich), verf:"geschliffen" (über dem Strich), zug:"0,5" (Bearbeitungszugabe, links),
+                       rund:true (Kreis: ringsum gleich), alt:true (alte Norm), rot:0 | -90 (von rechts lesbar) | 90 | 180 (Fehlerbilder), h (Schrifthöhe px), col,
+                       top:true (Fehlerbild: Wert über dem Strich)}
+     symExt(o)         Ausdehnung des Symbols ab der Spitze (links, rechts, Höhe) zum Platzieren
+     leader(g, id, ax, ay, kx, ky, o)  Hinweislinie mit Maßpfeil auf die Fläche (ax, ay), Knick (kx, ky), Bezugslinie nach o.side (±1, sonst vom Pfeil weg), Symbol aufrecht darauf
+   Rauheitsprofile:
+     rng(seed), profRand(seed, o) (zufälliges R-Profil, N Punkte über 5 Einzelmessstrecken), profPts(werte) (Profil aus Spitzen und Tälern je Strecke)
+     stats(z, n) → {rzi, rz, ra, rzmax, max, min} (Kennwerte nach Skript: Rz, Rzmax, Ra)   (Mittellinie = Mittelwert; Werte in µm)
+     chart(g, z, o)    Profil-Diagramm mit Raster, Einzelmessstrecken l1–l5, Rechtecken Rz_i (Wert über dem Rechteck), Rzmax, Ra (Täler hochklappen, einebnen)
+   Keine Formeln ($…$) in dieser Datei. */
+(function(){
+"use strict";
+const Z = () => window.ZK;
+const nsW = (t, h) => { const NG = Z().NG; return ([...String(t)].reduce((a, c) => a + (NG[c] || NG[" "])[0] + 2, 0) - 2)*h/10; };
+const TAN30 = Math.tan(Math.PI/6);
+/* Text mit Index: "R_{z1} = 9 µm" → tspans (Index tiefer und kleiner) */
+function TT(g, x, y, s, cls="lbl-s", extra={}){
+  const t = Z().T(g, x, y, "", cls, extra);
+  String(s).split(/(_\{[^}]*\})/).forEach(p => { if(!p) return; const sub = p.startsWith("_{");
+    t.appendChild(LM.G.el("tspan", sub ? {"baseline-shift":"sub", "font-size":"75%"} : {}, [sub ? p.slice(2, -1) : p])); });
+  return t;
+}
+
+/* ---------- Oberflächensymbol ---------- */
+function symExt(o={}){
+  const h = o.h || 13, H1 = 1.4*h, H2 = 2.9*h, bx = TAN30*H2, bar = Math.max(H1, nsW(o.wert || "", h), nsW(o.verf || "", h)) + 0.6*h;
+  return {left:TAN30*H1 + (o.zug ? nsW(o.zug, h) + 0.4*h : 0), right:bx + bar, H:H2 + (o.verf ? 1.5*h : 0), H1, H2, bx, bar, h};
+}
+function sym(g, x, y, o={}){
+  const {add, NS} = Z(), e = symExt(o), {h, H1, H2, bx, bar} = e, col = o.col || "var(--ink)", sw = o.sw || 1.1;
+  const G = add(g, "g", {transform:`translate(${x} ${y}) rotate(${o.rot || 0})`, "data-sym":o.art || "g", "data-norm":o.alt ? "alt" : "neu", "aria-label":"Oberflächensymbol " + [o.verf, o.wert].filter(Boolean).join(" ")});
+  const st = `fill:none;stroke:${col};stroke-width:${sw};stroke-linejoin:round;stroke-linecap:round`;
+  add(G, "path", {d:`M${(-TAN30*H1).toFixed(2)},${(-H1).toFixed(2)} L0,0 L${bx.toFixed(2)},${(-H2).toFixed(2)}` + (o.alt && !o.wert && !o.verf ? "" : ` L${(bx + bar).toFixed(2)},${(-H2).toFixed(2)}`), style:st});
+  /* v2: Kennzeichen ISO 21920 – kurzer waagerechter Strich über dem kurzen Schenkel (Maße nach der Vorlage der Lehrkraft: 0,46·H1 über dem Dreieck, von −0,55·H1 bis 0,47·H1) */
+  if(!o.alt) add(G, "path", {d:`M${(-0.55*H1).toFixed(2)},${(-1.46*H1).toFixed(2)} L${(0.47*H1).toFixed(2)},${(-1.46*H1).toFixed(2)}`, style:st, "data-sub":"Normstrich"});
+  if(o.art === "m") add(G, "path", {d:`M${(-TAN30*H1).toFixed(2)},${(-H1).toFixed(2)} L${(TAN30*H1).toFixed(2)},${(-H1).toFixed(2)}`, style:st});
+  if(o.art === "k"){ const d = H1/1.5, r = d/2; add(G, "circle", {cx:0, cy:-d, r, style:st}); }
+  if(o.rund) add(G, "circle", {cx:bx, cy:-H2, r:0.32*h, style:st.replace("fill:none", "fill:var(--surface)")});
+  const ink = el => { if(o.col) el.querySelectorAll("path").forEach(p => p.style.stroke = col); return el; };
+  if(o.wert) ink(NS(G, bx + 0.35*h, o.top ? -H2 - 0.45*h : -H2 + 1.3*h, o.wert, h, "start"));
+  if(o.verf) ink(NS(G, bx + 0.35*h, o.top ? -H2 + 1.3*h : -H2 - 0.45*h, o.verf, h, "start"));
+  if(o.zug) ink(NS(G, -TAN30*H1 - 0.35*h, -0.2*h, o.zug, h, "end"));
+  return Object.assign({G}, e);
+}
+/* Hinweislinie: Pfeil auf die Fläche (ax, ay), Knick (kx, ky), Bezugslinie waagerecht zur Seite o.side (+1 rechts, −1 links), Symbol steht aufrecht darauf */
+function leader(g, id, ax, ay, kx, ky, o={}){
+  const {add} = Z(), e = symExt(o), side = o.side || (ax > kx ? -1 : 1), L = e.left + e.right + 0.5*e.h, col = o.col || "var(--ink)";
+  add(g, "line", {x1:kx, y1:ky, x2:ax, y2:ay, style:`stroke:${col};stroke-width:1.1`, "marker-end":`url(#${id})`, "data-sub":"Hinweislinie"});
+  const x2 = kx + side*L; add(g, "line", {x1:kx, y1:ky, x2, y2:ky, style:`stroke:${col};stroke-width:1.1`, "data-sub":"Bezugslinie"});
+  const tip = side > 0 ? kx + e.left + 0.25*e.h : x2 + e.left + 0.25*e.h;
+  return sym(g, tip, ky, o);
+}
+
+/* ---------- Rauheitsprofile ---------- */
+function rng(seed){ let a = seed >>> 0 || 1; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0)/4294967296; }; }
+/* zufälliges R-Profil: o = {N, rz (Ziel-Rz in µm), art:"gedreht" (Rillen) | "geschliffen" (unregelmäßig), spike:{i, d} (Ausreißer: Index, Tiefe in µm, negativ = Kratzer)} */
+function profRand(seed, o={}){
+  const R = rng(seed), N = o.N || 400, z = new Array(N).fill(0), art = o.art || "gedreht";
+  if(art === "gedreht"){ const per = 22 + R()*8, ph = R()*6;
+    for(let i=0;i<N;i++){ const u = ((i + ph)/per) % 1; z[i] = 1.6*((u < .5 ? u*2 : (1 - u)*2) - .5); } }   // Drehrillen: Dreieck mit Periode = Vorschub
+  let a = 0; const sm = art === "gedreht" ? .55 : .35, amp = art === "gedreht" ? .45 : 1;
+  for(let i=0;i<N;i++){ a = a*sm + (R() - .5)*(1 - sm)*2.4; z[i] += amp*a + (art === "gedreht" ? .08 : .25)*Math.sin(i/9 + R()); }
+  const mid = () => { const m = z.reduce((s, v) => s + v, 0)/N; for(let i=0;i<N;i++) z[i] -= m; };
+  mid(); if(o.rz){ const f = o.rz/stats(z).rz; for(let i=0;i<N;i++) z[i] *= f; }   // auf Ziel-Rz skaliert
+  if(o.spike){ const {i, d, w = 5} = o.spike; for(let k=-w;k<=w;k++) if(z[i + k] != null) z[i + k] += d*(1 - Math.abs(k)/(w + 1)); mid(); }   // Ausreißer (Kratzer) nach dem Skalieren
+  return z;
+}
+/* Profil aus Eckpunkten: werte = [[z1, z2, …] je Einzelmessstrecke]; gleich viele Punkte je Strecke, linear verbunden. Rückgabe {z (Stützwerte), xs (0 … 1)} */
+function profPts(werte){
+  const xs = [], z = []; const n = werte.length;
+  werte.forEach((W, s) => W.forEach((v, j) => { xs.push((s + (j + .5)/W.length)/n); z.push(v); }));
+  return {xs:[0].concat(xs, [1]), z:[z[0]].concat(z, [z[z.length - 1]])};
+}
+function stats(z, n=5, xs){
+  const N = z.length, idx = i => xs ? Math.min(n - 1, Math.floor(xs[i]*n - 1e-9)) : Math.min(n - 1, Math.floor(i*n/N));
+  const mx = Array(n).fill(-1e9), mn = Array(n).fill(1e9);
+  z.forEach((v, i) => { if(xs && (xs[i] <= 0 || xs[i] >= 1)) return; const s = idx(i); mx[s] = Math.max(mx[s], v); mn[s] = Math.min(mn[s], v); });
+  const rzi = mx.map((v, s) => v - mn[s]), rz = rzi.reduce((a, b) => a + b, 0)/n;
+  const max = Math.max(...mx), min = Math.min(...mn);
+  const ra = xs ? null : z.reduce((a, v) => a + Math.abs(v), 0)/N;
+  return {rzi, rz, ra, rzmax:Math.max(...rzi), max, min, mx, mn};
+}
+/* Profil-Diagramm: o = {x, y, w, h, zr (Halbhöhe in µm), grid (µm), lab:true, sec:true, rects:true, vals:true, rzmax:true, ra:0 | 1 (Täler hochgeklappt) | 2 (eingeebnet),
+   xs (Stützstellen 0 … 1 für Profile aus Eckpunkten), col, axis:"z in µm", qm:true (Rz-Werte als „?“)} */
+function chart(g, z, o={}){
+  const {add, T} = Z(), x0 = o.x || 40, y0 = o.y || 20, w = o.w || 360, h = o.h || 200, zr = o.zr || 10, n = 5;
+  const X = t => x0 + t*w, Y = v => y0 + h/2 - v/zr*(h/2), N = z.length, xt = i => o.xs ? o.xs[i] : i/(N - 1);
+  const G = add(g, "g", {"data-chart":"1"});
+  const gs = o.grid || 2;
+  for(let v=-Math.floor(zr/gs)*gs; v<=zr + 1e-9; v+=gs){ add(G, "line", {x1:x0, y1:Y(v), x2:x0 + w, y2:Y(v), style:`stroke:var(--border);stroke-width:${v % (2*gs) === 0 ? 0.9 : 0.5}`});
+    if(o.lab !== false && Math.abs(v % (o.labStep || 2*gs)) < 1e-9) T(G, x0 - 6, Y(v) + 5, String(v).replace("-", "−"), "lbl-s", {"text-anchor":"end"}); }
+  add(G, "line", {x1:x0, y1:y0 - 6, x2:x0, y2:y0 + h + 4, style:"stroke:var(--ink);stroke-width:1.2"});
+  add(G, "line", {x1:x0, y1:Y(0), x2:x0 + w + 8, y2:Y(0), style:"stroke:var(--ink);stroke-width:1.2"});
+  if(o.axis !== false) TT(G, x0 - 34, y0 - (o.rects && o.vals !== false ? 26 : 10), o.axis || "z in µm", "lbl-s", {style:"font-weight:700"});   // über der Achse, über den Rz-Werten
+  const st = o.xs ? null : stats(z);
+  if(o.sec !== false) for(let s=1;s<n;s++) add(G, "line", {x1:X(s/n), y1:y0, x2:X(s/n), y2:y0 + h, style:"stroke:var(--muted);stroke-width:1;stroke-dasharray:5 4"});
+  if(o.sec !== false) for(let s=0;s<n;s++) TT(G, X((s + .5)/n), y0 + h + 18, `l_{${s + 1}}`, "lbl-s", {"text-anchor":"middle"});
+  const S = o.stats || st;
+  if(o.rects && S) for(let s=0;s<n;s++){ const a = X(s/n) + 3, b = X((s + 1)/n) - 3;
+    add(G, "rect", {x:a, y:Y(S.mx[s]), width:b - a, height:Y(S.mn[s]) - Y(S.mx[s]), style:`fill:rgba(31,111,168,.10);stroke:var(--blue);stroke-width:1.3`});
+    if(o.vals !== false) TT(G, (a + b)/2, y0 - 6, o.qm ? "?" : Z().f(S.rzi[s], 1), "lbl-s", {"text-anchor":"middle", style:"fill:var(--blue);font-weight:700"}); }
+  if(o.rzmax && S){ const m = S.rzi.indexOf(S.rzmax), a = X(m/n) + 3, b = X((m + 1)/n) - 3;   // größte Einzelrautiefe Rzmax hervorheben
+    add(G, "rect", {x:a, y:Y(S.mx[m]), width:b - a, height:Y(S.mn[m]) - Y(S.mx[m]), style:"fill:rgba(184,71,58,.12);stroke:var(--rust);stroke-width:2"});
+    TT(G, (a + b)/2, Y(S.mn[m]) + 17, "R_{zmax}", "lbl-s", {"text-anchor":"middle", style:"fill:var(--rust);font-weight:700"}); }
+  /* Profil: ra = 0 normal, 1 Täler nach oben geklappt (Betrag), 2 Rechteck gleicher Fläche (Höhe Ra); t (0 … 1) für Übergänge */
+  const ra = o.ra || 0, tt = o.t != null ? o.t : 1;
+  const zz = z.map(v => ra >= 1 ? (v < 0 ? v + (-2*v)*(ra === 1 ? tt : 1) : v) : v);
+  const pts = zz.map((v, i) => [X(xt(i)), Y(ra === 2 ? v + ((S ? S.ra : 0) - v)*tt : v)]);
+  if(ra >= 1){ add(G, "path", {d:"M" + X(0) + "," + Y(0) + " L" + pts.map(p => p.map(q => q.toFixed(1)).join(",")).join(" L") + " L" + X(1) + "," + Y(0) + " Z", style:"fill:rgba(31,111,168,.30);stroke:none"}); }
+  else add(G, "path", {d:"M" + X(0) + "," + (y0 + h) + " L" + pts.map(p => p.map(q => q.toFixed(1)).join(",")).join(" L") + " L" + X(1) + "," + (y0 + h) + " Z", style:"fill:rgba(140,150,160,.28);stroke:none"});
+  add(G, "path", {d:"M" + pts.map(p => p.map(q => q.toFixed(1)).join(",")).join(" L"), style:`fill:none;stroke:${o.col || "var(--ink)"};stroke-width:1.6;stroke-linejoin:round`});
+  if(ra === 2 && S && tt > .98){ add(G, "line", {x1:x0, y1:Y(S.ra), x2:x0 + w, y2:Y(S.ra), style:"stroke:var(--blue);stroke-width:2"});
+    TT(G, x0 + w - 4, Y(S.ra) - 6, `R_{a} = ${Z().f(S.ra, 1)}`, "lbl-s", {"text-anchor":"end", style:"fill:var(--blue);font-weight:700"}); }
+  return {G, X, Y, S};
+}
+window.OFL = {nsW, TT, sym, symExt, leader, rng, profRand, profPts, stats, chart};
+})();
 
 /* ============ Toleranz-Bausteine für LE 1.5, LE 1.6 und Übungen (window.TOL), seit 17.11.2026 ============
    Herausgelöst aus gfx_e.js (LE 1.5), damit LE 1.6 Passungen und die Übungen dieselben Normwerte und Grafiken nutzen.

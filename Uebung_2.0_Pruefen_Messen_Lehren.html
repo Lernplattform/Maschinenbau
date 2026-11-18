@@ -215,8 +215,10 @@ svg.gfx .hot:focus{outline:none}
 svg.gfx .hot:focus-visible .ring, svg.gfx .hot.on .ring{stroke:var(--rust); stroke-width:3}
 svg.gfx .ring{fill:var(--surface); stroke:var(--blue); stroke-width:2}
 svg.gfx .ringtxt{font-size:13px; font-weight:700; fill:var(--blue); text-anchor:middle; dominant-baseline:central; pointer-events:none}
-.sim{display:grid; grid-template-columns:minmax(0,1.6fr) minmax(220px,1fr); gap:16px; align-items:start}
-@media (max-width:760px){ .sim{grid-template-columns:1fr} }
+/* 18.11.2026 (Lehrkraft: „Grafik in groß unter den text in derselben breite. vor allem bei den interaktiven simulationen kann man damit besser arbeiten!“):
+   Simulation untereinander – Grafik in voller Breite, Bedienung darunter; Grafik höchstens 70 % der Fensterhöhe, damit die Bedienung sichtbar bleibt. */
+.sim{display:grid; grid-template-columns:minmax(0,1fr); gap:14px; align-items:start}
+.sim > :first-child svg.gfx{max-height:70vh}
 .sim.wide{grid-template-columns:1fr}
 .sim.wide .ctrl{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px 20px; align-items:start}
 .sim.wide .ctrl .readout, .sim.wide .ctrl > p{grid-column:1/-1}
@@ -375,7 +377,7 @@ input.err{border-color:var(--err)!important; background:var(--err-soft)}
 .fx{color:var(--blue)} .fy{color:var(--vap)}
 
 /* Grafik beschriften (Typ label) */
-.lblwrap{display:grid; grid-template-columns:minmax(0,440px) minmax(220px,1fr); gap:16px; align-items:start; margin-top:6px}
+.lblwrap{display:grid; grid-template-columns:minmax(0,600px) minmax(220px,1fr); gap:16px; align-items:start; margin-top:6px}
 @media (max-width:760px){ .lblwrap{grid-template-columns:1fr} }
 .lblfig{position:relative}
 .lblfig .pin{position:absolute; transform:translate(-50%,-50%); width:30px; height:30px; border-radius:50%; border:2.4px dashed var(--blue); background:var(--surface); color:var(--blue); font:inherit; font-size:14px; font-weight:800; cursor:pointer; padding:0; box-shadow:0 1px 4px #0004}
@@ -390,9 +392,9 @@ input.err{border-color:var(--err)!important; background:var(--err-soft)}
 
 /* ---------- Übungen (17.11.2026): Punkte, Fehler einkreisen (spots), Papieraufgabe (paper), Auswertung ---------- */
 .ptsbadge{display:inline-block; margin-left:10px; padding:1px 9px; border-radius:999px; background:var(--blue-soft); color:var(--blue); font-weight:800; letter-spacing:0; text-transform:none}
-.taskfig{max-width:480px; margin:4px 0 8px}
-.solbox [data-fig]{max-width:520px}
-.spotfig{max-width:560px}
+.taskfig{max-width:760px; margin:4px 0 8px}   /* 18.11.2026: Grafiken größer (vorher 480 px) */
+.solbox [data-fig]{max-width:760px}
+.spotfig{max-width:760px}
 .spotfig .spot{position:absolute; border-radius:50%; border:2.6px solid transparent; background:transparent; padding:0; cursor:pointer}
 .spotfig button.spot:hover{border:1.5px dotted color-mix(in srgb, var(--blue) 45%, transparent)}
 .spotfig .spot.marked, .spotfig button.spot.marked:hover{border:2.6px solid var(--blue)}
@@ -418,11 +420,41 @@ ul.evweak{margin:6px 0 0; padding-left:20px; line-height:1.55}
 .adjlist{display:flex; flex-direction:column; gap:18px}
 .adjrow{border:1px solid var(--border); border-radius:8px; padding:10px 12px; background:var(--surface)}
 .adjq{font-weight:600; margin-bottom:6px}
-.adjfig{max-width:440px; touch-action:none; cursor:ew-resize}
-.adjctl{max-width:440px; display:flex; flex-direction:column; gap:6px; margin-top:6px}
+.adjfig{max-width:640px; touch-action:none; cursor:ew-resize}
+.adjctl{max-width:640px; display:flex; flex-direction:column; gap:6px; margin-top:6px}
 .adjctl input[type=range]{width:100%; accent-color:var(--blue)}
 .adjbtns{gap:6px; flex-wrap:wrap}
 @media (max-width:520px){ .adjrow{padding:8px 2px} .adjq{padding:0 6px} }
+
+/* Fehlende Linien ergänzen (Typ lines, seit LE 1.3) */
+.lnfig{max-width:760px}
+.lnfig .lnc{position:absolute; height:18px; padding:0; border:0; background:transparent; cursor:pointer; display:flex; align-items:center; border-radius:6px}
+.lnfig .lnc span{display:block; width:100%; height:0; border-top:2px dotted color-mix(in srgb, var(--blue) 80%, transparent)}
+.lnfig .lnc:hover{background:color-mix(in srgb, var(--blue) 12%, transparent)}
+.lnfig .lnc.s1 span{border-top:3px solid var(--ink)}
+.lnfig .lnc.s2 span{border-top:0; height:1.6px; background:repeating-linear-gradient(90deg, var(--ink) 0 8px, transparent 8px 11px)}
+.lnfig .lnc.ok.s1 span{border-top-color:var(--ok)} .lnfig .lnc.ok.s2 span{background:repeating-linear-gradient(90deg, var(--ok) 0 8px, transparent 8px 11px)}
+.lnfig .lnc.err{background:color-mix(in srgb, var(--err) 18%, transparent)}
+.lnfig .lnc.err.s0 span{border-top:2px dashed var(--err)}
+.lnfig .lnc.err.s1 span{border-top-color:var(--err)} .lnfig .lnc.err.s2 span{background:repeating-linear-gradient(90deg, var(--err) 0 8px, transparent 8px 11px)}
+.lnfig .lnc:disabled{cursor:default}
+.lnfig .lnc:disabled.s0{display:none}
+
+/* Schnittflächen schraffieren (Typ hatch, LE 1.4); --hs = Schraffurabstand der Fläche (setzt engine.js) */
+.htfig{max-width:760px}
+.htfig .htc{position:absolute; padding:0; border:0; margin:0; cursor:pointer; background:transparent; --hs:7px}
+.htfig .htc:hover{background:color-mix(in srgb, var(--blue) 14%, transparent)}
+.htfig .htc.on{background:repeating-linear-gradient(-45deg, transparent 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc.on.neg{background:repeating-linear-gradient(45deg, transparent 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc.ok{background:repeating-linear-gradient(-45deg, color-mix(in srgb, var(--ok) 18%, transparent) 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc.ok.neg{background:repeating-linear-gradient(45deg, color-mix(in srgb, var(--ok) 18%, transparent) 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc.err{background:color-mix(in srgb, var(--err) 28%, transparent)}
+.htfig .htc.err.on{background:repeating-linear-gradient(-45deg, color-mix(in srgb, var(--err) 24%, transparent) 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc.err.on.neg{background:repeating-linear-gradient(45deg, color-mix(in srgb, var(--err) 24%, transparent) 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc:disabled.ok{background:repeating-linear-gradient(-45deg, transparent 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc:disabled.ok.neg{background:repeating-linear-gradient(45deg, transparent 0 calc(var(--hs) - 1.2px), var(--ink) calc(var(--hs) - 1.2px) var(--hs))}
+.htfig .htc:disabled{cursor:default} .htfig .htc:disabled:not(.on){display:none}
+.htfig .htc:focus-visible{outline:none; background:color-mix(in srgb, var(--blue) 24%, transparent)}
 /* Zusatz (freiwillig): Transfer mit Spielelement – Baukasten zusatz.js */
 .zx{display:flex; flex-direction:column; gap:12px; padding:18px; border:1px solid var(--border); border-left:6px solid var(--blue); border-radius:10px; background:var(--surface)}
 .zx.solved{border-left-color:var(--ok)}
@@ -472,8 +504,7 @@ ul.evweak{margin:6px 0 0; padding-left:20px; line-height:1.55}
 .zx table.rfa td.mono{white-space:nowrap}
 .zx{scroll-margin-top:90px}
 /* Übung 2.0: Layout wie a.css (LE 2.0) + Niveau-Kästen wie Übung 1.1 */
-.sim.kop{grid-template-columns:minmax(0,440px) minmax(240px,1fr)}
-@media (max-width:760px){ .sim.kop{grid-template-columns:minmax(0,1fr)} }
+.sim.kop{grid-template-columns:minmax(0,1fr)}   /* 18.11.2026: Grafik groß oben, Bedienung darunter */
 svg.gfx.big .lbl-s{font-size:14px}
 svg.gfx.big .lbl{font-size:16px}
 .ctrl .segbtns button{padding:5px 10px; font-size:13px}
@@ -1556,7 +1587,9 @@ const U = {
    Erwartet global: U = {id, title, fileStem, key, plan, tasks, problem}
    Aufgabentypen: toggle, tiles, select, num, text, assign, label (Grafik beschriften), sort, matrix, errors, mc, cases,
                   spots (Fehler in einer Zeichnung einkreisen), paper (Papieraufgabe mit Selbstbewertung nach Kriterien),
-                  adjust (Messgerät in einer Simulation auf ein Maß einstellen, seit Übung 2.0)
+                  adjust (Messgerät in einer Simulation auf ein Maß einstellen, seit Übung 2.0),
+                  lines (fehlende Linien in einer Zeichnung ergänzen: keine / sichtbare / verdeckte Kante, seit LE 1.3),
+                  hatch (Schnittflächen in einer Zeichnung antippen und schraffieren, seit LE 1.4)
    Übungen (17.11.2026): U.art = "Übung"; Punkte je Aufgabe über t.pts (Punkte je richtigem Item) bzw. it.p (je Item),
    bei spots/paper über ty.points/ty.maxPts; U.note = "linear" → Note in Auswertung und txt; t.exam = Prüfungsniveau wie „Zettel und Stift“ (Physik): kein Tipp, „Ergebnis prüfen“,
    Punkte beim ersten Prüfen festgelegt (spätere Versuche ändern sie nicht); Auswertung in #auswertung (Tabelle je Station, Punkte, „Das solltest du noch üben“).
@@ -1814,8 +1847,50 @@ T.adjust = {
   sol:t=>`<div class="solbox">${t.items.map(it=>`${it.t} <b>${fmt(it.a)} ${it.u||"mm"}</b>${it.w?`<div class="small">${it.w}</div>`:""}`).join("<br>")}</div>`
 };
 
+/* Fehlende Linien ergänzen (LE 1.3, 17.11.2026): Zeichnung t.fig (window.LM_FIG) mit Kandidaten-Linien; Antippen wechselt
+   keine Linie → sichtbare Kante (breite Volllinie) → verdeckte Kante (Strichlinie) → keine. items:[{vw, xy:[u1,v1,u2,v2], a:0|1|2, e}]
+   in Bildkoordinaten der Ansicht vw; die Lage in der Zeichnung liefert window.LM_LN[t.fig] = {w, h, P(vw, u, v) → [x, y]} (aus gfx_/lib_).
+   a = 0: Ablenker (hier gehört keine Linie hin). Bewertet wird jede Kandidaten-Linie. */
+const lnOf = t => (window.LM_LN || {})[t.fig];
+T.lines = {
+  st:["keine Linie","sichtbare Kante","verdeckte Kante"],
+  geo(t, it){ const L = lnOf(t), a = L.P(it.vw, it.xy[0], it.xy[1]), b = L.P(it.vw, it.xy[2], it.xy[3]), dx = b[0]-a[0], dy = b[1]-a[1];
+    return {mx:(a[0]+b[0])/2, my:(a[1]+b[1])/2, l:Math.hypot(dx, dy), ang:Math.atan2(dy, dx)*180/Math.PI, W:L.w, H:L.h}; },
+  btn(t, it, i, v, cls, dis){ const g = T.lines.geo(t, it);
+    return `<button type="button" class="lnc s${v||0} ${cls}" data-ln="${i}" ${dis?"disabled":""} aria-label="Linie ${i+1}: ${T.lines.st[v||0]}" style="left:${(g.mx/g.W*100).toFixed(2)}%;top:${(g.my/g.H*100).toFixed(2)}%;width:${(g.l/g.W*100).toFixed(2)}%;transform:translate(-50%,-50%) rotate(${g.ang.toFixed(2)}deg)"><span></span></button>`; },
+  body(t,a,ck){ if(!lnOf(t)){ if(!t._wait){ t._wait = 1; setTimeout(()=>{ t._wait = 0; renderTask(t.id); }, 30); } return `<p class="small muted">Zeichnung wird geladen …</p>`; }
+    const n = t.items.filter((it,i)=>a[i]).length;
+    return `<div class="lblfig lnfig"><div data-fig="${t.fig}"></div>${t.items.map((it,i)=>{ const v=a[i]||0, ok=v===it.a; return T.lines.btn(t, it, i, v, ck?(ok?(v?"ok":""):"err"):"", false); }).join("")}</div>
+      <p class="small muted spotinfo">${n?`${n} Linie${n===1?"":"n"} eingetragen.`:"Noch keine Linie eingetragen."} Die gepunkteten Stellen sind mögliche Linien. Antippen wechselt: keine Linie → <b>sichtbare Kante</b> → <b>verdeckte Kante</b> → keine Linie.${ck?" <b>Grün</b>: richtig · <b>Rot</b>: falsch oder fehlt.":""}</p>`; },
+  click(t,a,b){ if(b.dataset.ln==null) return false; const i=b.dataset.ln; a[i] = ((a[i]||0) + 1) % 3; if(!a[i]) delete a[i]; return true; },
+  ok:(t,it,v)=>(v||0)===it.a,
+  sol:t=>`<div class="solbox"><div class="lblfig lnfig"><div data-fig="${t.fig}"></div>${t.items.map((it,i)=>T.lines.btn(t, it, i, it.a, it.a?"ok":"", true)).join("")}</div>${t.items.some(it=>it.e)?`<ul>${t.items.filter(it=>it.e).map(it=>`<li>${it.e}</li>`).join("")}</ul>`:""}</div>`
+};
+
+/* Schnittflächen schraffieren (LE 1.4, 17.11.2026): Zeichnung t.fig (window.LM_FIG, viewBox 0 0 t.w t.h) ohne Schraffur; die Flächen liefert
+   window.LM_HT[t.fig] = {R:{name:[[x,y, x,y, …], …]}} (ein oder mehrere Polygone je Fläche, in Bildkoordinaten). items:[{r, a:0|1, e, ang}] –
+   a = 1: hier ist Schnittfläche (schraffieren), a = 0: nicht schraffieren (Hohlraum, Fläche hinter der Schnittebene, Normteil). Antippen schaltet um.
+   Die Flächen sind Knöpfe mit clip-path (Bedienung wie bei lines/spots, auch mit Tastatur). R[name] = ein Polygon oder eine Liste von Polygonen. */
+const htOf = t => (window.LM_HT || {})[t.fig];
+T.hatch = {
+  btns(t, a, ck, sol){ const H = htOf(t); return t.items.map((it,i)=>{ const on = sol ? !!it.a : !!a[i], ok = on === !!it.a, cls = (on?"on ":"") + (ck||sol ? (ok ? (on?"ok":"") : "err") : "") + (it.ang < 0 ? " neg" : "");
+    const Ls = H.R[it.r]||[]; return (typeof Ls[0] === "number" ? [Ls] : Ls).map(P => { let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9; for(let k=0;k<P.length;k+=2){ x0=Math.min(x0,P[k]); x1=Math.max(x1,P[k]); y0=Math.min(y0,P[k+1]); y1=Math.max(y1,P[k+1]); }
+      const w = x1-x0, h = y1-y0, poly = []; for(let k=0;k<P.length;k+=2) poly.push(`${((P[k]-x0)/w*100).toFixed(2)}% ${((P[k+1]-y0)/h*100).toFixed(2)}%`);
+      return `<button type="button" class="htc ${cls}" data-ht="${i}" data-hs="${it.s||t.s||7}" ${sol?"disabled":""} aria-pressed="${on}" aria-label="Fläche ${i+1}: ${on?"schraffiert":"nicht schraffiert"}" style="left:${(x0/t.w*100).toFixed(2)}%;top:${(y0/t.h*100).toFixed(2)}%;width:${(w/t.w*100).toFixed(2)}%;height:${(h/t.h*100).toFixed(2)}%;clip-path:polygon(${poly.join(",")})"></button>`; }).join(""); }).join(""); },
+  body(t,a,ck){ if(!htOf(t)){ if(!t._wait){ t._wait = 1; setTimeout(()=>{ t._wait = 0; renderTask(t.id); }, 30); } return `<p class="small muted">Zeichnung wird geladen …</p>`; }
+    const n = t.items.filter((it,i)=>a[i]).length;
+    return `<div class="lblfig htfig"><div data-fig="${t.fig}"></div>${T.hatch.btns(t, a, ck, false)}</div>
+      <p class="small muted spotinfo">${n?`${n} Fläche${n===1?"":"n"} schraffiert.`:"Noch keine Fläche schraffiert."} Tippe eine Fläche an, um sie zu schraffieren, noch einmal tippen entfernt die Schraffur.${ck?" <b>Grün</b>: richtig schraffiert · <b>Rot</b>: falsch schraffiert oder fehlt.":""}</p>`; },
+  /* Schraffurabstand je Fläche (it.s in Bildkoordinaten, größere Fläche = größerer Abstand, gleiches Bauteil = gleicher Abstand), mitskaliert mit der angezeigten Breite */
+  mount(t,a,host){ const sc = () => $$(".htfig", host).forEach(f => { const k = f.clientWidth / t.w; if(k > 0) $$(".htc", f).forEach(b => b.style.setProperty("--hs", (+b.dataset.hs*k).toFixed(2) + "px")); });
+    sc(); requestAnimationFrame(sc); if(!host._hsro && "ResizeObserver" in window){ host._hsro = new ResizeObserver(sc); host._hsro.observe(host); } },
+  click(t,a,b){ if(b.dataset.ht==null) return false; const i=b.dataset.ht; if(a[i]) delete a[i]; else a[i]=true; return true; },
+  ok:(t,it,v)=>!!v===!!it.a,
+  sol:t=>`<div class="solbox"><div class="lblfig htfig"><div data-fig="${t.fig}"></div>${T.hatch.btns(t, {}, false, true)}</div>${t.items.some(it=>it.e)?`<ul>${t.items.filter(it=>it.e).map(it=>`<li>${it.e}</li>`).join("")}</ul>`:""}</div>`
+};
+
 /* ---------- Punkte (Übungen, Prüfungsniveau) ---------- */
-const hasPts = t => t.pts!=null || T[t.type].maxPts || (t.items||[]).some(it=>it.p!=null);
+const hasPts = t => t.pts!=null || (T[t.type].maxPts && (t.exam || t.type==="paper")) || (t.items||[]).some(it=>it.p!=null);   // v1.2 (17.11.2026): spots ohne exam/pts zählen keine Punkte (Übung 1.2, Niveau 2)
 function maxPts(id){ const t=U.tasks[id], ty=T[t.type]; return ty.maxPts ? ty.maxPts(t) : t.items.reduce((s,it)=>s+(it.p!=null?it.p:(t.pts||0)),0); }
 function ptsNow(id){ const t=U.tasks[id], a=S.t[id], ty=T[t.type];
   if(ty.points) return ty.points(t,a);
@@ -1838,7 +1913,7 @@ function scoreText(id){ const t=U.tasks[id], a=S.t[id];
 function frame(id){
   const t=U.tasks[id], host=document.getElementById("task-"+id);
   const help = !["mc","cases","paper"].includes(t.type), pts = hasPts(t) ? `<span class="ptsbadge">${fmt(maxPts(id))} P.</span>` : "";
-  host.innerHTML = `<p class="tag">${t.tag}${pts}</p><h2>${t.title}</h2>${t.intro?`<p class="muted small">${t.intro}</p>`:""}${t.fig&&t.type!=="label"&&t.type!=="spots"?`<div class="taskfig"><div data-fig="${t.fig}"></div></div>`:""}<div class="tb"></div>
+  host.innerHTML = `<p class="tag">${t.tag}${pts}</p><h2>${t.title}</h2>${t.intro?`<p class="muted small">${t.intro}</p>`:""}${t.fig&&!["label","spots","lines","hatch"].includes(t.type)?`<div class="taskfig"><div data-fig="${t.fig}"></div></div>`:""}<div class="tb"></div>
     ${t.type==="paper"?`<div class="row helpbar">${t.exam?"":`<button type="button" class="btn secondary" data-help="hint">Tipp</button>`}<span class="score" role="status"></span></div><div class="th"></div>`:help?`<div class="row helpbar"><button type="button" class="btn" data-check>${t.exam?"Ergebnis prüfen":"Prüfen"}</button>${t.exam?"":`<button type="button" class="btn secondary" data-help="hint">Tipp</button>`}<button type="button" class="btn secondary" data-help="sol">Lösung</button><span class="score" role="status"></span></div><div class="th"></div>`:`<div class="row"><span class="score" role="status"></span></div>`}${t.after||""}`;
 }
 function renderTask(id){
@@ -1856,6 +1931,7 @@ function renderHelp(id){
   th.innerHTML = (H[id+"hint"]?`<div class="fb info small"><b>Tipp:</b> ${t.hint}</div>`:"") +
     (H[id+"sol"] && t.type!=="paper" ? (ready ? (t.sol || T[t.type].sol(t)) : `<div class="fb err small">Erst prüfen, dann ist die Lösung freigeschaltet.</div>`) : "");
   $$("[data-fig]",th).forEach(d => { const f = window.LM_FIG && window.LM_FIG[d.dataset.fig]; if(f) f(d); });   // Zeichnungen in Lösungen
+  if(t.type==="hatch" && T.hatch.mount) T.hatch.mount(t, S.t[id], th);
 }
 function initTasks(){
   Object.keys(U.tasks).forEach(id => {
