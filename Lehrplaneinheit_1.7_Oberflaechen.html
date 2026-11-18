@@ -593,10 +593,10 @@ dialog.tbldlg::backdrop{background:rgba(0,0,0,.45)}
   </div>
 
   <div class="stepbox">
-    <h2><span class="no">1</span>Die Problemstellung: Der Deckel leckt, die Buchse wandert</h2>
+    <h2><span class="no">1</span>Die Problemstellung: Der Deckel ist undicht, die Buchse wandert</h2>
     <p>Die Auszubildende Mia hat die Einzelteilzeichnung für den <b>Lagerdeckel</b> einer Ölpumpe erstellt. Der Deckel wird mit vier Schrauben an das Pumpengehäuse geschraubt, dazwischen liegt eine Flachdichtung. In die Bohrung Ø32 H7 wird eine <b>Gleitlagerbuchse</b> mit Übermaß eingepresst, in der sich später die Pumpenwelle dreht. Alle Maße stimmen. Als Oberflächenangabe hat Mia nur ein einziges Symbol neben das Schriftfeld gesetzt: Rz 25 für alle Flächen. Nach zwei Wochen Probebetrieb tritt zwischen Deckel und Gehäuse Öl aus, und die Buchse hat sich gelockert und dreht sich mit.</p>
     <div class="figure"><div data-fig="problem" class="pfigw"></div><div class="bubble" style="max-width:640px">„Bearbeitet ist doch jede Fläche. Und Rz 25 klingt nach ziemlich wenig, das sind ja Mikrometer.“<span>– Mia</span></div></div>
-    <p class="problem">Warum leckt der Deckel, und warum lockert sich die Buchse? Welche Oberflächenangaben fehlen, und wie trägst du sie ein?</p>
+    <p class="problem">Warum ist der Deckel undicht, und warum lockert sich die Buchse? Welche Oberflächenangaben fehlen, und wie trägst du sie ein?</p>
     <div>
       <label for="hyp1">Deine Vermutung in 2–3 Sätzen</label>
       <textarea id="hyp1" data-field data-req data-label="Erste Vermutung" placeholder="Ich glaube, … weil …"></textarea>
@@ -799,7 +799,7 @@ dialog.tbldlg::backdrop{background:rgba(0,0,0,.45)}
   <div class="task">
     <p class="tag">Aufgabe 16 · Antwort auf die Problemstellung</p>
     <h2>Zurück zum Lagerdeckel von Mia</h2>
-    <p class="problem">Warum leckt der Deckel, und warum lockert sich die Buchse? Welche Oberflächenangaben fehlen, und wie trägst du sie ein?</p>
+    <p class="problem">Warum ist der Deckel undicht, und warum lockert sich die Buchse? Welche Oberflächenangaben fehlen, und wie trägst du sie ein?</p>
     <div class="figure"><div data-fig="pr-loes" class="pfigw"></div></div>
     <p class="small muted">Drehbares 3D-Bild (vordere Hälfte abgeschnitten): blau die Dichtfläche, grün die Bohrung für die Buchse.</p>
     <div class="figure"><div data-fig="pic-ld" style="max-width:420px"></div></div>
@@ -1645,7 +1645,7 @@ const U = {
       {t:"Dichtfläche: Messprotokoll gegen Rz 6,3", ort:"Messraum", fig:"zx-4", base:1,
        m:"Der Messraum schickt die fünf Einzelrautiefen einer Dichtfläche: <b>7,4 · 8,1 · 6,9 · 7,8 · 7,3 µm</b>. Die Zeichnung fordert Rz 6,3. Der Kollege meint: „Nur knapp drüber, das kann raus.“",
        clues:[{n:"Skript", how:"Rz nachlesen", h:1, t:"Rz = Mittelwert der fünf Einzelrautiefen, aufsummieren und durch 5 teilen."},
-              {n:"Kunde fragen", how:"Was passiert bei zu rauer Fläche?", h:2, t:"„Zu raue Dichtflächen lecken. Dann zahlen Sie die Reklamation.“"}],
+              {n:"Kunde fragen", how:"Was passiert bei zu rauer Fläche?", h:2, t:"„Zu raue Dichtflächen dichten nicht ab. Dann zahlen Sie die Reklamation.“"}],
        q:[{type:"num", q:"Gemittelte Rautiefe Rz", k:"Rz", u:"µm", a:7.5, tol:0.05},
           {type:"select", q:"Entscheidung", k:"Entscheidung", o:["freigeben","nacharbeiten (z. B. schleifen)"], a:"nacharbeiten (z. B. schleifen)"}],
        h:"Addiere die fünf Werte und teile durch 5. Vergleiche mit 6,3.",
@@ -1756,7 +1756,7 @@ const U = {
 
     /* ===================== Station 4 · Rz, Rzmax, Ra ===================== */
     g10:{type:"num", tag:"Aufgabe 9 · Zahlen eintragen", title:"Rz aus dem Profil bestimmen", fig:"rz-auf",
-      intro:"Das Rauheitsprofil gehört zur Dichtfläche eines Ventilgehäuses (Raster 1 µm). Bestimme die Einzelrautiefen, Rz und Rzmax in µm.",
+      intro:"Das Rauheitsprofil gehört zur Dichtfläche eines Ventilgehäuses (Raster 1 µm). Bestimme die Einzelrautiefen, Rz und Rzmax in µm. Mit dem Messwerkzeug unter dem Bild legst du in jeder Teilmessstrecke eine Linie auf die höchste Spitze und eine auf das tiefste Tal und liest den Abstand ab.",
       hint:"In jeder Teilmessstrecke: höchste Spitze minus tiefstes Tal. Ein Tal bei −4 und eine Spitze bei +5 ergeben 9 µm. Dann alle fünf addieren und durch 5 teilen.",
       items:[
         {t:"$R_{z1}$", a:9, u:"µm", tol:0.05}, {t:"$R_{z2}$", a:10, u:"µm", tol:0.05}, {t:"$R_{z3}$", a:11, u:"µm", tol:0.05},
@@ -3968,8 +3968,39 @@ window.LM_FIG["le-ra"] = h => { const {g} = sheet(h, 420, 400, "Mittlere Rauheit
 })();
 /* Aufgabe: Profil zum Ablesen (Eckpunkte in µm; Rz1 … Rz5 = 9, 10, 11, 8, 10, Rz = 9,6, Rzmax = 11) */
 const RZA = profPts([[0,4,-4,5,-3,1],[1,4,-6,2,-3,0],[0,7,-2,3,-4,1],[2,4,-4,3,-3,1],[-1,5,-2,3,-5,0]]);
-window.LM_FIG["rz-auf"] = h => { const {g} = sheet(h, 420, 300, "Rauheitsprofil der Dichtfläche auf Millimeterraster: fünf Einzelmessstrecken, Raster 1 µm");
-  chart(g, RZA.z, {xs:RZA.xs, x:44, y:30, w:360, h:224, zr:8, grid:1, labStep:2, axis:"z in µm (Raster 1 µm)"}); };
+/* v2.1 (18.11.2026, Lehrkraft: „bräuchte man ein interaktives Messwerkzeug um die Werte herauszulesen“): Messwerkzeug – Teilmessstrecke wählen,
+   obere (Spitze) und untere Messlinie (Tal) ziehen oder mit ▲▼ schieben (Raster 0,5 µm), Anzeige der Höhen und des Abstands. Zeigt keine Lösung an. */
+window.LM_FIG["rz-auf"] = h => { const {svg, g} = sheet(h, 420, 300, "Rauheitsprofil der Dichtfläche auf Millimeterraster: fünf Einzelmessstrecken, Raster 1 µm, mit verschiebbaren Messlinien");
+  const C = {x:44, y:30, w:360, h:224, zr:8}, {X, Y} = chart(g, RZA.z, {xs:RZA.xs, x:C.x, y:C.y, w:C.w, h:C.h, zr:C.zr, grid:1, labStep:2, axis:"z in µm (Raster 1 µm)"});
+  const V = y => (C.y + C.h/2 - y)*C.zr/(C.h/2), snap = v => Math.max(-C.zr, Math.min(C.zr, Math.round(v*2)/2)), fz = v => (v > 0 ? "+" : v < 0 ? "−" : "") + f(Math.abs(v), 1);
+  const st = {sec:0, top:2, bot:-2}, M = add(g, "g", {"data-mess":"1"});
+  const box = document.createElement("div"); box.className = "rz-mess"; box.style.marginTop = "6px";
+  box.innerHTML = `<p class="small muted" style="margin:0 0 2px">📏 Messwerkzeug: Teilmessstrecke wählen, dann die Linien auf die höchste Spitze und das tiefste Tal ziehen.</p>
+    <div class="segbtns" data-m="sec">${[1,2,3,4,5].map(i => `<button type="button" data-v="${i - 1}"${i === 1 ? ' aria-pressed="true"' : ""}>l${i}</button>`).join("")}</div>
+    <div class="row" style="margin-top:6px;gap:6px;flex-wrap:wrap"><span style="white-space:nowrap"><span class="small" style="color:var(--err);font-weight:700">Spitze</span> <button type="button" class="btn small secondary" data-m="top+" aria-label="Spitzenlinie nach oben">▲</button> <button type="button" class="btn small secondary" data-m="top-" aria-label="Spitzenlinie nach unten">▼</button></span>
+      <span style="white-space:nowrap;margin-left:10px"><span class="small" style="color:var(--blue);font-weight:700">Tal</span> <button type="button" class="btn small secondary" data-m="bot+" aria-label="Tallinie nach oben">▲</button> <button type="button" class="btn small secondary" data-m="bot-" aria-label="Tallinie nach unten">▼</button></span></div>
+    <div class="readout" data-m="out" style="display:block;margin-top:6px" aria-live="polite"></div>`;
+  h.appendChild(box);
+  function draw(){ M.innerHTML = ""; const a = X(st.sec/5), b = X((st.sec + 1)/5);
+    add(M, "rect", {x:a, y:C.y, width:b - a, height:C.h, style:"fill:rgba(240,180,60,.13);stroke:none;pointer-events:none"});
+    [["top", "var(--err)"], ["bot", "var(--blue)"]].forEach(([k, c]) => { const y = Y(st[k]);
+      add(M, "line", {x1:a - 6, y1:y, x2:b + 6, y2:y, style:`stroke:${c};stroke-width:2.2;stroke-dasharray:7 3;cursor:ns-resize`});
+      add(M, "line", {x1:a - 6, y1:y, x2:b + 6, y2:y, "data-k":k, style:"stroke:transparent;stroke-width:16;cursor:ns-resize"});
+      T(M, b + 8, y + 4, fz(st[k]), "lbl-s", {style:`fill:${c};font-weight:700`}); });
+    const xm = a + 14, d = st.top - st.bot;
+    add(M, "line", {x1:xm, y1:Y(st.top), x2:xm, y2:Y(st.bot), style:"stroke:var(--ink);stroke-width:1.2"});
+    T(M, xm + 5, (Y(st.top) + Y(st.bot))/2 + 4, f(Math.abs(d), 1), "lbl-s", {style:"font-weight:700;paint-order:stroke;stroke:var(--card,#fff);stroke-width:3"});
+    box.querySelector('[data-m="out"]').innerHTML = `Teilmessstrecke l<sub>${st.sec + 1}</sub>: Spitzenlinie ${fz(st.top)} µm · Tallinie ${fz(st.bot)} µm · <b>Abstand ${f(Math.abs(d), 1)} µm</b>`; }
+  onSeg(box.querySelector('[data-m="sec"]'), v => { st.sec = +v; draw(); });
+  box.querySelectorAll("button[data-m]").forEach(bt => bt.addEventListener("click", () => { const k = bt.dataset.m.slice(0, 3); st[k] = snap(st[k] + (bt.dataset.m.endsWith("+") ? 0.5 : -0.5)); draw(); }));
+  const pt = e => { const P = svg.createSVGPoint(); P.x = e.clientX; P.y = e.clientY; return P.matrixTransform(svg.getScreenCTM().inverse()); };
+  let drag = null;
+  svg.addEventListener("pointerdown", e => { const p = pt(e); if(p.x < C.x || p.x > C.x + C.w + 40 || p.y < C.y - 10 || p.y > C.y + C.h + 10) return;
+    const s5 = Math.floor((p.x - C.x)/C.w*5); if(s5 >= 0 && s5 < 5 && s5 !== st.sec && !(e.target.dataset && e.target.dataset.k)){ st.sec = s5; const sg = box.querySelector('[data-m="sec"]'); sg.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x.dataset.v == s5 ? "true" : "false")); }
+    const v = V(p.y); drag = Math.abs(v - st.top) <= Math.abs(v - st.bot) ? "top" : "bot"; st[drag] = snap(v); draw(); svg.setPointerCapture(e.pointerId); e.preventDefault(); });
+  svg.addEventListener("pointermove", e => { if(!drag) return; st[drag] = snap(V(pt(e).y)); draw(); });
+  const up = () => { drag = null; }; svg.addEventListener("pointerup", up); svg.addEventListener("pointercancel", up);
+  svg.style.touchAction = "none"; draw(); };
 /* Aufgabe: Dreieck- und Rechteckprofil (je ±6 µm) */
 window.LM_FIG["ra-tri"] = h => { const {g} = sheet(h, 420, 300, "Zwei Rauheitsprofile mit gleichen Spitzen und Tälern: oben Dreiecke, unten Rechtecke, jeweils plus und minus 6 µm");
   const tri = [], rec = [], xs = []; for(let i=0;i<=20;i++){ xs.push(i/20); tri.push(i % 2 ? -6 : 6); }
