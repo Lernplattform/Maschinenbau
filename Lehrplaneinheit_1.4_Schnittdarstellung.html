@@ -973,6 +973,7 @@ function SaveKit(cfg){
     if(n("browser")) L.push("  ACHTUNG: Der Speicher im Browser wurde verändert.");
     if(n("alt")) L.push("  Hinweis: begonnen vor Einführung der Signatur.");
     if(n("laden")) L.push(`  Hinweis: ${n("laden")}× von Hand aus Datei geladen.`);
+    if(n("reset")) L.push(`  Hinweis: ${n("reset")}× „Alles löschen“ (Versuche und Lösungsaufrufe bleiben gespeichert).`);
     return L.join("\n");
   }
   function parse(txt){
@@ -1263,7 +1264,11 @@ function SaveKit(cfg){
     else if(a==="download") download();
     else if(a==="copy") copyText();
     else if(a==="askreset"){ const r = $("#lm-reset"); if(r) r.hidden = !r.hidden; }
-    else if(a==="reset"){ const w = cfg.getState()._who; base = {}; cfg.setState(w ? {_who:{v:w.v, n:w.n, ts:Date.now(), wid:rid(6)}} : {}); writeLocal(); scheduleFile(); flash("Alle Eingaben gelöscht."); }
+    else if(a==="reset"){   // 19.11.2026: Versuche (at), Sitzungen, Einfügungen und Vermerke bleiben erhalten, „Alles löschen“ wird vermerkt – sonst ließe sich die Wertung der Versuche umgehen
+      const o = cfg.getState(), w = o._who, ns = {}; base = {};
+      ["_ses","_fl","_pa","at"].forEach(k => { if(o[k] != null) ns[k] = JSON.parse(JSON.stringify(o[k])); });
+      if(w) ns._who = {v:w.v, n:w.n, ts:Date.now(), wid:w.wid || rid(6)};
+      addFlag(ns, "reset"); cfg.setState(ns); writeLocal(); scheduleFile(); flash("Alle Eingaben gelöscht. Deine bisherigen Versuche bleiben für die Wertung gespeichert."); }
   });
   document.addEventListener("change", e => { if(e.target && (e.target.id==="lm-load" || e.target.id==="lm-gate-load" || e.target.id==="lm-name-load")){ if(e.target.id==="lm-gate-load") skip(); loadBlob(e.target.files && e.target.files[0]); e.target.value=""; } });
   document.addEventListener("keydown", e => { if(e.key==="Enter" && e.target && (e.target.id==="lm-vn" || e.target.id==="lm-nn")){ e.preventDefault(); if(e.target.id==="lm-vn" && !$("#lm-nn").value.trim()) $("#lm-nn").focus(); else setName(); } });
@@ -1813,6 +1818,11 @@ const U = {
    Übungen (17.11.2026): U.art = "Übung"; Punkte je Aufgabe über t.pts (Punkte je richtigem Item) bzw. it.p (je Item),
    bei spots/paper über ty.points/ty.maxPts; U.note = "linear" → Note in Auswertung und txt; t.exam = Prüfungsniveau wie „Zettel und Stift“ (Physik): kein Tipp, „Ergebnis prüfen“,
    Punkte beim ersten Prüfen festgelegt (spätere Versuche ändern sie nicht); Auswertung in #auswertung (Tabelle je Station, Punkte, „Das solltest du noch üben“).
+   Versuche (19.11.2026, Lehrkraft: „ich will auf jeden fall in die auswertung nehmen, was man als erstes eingibt und wie oft man die Lösung ändert und wie oft
+   man auf musterlösung klickt … Man kann das alles machen, aber es MUSS in die Bewertung einfließen!“): S.at[id] = {n Prüfen-Versuche (nur mit Änderung),
+   f/fp erster Versuch (richtig/Punkte), b/bp bisher bester Stand, g/gp GEWERTET, s Lösung angesehen (Anzahl), sv Versuch, bei dem die Lösung zuerst
+   angesehen wurde, tp Tipp angesehen, t1/tl Zeit erstes/letztes Prüfen}. Gewertet = erster Versuch + Verbesserung beim 2. Prüfen × ½ + beim 3. Prüfen × ¼,
+   danach und nach dem Ansehen der Lösung 0 (Prüfungsniveau t.exam: nur erster Versuch). Gilt für alle Aufgaben mit „Prüfen“; mc/cases/paper wie bisher.
    ============================================================ */
 const E = (function(){
 "use strict";
@@ -1824,11 +1834,11 @@ const esc = LM.esc;
 let S = {};
 const SK = SaveKit({
   key:U.key, moduleId:U.id, moduleTitle:U.title, fileStem:U.fileStem, art:U.art,
-  getState:()=>S, setState:o=>{ S = o||{}; ensure(); renderAll(); }, summary:()=>summaryText(),
+  getState:()=>S, setState:o=>{ const old = S; S = o||{}; ensure(); keepAttempts(old); renderAll(); }, summary:()=>summaryText(),
   progress:()=>({done:U.plan.filter(p=>doneFor(p[0])).length, total:U.plan.length})
 });
 S = SK.initial();
-function ensure(){ ["t","sc","dirty","pt"].forEach(k => { if(!S[k] || typeof S[k] !== "object") S[k] = {}; }); Object.keys(U.tasks).forEach(id => { if(!S.t[id] || typeof S.t[id] !== "object") S.t[id] = {}; }); }
+function ensure(){ ["t","sc","dirty","pt","at"].forEach(k => { if(!S[k] || typeof S[k] !== "object") S[k] = {}; }); Object.keys(U.tasks).forEach(id => { if(!S.t[id] || typeof S.t[id] !== "object") S.t[id] = {}; }); }
 ensure();
 function save(){ SK.changed(); renderTabs(); if(current===last) updateSummary(); renderEval(); }
 const H = {};
@@ -2118,6 +2128,28 @@ function ptsNow(id){ const t=U.tasks[id], a=S.t[id], ty=T[t.type];
   return t.items.reduce((s,it,i)=>s+(ty.ok(t,it,a[i])?(it.p!=null?it.p:t.pts||0):0),0); }
 const ptTxt = id => `${fmt(S.pt[id]||0)} von ${fmt(maxPts(id))} Punkten`;
 
+/* ---------- Versuche und gewertetes Ergebnis (19.11.2026) ---------- */
+const WGT = [1, 0.5, 0.25];                                  // Gewicht der Verbesserung beim 1./2./3. Prüfen, danach 0
+const atOf = id => S.at[id] || (S.at[id] = {n:0, s:0, tp:0});
+function recordCheck(id){
+  const t=U.tasks[id], A=atOf(id), sc=scoreOf(id), pt=hasPts(t)?ptsNow(id):0, now=Date.now();
+  A.n++; A.tl=now; A.N=t.items.length;
+  if(A.n===1){ A.f=A.g=A.b=sc; A.fp=A.gp=A.bp=pt; A.t1=now; }
+  else { const w = t.exam || A.sv!=null ? 0 : (WGT[A.n-1]||0);
+    if(sc>A.b){ A.g += (sc-A.b)*w; A.b=sc; } if(pt>A.bp){ A.gp += (pt-A.bp)*w; A.bp=pt; } }
+  A.g=Math.round(A.g*100)/100; A.gp=Math.round(A.gp*100)/100;
+  S.sc[id]=sc; if(hasPts(t)) S.pt[id]=A.gp;
+}
+/* gewertete Anzahl richtiger Teile (alte Speicherstände ohne Versuchsdaten: letzter Stand) */
+const wert = id => { const A=S.at[id]; return A && A.n ? A.g : (S.sc[id]!=null ? S.sc[id] : null); };
+const versTxt = A => `1. Versuch ${A.f} · ${A.n}× geprüft` + (A.s ? ` · Lösung ${A.s}× angesehen` : "") + (A.tp ? ` · Tipp ${A.tp}×` : "");
+/* Laden einer Datei derselben Arbeit oder „Alles löschen“ darf die Versuche nicht zurücksetzen: je Aufgabe den Stand mit mehr Versuchen behalten */
+function keepAttempts(old){
+  if(!old || !old.at || !old._who || !S._who || old._who.wid !== S._who.wid) return;
+  Object.keys(old.at).forEach(id => { const a=old.at[id], b=S.at[id];
+    if(!b || (a.n||0) > (b.n||0) || ((a.n||0)===(b.n||0) && (a.s||0) > (b.s||0))){ S.at[id]=a; if(a.n && hasPts(U.tasks[id]||{type:"toggle",items:[]})) S.pt[id]=a.gp; } });
+}
+
 /* ---------- Aufgaben rendern ---------- */
 function scoreOf(id){ const t=U.tasks[id], a=S.t[id], ty=T[t.type];
   if(ty.score) return ty.score(t,a);
@@ -2128,8 +2160,9 @@ function scoreText(id){ const t=U.tasks[id], a=S.t[id];
   if(t.type==="cases") return "";
   if(S.sc[id]==null) return "";
   if(S.dirty[id]) return "Geändert: bitte erneut prüfen.";
-  const N=t.items.length, n=S.sc[id];
-  return `${n} von ${N} richtig` + (t.goal ? (n>=t.goal?" · Ziel erreicht":` · Ziel: ${t.goal}`) : "") + (hasPts(t)?" · "+ptTxt(id):""); }
+  const N=t.items.length, n=S.sc[id], A=S.at[id];
+  return `${n} von ${N} richtig` + (t.goal ? (n>=t.goal?" · Ziel erreicht":` · Ziel: ${t.goal}`) : "")
+    + (A && A.n ? ` · gewertet ${fmt(A.g)} von ${N}` + (A.n>1 ? ` (${versTxt(A)})` : "") : "") + (hasPts(t)?" · "+ptTxt(id):""); }
 function frame(id){
   const t=U.tasks[id], host=document.getElementById("task-"+id);
   const help = !["mc","cases","paper"].includes(t.type), pts = hasPts(t) ? `<span class="ptsbadge">${fmt(maxPts(id))} P.</span>` : "";
@@ -2149,7 +2182,7 @@ function renderHelp(id){
   const ready = S.sc[id]!=null;
   $$("[data-help='sol']",host).forEach(b=>{ b.setAttribute("aria-disabled", ready?"false":"true"); b.title = ready?"":"Erst prüfen, dann ist die Lösung freigeschaltet."; });
   th.innerHTML = (H[id+"hint"]?`<div class="fb info small"><b>Tipp:</b> ${t.hint}</div>`:"") +
-    (H[id+"sol"] && t.type!=="paper" ? (ready ? (t.sol || T[t.type].sol(t)) : `<div class="fb err small">Erst prüfen, dann ist die Lösung freigeschaltet.</div>`) : "");
+    (H[id+"sol"] && t.type!=="paper" ? (ready ? `<p class="small muted" style="margin:6px 0 2px">Lösung angesehen: Verbesserungen bei dieser Aufgabe zählen ab jetzt nicht mehr für die Wertung.</p>` + (t.sol || T[t.type].sol(t)) : `<div class="fb err small">Erst prüfen, dann ist die Lösung freigeschaltet.</div>`) : "");
   $$("[data-fig]",th).forEach(d => { const f = window.LM_FIG && window.LM_FIG[d.dataset.fig]; if(f) f(d); });   // Zeichnungen in Lösungen
   if(t.type==="hatch" && T.hatch.mount) T.hatch.mount(t, S.t[id], th);
 }
@@ -2159,8 +2192,13 @@ function initTasks(){
     host.classList.add("task"); host.dataset.task=id; frame(id);
     host.addEventListener("click", e => {
       const b=e.target.closest("button"); if(!b || b.closest(".th")) return;
-      if(b.hasAttribute("data-check")){ S.sc[id]=scoreOf(id); if(hasPts(t) && !(t.exam && S.pt[id]!=null)) S.pt[id]=ptsNow(id); delete S.dirty[id]; save(); renderTask(id); return; }
-      if(b.dataset.help){ H[id+b.dataset.help]=!H[id+b.dataset.help]; renderHelp(id); return; }
+      if(b.hasAttribute("data-check")){ const A=S.at[id];
+        if(S.sc[id]==null || S.dirty[id] || !A || !A.n) recordCheck(id);   // nur ein Versuch, wenn sich seit dem letzten Prüfen etwas geändert hat
+        delete S.dirty[id]; save(); renderTask(id); return; }
+      if(b.dataset.help){ const k=b.dataset.help, on=!H[id+k]; H[id+k]=on;
+        if(on && k==="sol" && S.sc[id]!=null){ const A=atOf(id); A.s=(A.s||0)+1; if(A.sv==null) A.sv=A.n||0; S.at[id]=A; save(); }
+        else if(on && k==="hint"){ const A=atOf(id); A.tp=(A.tp||0)+1; save(); }
+        renderHelp(id); return; }
       const ty=T[t.type]; if(!ty.click) return;
       const r=ty.click(t,S.t[id],b); if(!r) return;
       if(r===true){ if(["mc","cases","paper"].includes(t.type)){ S.sc[id]=scoreOf(id); if(hasPts(t)) S.pt[id]=ptsNow(id); } else if(S.sc[id]!=null) S.dirty[id]=true; save(); }   // paper: Selbstbewertung bleibt änderbar
@@ -2215,13 +2253,14 @@ function summaryText(){
         if(t.type==="cases"){ L.push("  "+t.tag); t.items.forEach((c,i)=>{ const st=a[i]||{}; L.push(`    Fall ${i+1} ${c.t}: ${st.choice||"–"}`); L.push(`       Begründung: ${(st.text||"–").trim()}`); }); }
         else if(t.type==="mc"){ L.push(`  ${t.tag}: ${t.items.filter((it,i)=>a[i]===it.a).length}/${t.items.length} richtig (${Object.keys(a).length} beantwortet)`+(hasPts(t)?` · ${fmt(S.pt[id]||0)}/${fmt(maxPts(id))} P.`:"")); }
         else if(t.type==="paper"){ L.push(`  ${t.tag}: ${a.open?"Selbstbewertung "+fmt(S.pt[id]||0)+"/"+fmt(maxPts(id))+" P.":"Musterlösung noch nicht aufgedeckt"}`); if(t.field) L.push(`     Antwort: ${(a.text||"–").trim()}`); }
-        else L.push(`  ${t.tag}: ${S.sc[id]!=null?S.sc[id]+"/"+t.items.length+" richtig"+(hasPts(t)?` · ${fmt(S.pt[id]||0)}/${fmt(maxPts(id))} P.`:""):"nicht geprüft"}`);
+        else { const A=S.at[id], N=t.items.length;
+          L.push(`  ${t.tag}: ${S.sc[id]==null ? "nicht geprüft" : A && A.n ? `gewertet ${fmt(A.g)}/${N} · zuletzt ${S.sc[id]}/${N} · ${versTxt(A)}` + (A.sv!=null ? ` (zuerst nach Versuch ${A.sv})` : "") : `${S.sc[id]}/${N} richtig`}` + (S.sc[id]!=null && hasPts(t) ? ` · ${fmt(S.pt[id]||0)}/${fmt(maxPts(id))} P.` : "")); }
       } else { L.push("  " + (x.dataset.label||x.id) + ": " + ((S[x.id]||"–").trim())); }
     });
   });
   if(window.LM_ZX){ L.push(""); L.push(LM_ZX.summary()); }
   if(document.getElementById("auswertung")){ const ev=evalData(); L.push(""); L.push("AUSWERTUNG");
-    ev.rows.forEach(r=>L.push(`  ${r.title}: ${r.ok}/${r.n} richtig`+(r.max?` · ${fmt(r.pts)}/${fmt(r.max)} P.`:"")));
+    ev.rows.forEach(r=>L.push(`  ${r.title}: ${fmt(r.ok)}/${r.n} gewertet`+(r.max?` · ${fmt(r.pts)}/${fmt(r.max)} P.`:"")));
     if(ev.max){ const nt=noteOf(ev); L.push(""); L.push(`PUNKTE: ${fmt(ev.pts)}/${fmt(ev.max)} (${ev.pct} %)`+(nt?` · Note ${nt.n} (${nt.w})`:"")); } }
   return L.join("\n");
 }
@@ -2240,7 +2279,7 @@ function evalData(){
   const rows = U.plan.map(([sid,title]) => { const sec=document.getElementById(sid), ids=sec?$$("[data-task]",sec).map(d=>d.dataset.task):[];
     let ok=0, n=0, pts=0, max=0; const weak=[];
     ids.forEach(id => { const t=U.tasks[id], a=S.t[id], N = t.type==="paper" ? t.crit.length : t.items.length;
-      const r = t.type==="paper" ? (a.open?Math.round(N*(S.pt[id]||0)/maxPts(id)):0) : t.type==="mc"||t.type==="cases" ? scoreOf(id) : (S.sc[id]!=null && !S.dirty[id] ? S.sc[id] : 0);
+      const r = t.type==="paper" ? (a.open?Math.round(N*(S.pt[id]||0)/maxPts(id)):0) : t.type==="mc"||t.type==="cases" ? scoreOf(id) : (wert(id) || 0);   // 19.11.2026: gewertetes Ergebnis
       ok+=r; n+=N; if(hasPts(t)){ pts+=S.pt[id]||0; max+=maxPts(id); }
       const begun = t.type==="paper" ? a.open : t.type==="mc" ? Object.keys(a).length : S.sc[id]!=null;
       if(!begun || r < 0.75*N) weak.push({id, t, begun}); });
@@ -2255,7 +2294,7 @@ function renderEval(){
   const h=$("#auswertung"); if(!h) return; const ev=evalData();
   const bar = (v,n) => `<div class="evbar"><span style="width:${n?Math.round(100*v/n):0}%"></span></div>`;
   const weak = ev.rows.flatMap(r=>r.weak.map(w=>({...w, st:r.title, sid:r.sid})));
-  h.innerHTML = `<div class="tbl-wrap"><table class="evtab"><tr><th>Niveau</th><th>richtig</th><th></th><th>Punkte</th><th>Stand</th></tr>${ev.rows.map(r=>`<tr><td><a href="#${r.sid}" data-go="${r.sid}"><b>${r.title}</b></a></td><td class="nowrap">${r.ok} von ${r.n}</td><td style="min-width:120px">${bar(r.ok,r.n)}</td><td class="nowrap">${r.max?`${fmt(r.pts)} von ${fmt(r.max)}`:"–"}</td><td>${r.done?'<span class="okmark">✓ erledigt</span>':'<span class="muted small">offen</span>'}</td></tr>`).join("")}</table></div>
+  h.innerHTML = `<div class="tbl-wrap"><table class="evtab"><tr><th>Niveau</th><th>richtig</th><th></th><th>Punkte</th><th>Stand</th></tr>${ev.rows.map(r=>`<tr><td><a href="#${r.sid}" data-go="${r.sid}"><b>${r.title}</b></a></td><td class="nowrap">${fmt(r.ok)} von ${r.n}</td><td style="min-width:120px">${bar(r.ok,r.n)}</td><td class="nowrap">${r.max?`${fmt(r.pts)} von ${fmt(r.max)}`:"–"}</td><td>${r.done?'<span class="okmark">✓ erledigt</span>':'<span class="muted small">offen</span>'}</td></tr>`).join("")}</table></div>
     ${ev.max?`<div class="evpts"><div><div class="small muted">Prüfungsniveau</div><div class="evbig">${fmt(ev.pts)} <span class="small">von ${fmt(ev.max)} Punkten</span></div></div><div style="flex:1">${bar(ev.pts,ev.max)}<div class="small muted">${ev.pct} % der Punkte</div></div>${noteOf(ev)?`<div><div class="small muted">Note</div><div class="evbig">${noteOf(ev).n} <span class="small">${noteOf(ev).w}</span></div></div>`:""}</div>`:""}
     <h3>Das solltest du noch üben</h3>${weak.some(w=>w.begun)?`<ul class="evweak">${weak.filter(w=>w.begun).map(w=>`<li><a href="#task-${w.id}" data-jump="${w.sid}:${w.id}">${w.st} · ${w.t.tag.replace(/<[^>]+>/g,"").split(" · ")[0]}: ${w.t.title}</a> <span class="small muted">weniger als drei Viertel richtig${w.t.le?` · Nachlesen: ${w.t.le}`:""}</span></li>`).join("")}</ul>`:weak.length?`<p class="small muted">Noch nichts, was du nachholen musst. Bearbeite zuerst die offenen Aufgaben.</p>`:`<p class="fb ok small">Alles mindestens zu drei Vierteln richtig. Stark!</p>`}
     ${ev.rows.filter(r=>r.weak.some(w=>!w.begun)).map(r=>`<p class="small"><b>${r.title}, noch offen:</b> ${r.weak.filter(w=>!w.begun).map(w=>`<a href="#task-${w.id}" data-jump="${r.sid}:${w.id}">${w.t.tag.replace(/<[^>]+>/g,"").split(" · ")[0].replace("Aufgabe ","")}</a>`).join(", ")}</p>`).join("")}`;
