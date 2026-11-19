@@ -1549,7 +1549,7 @@ const SK = SaveKit({
 S = SK.initial();
 function ensure(){ ["t","sc","dirty","pt","at"].forEach(k => { if(!S[k] || typeof S[k] !== "object") S[k] = {}; }); Object.keys(U.tasks).forEach(id => { if(!S.t[id] || typeof S.t[id] !== "object") S.t[id] = {}; }); }
 ensure();
-function save(){ SK.changed(); renderTabs(); if(current===last) updateSummary(); renderEval(); }
+function save(){ SK.changed(); renderTabs(); if(current===last) updateSummary(); renderEval(); if(typeof updEnd==="function") updEnd(); }
 const H = {};
 
 /* ---------- Navigation ---------- */
@@ -1562,6 +1562,7 @@ function show(id){
   stations.forEach(s => { s.hidden = s.id !== id; });
   current = id; S.tab = id; SK.changed(true); renderTabs();
   if(id === last) updateSummary();
+  if(typeof updEnd==="function") updEnd();
   document.dispatchEvent(new CustomEvent("lm-show", {detail:id}));
   window.scrollTo({top:0, behavior:"auto"});
 }
@@ -1982,6 +1983,30 @@ const cp=$("#copy"); if(cp) cp.addEventListener("click", () => {
   const fb=()=>{ const ta=$("#summary"); ta.focus(); ta.select(); $("#save-msg").textContent="Text markiert: jetzt Strg+C drücken."; };
   try { navigator.clipboard.writeText(t).then(()=>{ $("#save-msg").textContent="Kopiert."; }, fb); } catch(e){ fb(); }
 });
+
+/* ---------- Abgabe am Ende der letzten beiden Stationen (19.11.2026, Lehrkraft: „dass unten bei Reiter 4 und 5 … auch der Inhalt der Text-Datei
+   zum kopieren hinterlegt wird, dass man diese zur Not auch einfach kopieren kann und den Inhalt mir per Mail zusenden lassen kann“):
+   ganzer Speicherstand samt Signatur in einem schreibgeschützten Feld, „Text kopieren“ und „Als Datei sichern“ ---------- */
+const endHosts = plain.slice(-2).map(sec => {
+  const d = document.createElement("div"); d.className = "card lm-end"; d.style.marginTop = "18px";
+  d.innerHTML = `<h3 style="margin-top:0">📨 Abgeben oder sichern</h3>
+    <p class="small">Hier steht dein ganzer Speicherstand. Klappt das Speichern als Datei nicht, tippe auf <b>„Text kopieren“</b> und füge ihn in eine Mail an deine Lehrkraft ein.
+    <b>Nichts am Text ändern</b>, sonst wird er als verändert erkannt.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0"><button type="button" class="btn" data-end="copy">Text kopieren</button><button type="button" class="btn secondary" data-end="dl">Als Datei sichern</button></div>
+    <textarea readonly rows="8" class="lm-endtxt" aria-label="Speicherstand zum Kopieren" style="width:100%;font-family:ui-monospace,Consolas,monospace;font-size:12px"></textarea>
+    <p class="small muted" data-end="msg" aria-live="polite" style="margin:4px 0 0"></p>`;
+  sec.appendChild(d);
+  const ta = d.querySelector("textarea"), msg = d.querySelector('[data-end="msg"]');
+  ta.addEventListener("focus", () => { ta.value = SK.fullText(); ta.select(); });
+  d.querySelector('[data-end="dl"]').addEventListener("click", () => { SK.download(); msg.textContent = "Datei gespeichert (meist im Ordner „Downloads“)."; });
+  d.querySelector('[data-end="copy"]').addEventListener("click", () => { const t = SK.fullText(); ta.value = t;
+    const fb = () => { ta.focus(); ta.select(); ta.setSelectionRange(0, t.length); let ok=false; try { ok = document.execCommand("copy"); } catch(e){}
+      msg.textContent = ok ? "Kopiert. Jetzt in die Mail einfügen (Strg+V)." : "Text ist markiert: jetzt Strg+C (am iPad: Kopieren) drücken."; };
+    try { navigator.clipboard.writeText(t).then(() => { msg.textContent = "Kopiert. Jetzt in die Mail an deine Lehrkraft einfügen (Strg+V)."; }, fb); } catch(e){ fb(); } });
+  return {sec, ta};
+});
+let endT = null;
+function updEnd(){ clearTimeout(endT); endT = setTimeout(() => endHosts.forEach(h => { if(!h.sec.hidden && document.activeElement !== h.ta) h.ta.value = SK.fullText(); }), 300); }
 
 /* ---------- Auswertung (Übungen): je Station richtig/gesamt und Punkte; Aufgaben unter 75 % → „noch üben“ ---------- */
 function evalData(){
